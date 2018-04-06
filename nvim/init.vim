@@ -33,6 +33,10 @@ map <SPACE> <Leader>
 nnoremap o o<Esc>
 nnoremap O O<Esc>
 
+" Make it so that Tab acts like ^, since ^ is to hard to reach
+nnoremap <Tab> ^
+vnoremap <Tab> ^
+
 " Make it so that Ctrl-j and Ctrl-k move up and, retaining cursor pos in view
 map <C-j> <C-e>j
 map <C-k> <C-y>k
