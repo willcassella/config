@@ -70,6 +70,7 @@ Plug 'Yggdroot/indentline'
 Plug 'tpope/vim-fugitive'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'equalsraf/neovim-gui-shim'
+Plug 'scrooloose/nerdtree'
 call plug#end()
 
 " THEMES
