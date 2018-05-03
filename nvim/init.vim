@@ -38,11 +38,11 @@ nnoremap <Tab> ^
 vnoremap <Tab> ^
 
 " Make it so that Ctrl-j and Ctrl-k move up and, retaining cursor pos in view
-map <C-j> <C-e>j
-map <C-k> <C-y>k
+noremap <C-j> <C-e>j
+noremap <C-k> <C-y>k
 
 " Make it so that K splits the line at the cursor position
-map K i<CR><Esc>
+noremap K i<CR><Esc>
 
 " Add mappings for moving lines with alt+k/alt+j
 nnoremap <A-k> :m .-2<CR>==
@@ -52,14 +52,27 @@ inoremap <A-k> <Esc>:m .-2<CR>==gi
 vnoremap <A-j> :m '>+1<CR>gv=gv
 vnoremap <A-k> :m '<-2<CR>gv=gv
 
+" Make it so that <A-h> and <A-l> indent and outdent in all modes
+nnoremap <A-h> <<
+nnoremap <A-l> >>
+inoremap <A-h> <Esc><<gi
+inoremap <A-l> <Esc>>>gi
+vnoremap <A-h> <gv
+vnoremap <A-l> >gv
+
 " Use Q to execute default register (used to be Q-ex mode)
 nnoremap Q @q
+
+" Make it so that <Esc> in terminal mode leaves terminal mode
+tmap <Esc> <C-\><C-n>
 
 " LEADER MAPPINGS
 " Setup <Leader>i macro to create two blank lines and insert
 map <Leader>i oOi
 " Make <Leader>a disable highlighted text from search (inspired by Blender)
 map <silent> <Leader>a :noh<CR>
+" Make <Leader>` open a console below the current buffer
+nmap <Leader>` :10sp term://bash<CR>
 
 " PLUGINS
 call plug#begin('~/.local/share/nvim/plugged')
@@ -73,9 +86,13 @@ Plug 'equalsraf/neovim-gui-shim'
 Plug 'scrooloose/nerdtree'
 call plug#end()
 
+" PLUGIN MAPPINGS
+map <C-n> :NERDTreeToggle<CR>
+
 " THEMES
 syntax on " Enable themes
 set termguicolors " Enable true color mode
 let g:airline_powerline_fonts=1
 let g:airline_theme='onedark'
 colorscheme onedark
+
