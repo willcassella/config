@@ -1,6 +1,7 @@
 " GENERAL
 set number " Show line numbers
 set cursorline " Highlight cursor line
+set nowrap " Wrapping is annoying
 
 set showmatch " Show matching brackets
 set matchtime=1 " Cursor restores after highlighting matching bracking in .1 seconds
@@ -37,9 +38,12 @@ nnoremap O O<Esc>0D
 nnoremap <Tab> ^
 vnoremap <Tab> ^
 
-" Make it so that Ctrl-j and Ctrl-k move up and, retaining cursor pos in view
-noremap <C-j> <C-e>j
-noremap <C-k> <C-y>k
+" Make it so that <Leader>Tab acts like g_
+nnoremap <Leader><Tab> g_
+vnoremap <Leader><Tab> g_
+
+" Make it so that <C-Space> can be used instead of escape
+map <C-Space> <Esc>
 
 " Make it so that K splits the line at the cursor position
 noremap K i<CR><Esc>
