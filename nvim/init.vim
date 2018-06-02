@@ -5,7 +5,6 @@ set nowrap " Wrapping is annoying
 
 set showmatch " Show matching brackets
 set matchtime=1 " Cursor restores after highlighting matching bracking in .1 seconds
-set t_ti="" " Restore terminal contents after closing vim
 
 set expandtab " Tab expands to spaces
 set tabstop=4 " Tabs are 4 spaces
@@ -90,6 +89,29 @@ map <silent> <Leader>a :noh<CR>
 
 " Make <Leader>` open a console below the current buffer
 nmap <Leader>` :10sp term://bash<CR>
+
+" Use leader in front of y/d/p to make copy/cust/paste from clipboard not such
+" a pain in the ass
+nmap <Leader>y "+y
+nmap <Leader>Y "+Y
+vmap <Leader>y "+y
+vmap <Leader>Y "+Y
+nmap <Leader>d "+d
+nmap <Leader>D "+D
+vmap <Leader>d "+d
+vmap <Leader>D "+D
+nmap <Leader>x "+x
+nmap <Leader>X "+X
+vmap <Leader>x "+x
+vmap <Leader>X "+X
+nmap <Leader>c "+c
+nmap <Leader>C "+C
+vmap <Leader>c "+c
+vmap <Leader>C "+C
+nmap <Leader>p "+p
+nmap <Leader>P "+P
+vmap <Leader>p "+p
+vmap <Leader>P "+P
 
 " PLUGINS
 call plug#begin('~/.local/share/nvim/plugged')
