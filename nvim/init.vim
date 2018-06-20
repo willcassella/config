@@ -139,5 +139,5 @@ syntax on " Enable themes
 set termguicolors " Enable true color mode
 let g:airline_powerline_fonts=1
 let g:airline_theme='onedark'
-colorscheme onedark
+silent! colorscheme onedark
 
