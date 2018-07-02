@@ -26,8 +26,15 @@ if !&sidescrolloff
 endif
 
 " BASIC MAPPINGS
+" Use <C-s> as save
+nnoremap <C-s> :w<CR>
+inoremap <C-s> <C-o>:w<CR>
+
+" Use <C-q> as quit
+nnoremap <C-q> :q<CR>
+
 " Make space an alias for <Leader>
-map <SPACE> <Leader>
+nnoremap <SPACE> <Leader>
 
 " Make it so that o and O don't enter insert mode, and give you a blank line
 nnoremap o o<Esc>0D
@@ -41,11 +48,17 @@ vnoremap <Tab> ^
 nnoremap <Leader><Tab> g_
 vnoremap <Leader><Tab> g_
 
-" Make it so that <C-Space> can be used instead of escape
-map <C-Space> <Esc>
+" Make it so you can scroll with J and K
+nnoremap J <C-e>
+nnoremap K <C-y>
 
-" Make it so that K splits the line at the cursor position
-noremap K i<CR><Esc>
+" Make it so that Alt+J/K join and split lines
+nnoremap <A-J> J
+nnoremap <A-K> i<CR><Esc>
+
+" Swap role of H and L
+nnoremap H L
+nnoremap L H
 
 " Add mappings for moving lines with alt+k/alt+j
 nnoremap <A-k> :m .-2<CR>
@@ -65,16 +78,26 @@ vnoremap <A-h> <gv
 vnoremap <A-l> >gv
 
 " Make it so that CTRL+hjkl can be used to navigate between windows
-map <C-h> <C-w>h
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-l> <C-w>l
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+" Make it so that Ctrl+Alt+hjkl can be used to resize windows
+nnoremap <M-C-h> <C-w><
+nnoremap <M-C-j> <C-w>-
+nnoremap <M-C-k> <C-w>+
+nnoremap <M-C-l> <C-w>>
+
+" Make it so that Ctrl+j/k can be used for auto-complete
+inoremap <C-j> <C-n>
+inoremap <C-k> <C-p>
 
 " Use Q to execute default register (used to be Q-ex mode)
 nnoremap Q @q
 
 " Make it so that <Esc> in terminal mode leaves terminal mode
-tmap <Esc> <C-\><C-n>
+tnoremap <Esc> <C-\><C-n>
 
 " LEADER MAPPINGS
 " Set up <Leader>o and <Leader>O to give you "intelligent new lines"
@@ -84,34 +107,8 @@ nmap <Leader>O kA<CR>
 " Setup <Leader>i macro to create two blank lines and insert
 map <Leader>i oOi
 
-" Make <Leader>a disable highlighted text from search (inspired by Blender)
-map <silent> <Leader>a :noh<CR>
-
-" Make <Leader>` open a console below the current buffer
-nmap <Leader>` :10sp term://bash<CR>
-
-" Use leader in front of y/d/p to make copy/cust/paste from clipboard not such
-" a pain in the ass
-nmap <Leader>y "+y
-nmap <Leader>Y "+Y
-vmap <Leader>y "+y
-vmap <Leader>Y "+Y
-nmap <Leader>d "+d
-nmap <Leader>D "+D
-vmap <Leader>d "+d
-vmap <Leader>D "+D
-nmap <Leader>x "+x
-nmap <Leader>X "+X
-vmap <Leader>x "+x
-vmap <Leader>X "+X
-nmap <Leader>c "+c
-nmap <Leader>C "+C
-vmap <Leader>c "+c
-vmap <Leader>C "+C
-nmap <Leader>p "+p
-nmap <Leader>P "+P
-vmap <Leader>p "+p
-vmap <Leader>P "+P
+" Make <Esc> in normal mode hide search highlights
+nnoremap <Esc> :noh<CR>
 
 " PLUGINS
 call plug#begin('~/.local/share/nvim/plugged')
@@ -122,17 +119,12 @@ Plug 'Yggdroot/indentline'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'equalsraf/neovim-gui-shim'
 Plug 'scrooloose/nerdtree'
-Plug 'easymotion/vim-easymotion'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 call plug#end()
 
 " PLUGIN MAPPINGS
 map <C-n> :NERDTreeToggle<CR>
-map <Leader>l <Plug>(easymotion-bd-jk)
-nmap <Leader>l <Plug>(easymotion-overwin-line)
-map <Leader> <Plug>(easymotion-bd-w)
-nmap <Leader> <Plug>(easymotion-overwin-w)
 
 " THEMES
 syntax on " Enable themes
