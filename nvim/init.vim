@@ -69,6 +69,10 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
+" Make it so that in normal mode, CTRL+j/k can be used for autocomplete
+inoremap <C-j> <C-n>
+inoremap <C-k> <C-p>
+
 " Make it so that J and K can scroll the window
 nnoremap J <C-e>
 vnoremap J <C-e>
@@ -117,6 +121,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'airblade/vim-gitgutter'
+Plug 'shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 call plug#end()
 
 " PLUGIN MAPPINGS
@@ -131,6 +136,7 @@ let g:gitgutter_sign_added = '|'
 let g:gitgutter_sign_modified = '|'
 let g:gitgutter_sign_removed = '|'
 let g:gitgutter_sign_modified_removed = '|'
+let g:deoplete#enable_at_startup = 1
 
 " THEMES
 syntax on " Enable themes
