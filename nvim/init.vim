@@ -1,4 +1,5 @@
 " GENERAL
+set nocompatible
 set number " Show line numbers
 set cursorline " Highlight cursor line
 set nowrap " Wrapping is annoying
@@ -26,19 +27,16 @@ if !&sidescrolloff
 endif
 
 " BASIC MAPPINGS
-" Use <C-s> as save
-nnoremap <C-s> :w<CR>
-inoremap <C-s> <C-o>:w<CR>
-
-" Use <C-q> as quit
-nnoremap <C-q> :q<CR>
-
 " Make space an alias for <Leader>
-nnoremap <SPACE> <Leader>
+map <SPACE> <Leader>
 
 " Make it so that o and O don't enter insert mode, and give you a blank line
 nnoremap o o<Esc>0D
 nnoremap O O<Esc>0D
+
+" Set up <Leader>o and <Leader>O to give you "intelligent new lines"
+nmap <Leader>o A<CR>
+nmap <Leader>O kA<CR>
 
 " Make it so that Tab acts like ^, since ^ is to hard to reach
 nnoremap <Tab> ^
@@ -47,18 +45,6 @@ vnoremap <Tab> ^
 " Make it so that <Leader>Tab acts like g_
 nnoremap <Leader><Tab> g_
 vnoremap <Leader><Tab> g_
-
-" Make it so you can scroll with J and K
-nnoremap J <C-e>
-nnoremap K <C-y>
-
-" Make it so that Alt+J/K join and split lines
-nnoremap <A-J> J
-nnoremap <A-K> i<CR><Esc>
-
-" Swap role of H and L
-nnoremap H L
-nnoremap L H
 
 " Add mappings for moving lines with alt+k/alt+j
 nnoremap <A-k> :m .-2<CR>
@@ -83,32 +69,40 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
-" Make it so that Ctrl+Alt+hjkl can be used to resize windows
-nnoremap <M-C-h> <C-w><
-nnoremap <M-C-j> <C-w>-
-nnoremap <M-C-k> <C-w>+
-nnoremap <M-C-l> <C-w>>
+" Make it so that J and K can scroll the window
+nnoremap J <C-e>
+vnoremap J <C-e>
+nnoremap K <C-y>
+vnoremap K <C-y>
 
-" Make it so that Ctrl+j/k can be used for auto-complete
-inoremap <C-j> <C-n>
-inoremap <C-k> <C-p>
+" Make it so that H and L switch tabs
+nnoremap H gT
+nnoremap L gt
+
+" Make it so that F1 can be used for doc search
+nnoremap <F1> K
+
+" Make it so that Alt+J/K join and split lines
+nnoremap <A-J> J
+nnoremap <A-K> i<CR><Esc>
+
+" Make is so that Ctrl+Alt+hjkl can resize windows
+nnoremap <C-M-H> <C-w><
+nnoremap <C-M-J> <C-w>-
+nnoremap <C-M-K> <C-w>+
+nnoremap <C-M-L> <C-w>>
 
 " Use Q to execute default register (used to be Q-ex mode)
 nnoremap Q @q
 
 " Make it so that <Esc> in terminal mode leaves terminal mode
-tnoremap <Esc> <C-\><C-n>
+tmap <Esc> <C-\><C-n>
 
-" LEADER MAPPINGS
-" Set up <Leader>o and <Leader>O to give you "intelligent new lines"
-nmap <Leader>o A<CR>
-nmap <Leader>O kA<CR>
+" Make it so that escape in normal mode hides search hightlights
+nnoremap <Esc> :noh<CR><Esc>
 
 " Setup <Leader>i macro to create two blank lines and insert
 map <Leader>i oOi
-
-" Make <Esc> in normal mode hide search highlights
-nnoremap <Esc> :noh<CR>
 
 " PLUGINS
 call plug#begin('~/.local/share/nvim/plugged')
@@ -121,10 +115,22 @@ Plug 'equalsraf/neovim-gui-shim'
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-commentary'
+Plug 'airblade/vim-gitgutter'
 call plug#end()
 
 " PLUGIN MAPPINGS
 map <C-n> :NERDTreeToggle<CR>
+map <Leader>l <Plug>(easymotion-bd-jk)
+nmap <Leader>l <Plug>(easymotion-overwin-line)
+map <Leader> <Plug>(easymotion-bd-w)
+nmap <Leader> <Plug>(easymotion-overwin-w)
+
+" Plugin customization
+let g:gitgutter_sign_added = '|'
+let g:gitgutter_sign_modified = '|'
+let g:gitgutter_sign_removed = '|'
+let g:gitgutter_sign_modified_removed = '|'
 
 " THEMES
 syntax on " Enable themes
