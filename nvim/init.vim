@@ -1,6 +1,7 @@
 " GENERAL
 set nocompatible
-set number " Show line numbers
+set number " Show line number on current line
+set relativenumber " Show other lines as retive to the cursor
 set cursorline " Highlight cursor line
 set nowrap " Wrapping is annoying
 
@@ -14,8 +15,11 @@ set shiftwidth=4 " Indenting (< and >) is done in 4 space increments
 set ignorecase " Searching is case-insensitive
 set smartcase " unless the query has a capital letter
 
+set noequalalways " Prevent vim from resizing non-adjacent windows when opening or closing windows
 set splitbelow " Horizontal splits are made below the current buffer
 set splitright " Vertical spltis are made to the right of the current buffer
+
+set autoread " Reload file if changed on-disk
 
 " Show next 3 lines while scrolling
 if !&scrolloff
@@ -30,13 +34,9 @@ endif
 " Make space an alias for <Leader>
 map <SPACE> <Leader>
 
-" Make it so that o and O don't enter insert mode, and give you a blank line
-nnoremap o o<Esc>0D
-nnoremap O O<Esc>0D
-
-" Set up <Leader>o and <Leader>O to give you "intelligent new lines"
-nmap <Leader>o A<CR>
-nmap <Leader>O kA<CR>
+" Make it so that Alt+i and Alt+I give you whitespace in normal mode
+nnoremap <M-i> o<Esc>0D
+nnoremap <M-I> O<Esc>0D
 
 " Make it so that Tab acts like ^, since ^ is to hard to reach
 nnoremap <Tab> ^
@@ -108,6 +108,9 @@ nnoremap <Esc> :noh<CR><Esc>
 " Setup <Leader>i macro to create two blank lines and insert
 map <Leader>i oOi
 
+" Create command for markdown (I use this one a lot!)
+command MD set filetype=markdown
+
 " PLUGINS
 call plug#begin('~/.local/share/nvim/plugged')
 Plug 'vim-airline/vim-airline'
@@ -122,21 +125,26 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'airblade/vim-gitgutter'
 Plug 'shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
+Plug 'ryanoasis/vim-devicons'
 call plug#end()
 
 " PLUGIN MAPPINGS
 map <C-n> :NERDTreeToggle<CR>
-map <Leader>l <Plug>(easymotion-bd-jk)
-nmap <Leader>l <Plug>(easymotion-overwin-line)
-map <Leader> <Plug>(easymotion-bd-w)
-nmap <Leader> <Plug>(easymotion-overwin-w)
 
 " Plugin customization
-let g:gitgutter_sign_added = '|'
-let g:gitgutter_sign_modified = '|'
-let g:gitgutter_sign_removed = '|'
-let g:gitgutter_sign_modified_removed = '|'
+let g:gitgutter_sign_added = '┃'
+let g:gitgutter_sign_modified = '╏'
+let g:gitgutter_sign_modified_removed = '╏'
+let g:gitgutter_sign_removed = '┇'
 let g:deoplete#enable_at_startup = 1
+
+" Autocomplete
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+    \ }
+
+let g:airline#extensions#tabline#enabled = 1
 
 " THEMES
 syntax on " Enable themes
