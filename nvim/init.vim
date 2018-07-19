@@ -1,8 +1,8 @@
 " GENERAL
 set nocompatible
 set number " Show line number on current line
-set relativenumber " Show other lines as retive to the cursor
-set cursorline " Highlight cursor line
+" set relativenumber " Show other lines as retive to the cursor (disbaled due to lag)
+" set cursorline " Highlight cursor line (Disabled due to lag)
 set nowrap " Wrapping is annoying
 
 set showmatch " Show matching brackets
@@ -20,6 +20,7 @@ set splitbelow " Horizontal splits are made below the current buffer
 set splitright " Vertical spltis are made to the right of the current buffer
 
 set autoread " Reload file if changed on-disk
+set hidden " Allow closing (hiding) buffers even if they have changes
 
 " Show next 3 lines while scrolling
 if !&scrolloff
@@ -69,6 +70,12 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
+" Make is so that Ctrl+Alt+hjkl can resize windows
+nnoremap <C-M-H> <C-w><
+nnoremap <C-M-J> <C-w>-
+nnoremap <C-M-K> <C-w>+
+nnoremap <C-M-L> <C-w>>
+
 " Make it so that in normal mode, CTRL+j/k can be used for autocomplete
 inoremap <C-j> <C-n>
 inoremap <C-k> <C-p>
@@ -83,18 +90,16 @@ vnoremap K <C-y>
 nnoremap H gT
 nnoremap L gt
 
+" Make it so that Alt+H and Alt+L switch buffers
+nnoremap <A-H> :bp<CR>
+nnoremap <A-L> :bn<CR>
+
 " Make it so that F1 can be used for doc search
 nnoremap <F1> K
 
 " Make it so that Alt+J/K join and split lines
 nnoremap <A-J> J
 nnoremap <A-K> i<CR><Esc>
-
-" Make is so that Ctrl+Alt+hjkl can resize windows
-nnoremap <C-M-H> <C-w><
-nnoremap <C-M-J> <C-w>-
-nnoremap <C-M-K> <C-w>+
-nnoremap <C-M-L> <C-w>>
 
 " Use Q to execute default register (used to be Q-ex mode)
 nnoremap Q @q
@@ -146,10 +151,11 @@ let g:LanguageClient_serverCommands = {
 
 let g:airline#extensions#tabline#enabled = 1
 
+let g:indentLine_bufTypeExclude = ['help', 'terminal']
+
 " THEMES
 syntax on " Enable themes
 set termguicolors " Enable true color mode
 let g:airline_powerline_fonts=1
 let g:airline_theme='onedark'
 silent! colorscheme onedark
-
