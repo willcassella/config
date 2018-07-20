@@ -48,58 +48,71 @@ nnoremap <Leader><Tab> g_
 vnoremap <Leader><Tab> g_
 
 " Add mappings for moving lines with alt+k/alt+j
-nnoremap <A-k> :m .-2<CR>
-nnoremap <A-j> :m .+1<CR>
-inoremap <A-j> <Esc>:m .+1<CR>gi
-inoremap <A-k> <Esc>:m .-2<CR>gi
-vnoremap <A-j> :m '>+1<CR>gv
-vnoremap <A-k> :m '<-2<CR>gv
+nnoremap <M-k> :m .-2<CR>
+nnoremap <M-j> :m .+1<CR>
+inoremap <M-j> <Esc>:m .+1<CR>gi
+inoremap <M-k> <Esc>:m .-2<CR>gi
+vnoremap <M-j> :m '>+1<CR>gv
+vnoremap <M-k> :m '<-2<CR>gv
 
 " Make it so that <A-h> and <A-l> indent and outdent in all modes
 " Note: Not using << here because it doesn't seem to maintain cursor position, which is annoying
-nnoremap <A-h> a<C-d><Esc>
-nnoremap <A-l> a<C-t><Esc>
-inoremap <A-h> <C-d>
-inoremap <A-l> <C-t>
-vnoremap <A-h> <gv
-vnoremap <A-l> >gv
+nnoremap <M-h> a<C-d><Esc>
+nnoremap <M-l> a<C-t><Esc>
+inoremap <M-h> <C-d>
+inoremap <M-l> <C-t>
+vnoremap <M-h> <gv
+vnoremap <M-l> >gv
 
-" Make it so that CTRL+hjkl can be used to navigate between windows
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
+" WINDOW NAVIGATION
 
-" Make is so that Ctrl+Alt+hjkl can resize windows
-nnoremap <C-M-H> <C-w><
-nnoremap <C-M-J> <C-w>-
-nnoremap <C-M-K> <C-w>+
-nnoremap <C-M-L> <C-w>>
+" Make it so that Ctrl-hjkl can be used to navigate between windows
+nnoremap <C-H> <C-W>h
+nnoremap <C-J> <C-W>j
+nnoremap <C-K> <C-W>k
+nnoremap <C-L> <C-W>l
 
-" Make it so that in normal mode, CTRL+j/k can be used for autocomplete
-inoremap <C-j> <C-n>
-inoremap <C-k> <C-p>
+" Make is so that Ctrl-Alt-hjkl can resize windows
+nnoremap <C-M-H> <C-W><
+nnoremap <C-M-J> <C-W>-
+nnoremap <C-M-K> <C-W>+
+nnoremap <C-M-L> <C-W>>
 
-" Make it so that J and K can scroll the window
-nnoremap J <C-e>
-vnoremap J <C-e>
-nnoremap K <C-y>
-vnoremap K <C-y>
+" Make it so that in normal mode, Ctrl-jk can be used for autocomplete
+inoremap <C-J> <C-N>
+inoremap <C-K> <C-P>
 
-" Make it so that H and L switch tabs
-nnoremap H gT
-nnoremap L gt
+" BUFFER/TAB NAVIGATION
 
-" Make it so that Alt+H and Alt+L switch buffers
-nnoremap <A-H> :bp<CR>
-nnoremap <A-L> :bn<CR>
+" Make it so that Shift-j and Shift-k can scroll the window in normal and visual modes
+nnoremap J <C-E>
+vnoremap J <C-E>
+nnoremap K <C-Y>
+vnoremap K <C-Y>
+
+" Make it so that Shift-h and Shift-l switch buffers
+nnoremap H :bp<CR>
+nnoremap L :bn<CR>
+
+" Make it so that Alt-Shift-h and Alt-Shift-l switch buffers
+nnoremap <M-H> gT
+nnoremap <M-L> gt
+
+" Make it so that Ctrl-s opens the previously opened buffer
+nnoremap <C-S> <C-^>
+
+" Make it so that Ctrl-d lets you change the current buffer
+nnoremap <C-D> :CtrlPBuffer<CR>
+
+" Make it so that Ctrl-f lets you search for files
+nnoremap <C-F> :CtrlP<CR>
 
 " Make it so that F1 can be used for doc search
 nnoremap <F1> K
 
-" Make it so that Alt+J/K join and split lines
-nnoremap <A-J> J
-nnoremap <A-K> i<CR><Esc>
+" Make it so that Alt-Shift-j and Alt-Shift-k join and split lines
+nnoremap <M-J> J
+nnoremap <M-K> i<CR><Esc>
 
 " Use Q to execute default register (used to be Q-ex mode)
 nnoremap Q @q
@@ -108,13 +121,10 @@ nnoremap Q @q
 tmap <Esc> <C-\><C-n>
 
 " Make it so that escape in normal mode hides search hightlights
-nnoremap <Esc> :noh<CR><Esc>
-
-" Setup <Leader>i macro to create two blank lines and insert
-map <Leader>i oOi
+nnoremap <silent> <Esc> :noh<CR><Esc>
 
 " Create command for markdown (I use this one a lot!)
-command MD set filetype=markdown
+command MD set filetype=markdown | setlocal wrap
 
 " PLUGINS
 call plug#begin('~/.local/share/nvim/plugged')
@@ -123,7 +133,6 @@ Plug 'sheerun/vim-polyglot'
 Plug 'joshdick/onedark.vim'
 Plug 'Yggdroot/indentline'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'equalsraf/neovim-gui-shim'
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
@@ -135,7 +144,7 @@ Plug 'ryanoasis/vim-devicons'
 call plug#end()
 
 " PLUGIN MAPPINGS
-map <C-n> :NERDTreeToggle<CR>
+map <C-E> :NERDTreeToggle<CR>
 
 " Plugin customization
 let g:gitgutter_sign_added = '┃'
@@ -150,6 +159,15 @@ let g:LanguageClient_serverCommands = {
     \ }
 
 let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '┃'
+let g:airline#extensions#tabline#right_sep = ' '
+let g:airline#extensions#tabline#right_alt_sep = '┃'
+
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
 
 let g:indentLine_bufTypeExclude = ['help', 'terminal']
 
