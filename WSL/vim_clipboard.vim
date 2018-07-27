@@ -5,8 +5,8 @@ let g:clipboard = {
 \       '*': 'clip.exe',
 \   },
 \   'paste': {
-\       '+': 'pasterboy.exe',
-\       '*': 'pasterboy.exe',
+\       '+': 'pasterboy.exe | dos2unix | dos2unix',
+\       '*': 'pasterboy.exe | dos2unix | dos2unix',
 \   },
 \   'cache_enabled': 1,
 \}

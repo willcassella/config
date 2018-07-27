@@ -35,9 +35,15 @@ endif
 " Make space an alias for <Leader>
 map <SPACE> <Leader>
 
-" Make it so that Alt+i and Alt+I give you whitespace in normal mode
-nnoremap <M-i> o<Esc>0D
-nnoremap <M-I> O<Esc>0D
+" Make it so that Alt+o and Alt+O give you whitespace in normal and insert mode
+nnoremap <M-o> o<Esc>0D
+nnoremap <M-O> O<Esc>0D
+inoremap <M-o> <C-O>o
+inoremap <M-O> <C-O>O
+
+" Make it so that ( and ) open and close splits
+nnoremap ( zo
+nnoremap ) zc
 
 " Make it so that Tab acts like ^, since ^ is to hard to reach
 nnoremap <Tab> ^
@@ -94,7 +100,7 @@ vnoremap K <C-Y>
 nnoremap H :bp<CR>
 nnoremap L :bn<CR>
 
-" Make it so that Alt-Shift-h and Alt-Shift-l switch buffers
+" Make it so that Alt-Shift-h and Alt-Shift-l switch tabs
 nnoremap <M-H> gT
 nnoremap <M-L> gt
 
@@ -106,6 +112,9 @@ nnoremap <C-D> :CtrlPBuffer<CR>
 
 " Make it so that Ctrl-f lets you search for files
 nnoremap <C-F> :CtrlP<CR>
+
+" Make it so that Ctrl-q lets you quit the current buffer
+nnoremap <C-Q> :BD<CR>
 
 " Make it so that F1 can be used for doc search
 nnoremap <F1> K
@@ -137,10 +146,13 @@ Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-repeat'
 Plug 'airblade/vim-gitgutter'
 Plug 'shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
 Plug 'ryanoasis/vim-devicons'
+Plug 'qpkorr/vim-bufkill'
+Plug 'justinmk/vim-sneak'
 call plug#end()
 
 " PLUGIN MAPPINGS

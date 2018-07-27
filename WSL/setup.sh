@@ -10,7 +10,7 @@ sudo apt upgrade -y
 sudo apt autoremove -y
 
 # Install packages
-sudo apt install -y make cmake gcc clang nasm neovim emscripten fish mingw-w64 dos2unix
+sudo apt install -y make cmake gcc clang nasm neovim emscripten fish mingw-w64 dos2unix pkg-config
 
 # Setup neovim
 curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
