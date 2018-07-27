@@ -31,6 +31,10 @@ if !&sidescrolloff
     set sidescrolloff=5
 endif
 
+if has('mouse')
+    set mouse=a
+endif
+
 " BASIC MAPPINGS
 " Make space an alias for <Leader>
 map <SPACE> <Leader>
