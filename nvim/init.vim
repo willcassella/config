@@ -53,9 +53,9 @@ nnoremap ) zc
 nnoremap <Tab> ^
 vnoremap <Tab> ^
 
-" Make it so that <Leader>Tab acts like g_
-nnoremap <Leader><Tab> g_
-vnoremap <Leader><Tab> g_
+" Make it so that Backspace acts like g_
+nnoremap <BS> g_
+vnoremap <BS> g_
 
 " Add mappings for moving lines with alt+k/alt+j
 nnoremap <M-k> :m .-2<CR>
@@ -157,6 +157,7 @@ Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.s
 Plug 'ryanoasis/vim-devicons'
 Plug 'qpkorr/vim-bufkill'
 Plug 'justinmk/vim-sneak'
+Plug 'wellle/targets.vim'
 call plug#end()
 
 " PLUGIN MAPPINGS

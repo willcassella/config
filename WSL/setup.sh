@@ -22,5 +22,11 @@ nvim -c ':PlugUpdate' -c ':qa'
 # Make fish the default shell
 sudo chsh -s $(which fish) $(whoami)
 
+# Install oh-my-fish
+curl -L https://get.oh-my.fish | fish
+
+# Install foreign-environment plugin
+omf install foreign-env
+
 # Setup directory colors
 ln -s ~/usr/config/linux/.dircolors ~/.dircolors
