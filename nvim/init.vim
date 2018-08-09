@@ -32,8 +32,11 @@ if !&sidescrolloff
 endif
 
 if has('mouse')
-    set mouse=a
+    set mouse=nv
 endif
+
+" Use system clipboard by default
+set clipboard=unnamedplus
 
 " BASIC MAPPINGS
 " Make space an alias for <Leader>
@@ -144,7 +147,7 @@ call plug#begin('~/.local/share/nvim/plugged')
 Plug 'vim-airline/vim-airline'
 Plug 'sheerun/vim-polyglot'
 Plug 'joshdick/onedark.vim'
-Plug 'Yggdroot/indentline'
+Plug 'yggdroot/indentline'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-fugitive'
@@ -158,10 +161,14 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'qpkorr/vim-bufkill'
 Plug 'justinmk/vim-sneak'
 Plug 'wellle/targets.vim'
+Plug 'svermeulen/vim-easyclip'
+Plug 'foosoft/vim-argwrap'
 call plug#end()
 
 " PLUGIN MAPPINGS
-map <C-E> :NERDTreeToggle<CR>
+noremap <silent> <C-E> :NERDTreeToggle<CR>
+
+nnoremap <silent> <leader>* :ArgWrap<CR>
 
 " Plugin customization
 let g:gitgutter_sign_added = '┃'
