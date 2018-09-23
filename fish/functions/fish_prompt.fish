@@ -17,9 +17,10 @@ function fish_prompt
  
     # Print last status if error
     if test $last_status -ne 0;
-        set_color $color_error; echo -n '['$last_status']'
+        set_color $color_error; printf '[%d]' $last_status
     end
  
     # Put command on a new line
-    set_color $color_border; echo; echo -n '$ '
+    set_color $color_border; printf '\n$ '
+    set_color white
 end
