@@ -242,7 +242,7 @@ if g:plugins_loaded
     nnoremap <M-Q> :BD!<CR>
 else
     nnoremap <M-q> :call PluginError('Alt-q', 'qpkorr/vim-bufkill')<CR>
-    nnoremap <M-Q> :call PluginError('Alt-Shift-q', 'qpkorr/vim-buffkill')<CR>
+    nnoremap <M-Q> :call PluginError('Alt-Shift-q', 'qpkorr/vim-bufkill')<CR>
 endif
 
 
