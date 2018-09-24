@@ -46,7 +46,7 @@ elseif g:plugins_loaded
     " PLUGIN VISUAL SETTINGS (not pretty)
     let g:gitgutter_sign_added = '++'
     let g:gitgutter_sign_modified = '~~'
-    let g:gitbutter_sign_modified_removed = '~~'
+    let g:gitgutter_sign_modified_removed = '~~'
     let g:gitgutter_sign_removed = '--'
 
     let g:airline#extensions#tabline#enabled = 1

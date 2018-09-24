@@ -33,6 +33,7 @@ if !&sidescrolloff
     set sidescrolloff=5
 endif
 
+" Only use mouse in normal and visual modes, if available
 if has('mouse')
     set mouse=nv
 endif
@@ -60,7 +61,7 @@ nnoremap ) zc
 nnoremap <Tab> g^
 vnoremap <Tab> g^
 
-" Make it so that BackSlash acts like g_ (go to last non-whitespace character)
+" Make it so that Backslash acts like g_ (go to last non-whitespace character)
 nnoremap \ g_
 vnoremap \ g_
 
@@ -76,7 +77,7 @@ vnoremap - g$
 nnoremap _ gkg^
 vnoremap _ gkg^
 
-" Make it so that + work s with visual lines (go to first non-whitespace character of next line)
+" Make it so that + works with visual lines (go to first non-whitespace character of next line)
 nnoremap + gjg_
 vnoremap + gjg_
 
@@ -111,9 +112,6 @@ nnoremap <M-K> i<CR><Esc>
 " Use Q to execute default register (used to be Q-ex mode)
 nnoremap Q @q
 
-" Make it so that <Esc> in terminal mode leaves terminal mode
-tmap <Esc> <C-\><C-n>
-
 " Make it so that double-tapping space hides search hightlights
 nnoremap <silent> <leader><space> :noh<CR><Esc>
 vnoremap <silent> <leader><space> :noh<CR><Esc>
@@ -124,7 +122,7 @@ inoremap <C-I> <Esc>
 cnoremap <C-I> <Esc>
 onoremap <C-I> <Esc>
 
-" Make it so that in normal mode, Ctrl-jk can be used for autocomplete
+" Make it so that in insert mode, Ctrl-jk can be used for autocomplete
 inoremap <C-J> <C-N>
 inoremap <C-K> <C-P>
 
@@ -150,7 +148,7 @@ else
     nnoremap ys :call PluginError('n_ys', 'tpope/vim-surround')<CR>
     nnoremap cs :call PluginError('n_cs', 'tpope/vim-surround')<CR>
     nnoremap ds :call PluginError('n_ds', 'tpope/vim-surround')<CR>
-    nnoremap S :call PluginError('v_S', 'tpope/vim-surround')<CR>
+    vnoremap S :call PluginError('v_S', 'tpope/vim-surround')<CR>
     nnoremap s :call PluginError('n_s', 'justinmk/vim-sneak')<CR>
 endif
 
@@ -166,7 +164,7 @@ nnoremap <C-J> <C-W>j
 nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
 
-" Make is so that Ctrl-Alt-hjkl can resize windows
+" Make it so that Ctrl-Alt-hjkl can resize windows
 nnoremap <C-M-H> <C-W><
 nnoremap <C-M-J> <C-W>-
 nnoremap <C-M-K> <C-W>+
@@ -194,13 +192,13 @@ nnoremap <C-S> <C-^>
 
 if g:plugins_loaded
     " Make it so that Ctrl-d lets you change the current buffer
-    nnoremap <C-D> :CtrlPBuffer<CR>
+    nnoremap <silent> <C-D> :CtrlPBuffer<CR>
 
     " Make it so that Ctrl-f lets you search for files
-    nnoremap <C-F> :CtrlP<CR>
+    nnoremap <silent> <C-F> :CtrlP<CR>
 
-    " Make it so that Ctrl-q lets you quit the current buffer
-    nnoremap <C-Q> :BD<CR>
+    " Make it so that Ctrl-e enters 'explore' mode
+    nnoremap <silent> <C-E> :NERDTreeToggle<CR>
 else
     nnoremap <C-D> :call PluginError('Ctrl-d', 'ctrlpvim/ctrlp.vim')<CR>
     nnoremap <C-F> :call PluginError('Ctrl-f', 'ctrlpvim/ctrlp.vim')<CR>
@@ -244,13 +242,13 @@ if g:plugins_loaded
     nnoremap <M-Q> :BD!<CR>
 else
     nnoremap <M-q> :call PluginError('Alt-q', 'qpkorr/vim-bufkill')<CR>
-    nnoremap <M-Q> :call PluginError('Alt-Shift-Q', 'qpkorr/vim-buffkill')<CR>
+    nnoremap <M-Q> :call PluginError('Alt-Shift-q', 'qpkorr/vim-buffkill')<CR>
 endif
 
 
 " TERMINAL CONFIG
 
-" Checkif fish shell is available and if so, use that
+" Check if fish shell is available and if so, use that
 let fish_path = system('command -v fish | tr -d \\n')
 if v:shell_error == 0 && strlen(fish_path)
     let &shell=fish_path
@@ -288,4 +286,3 @@ if has('nvim') || has('terminal')
     " Command for opening terminal in new vertical split
     command VTerm vnew | call termopen(&shell)
 endif
-
