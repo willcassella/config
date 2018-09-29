@@ -7,10 +7,15 @@ endfunction
 " GENERAL OPTIONS
 
 set nocompatible
+set modelines=0 " Something to do with security
+set encoding=utf-8 " Make vim always encode in utf8
 
 set expandtab " Tab expands to spaces
 set tabstop=4 " Tabs are 4 spaces
+set softtabstop=4 " Soft tabs are 4 spaces
 set shiftwidth=4 " Indenting (< and >) is done in 4 space increments
+
+set autoindent " Copy indention from previous line
 
 set ignorecase " Searching is case-insensitive
 set smartcase " unless the query has a capital letter
@@ -57,29 +62,26 @@ inoremap <M-O> <C-O>O
 nnoremap ( zo
 nnoremap ) zc
 
-" Make it so that Tab acts like g^, since g^ is to hard to reach (go to first non-whitespace character on visual line)
-nnoremap <Tab> g^
-vnoremap <Tab> g^
+" Make it so that Backslash acts like ^, since ^ is to hard to reach (go to first non-whitespace character on line)
+" NOTE: I'd prefer Tab, but Ctrl-I is indistinguishable from Tab, and already does something useful
+nnoremap \ ^
+vnoremap \ ^
 
-" Make it so that Backslash acts like g_ (go to last non-whitespace character)
-nnoremap \ g_
-vnoremap \ g_
+" Make it so that Backspace acts like g_ (go to last non-whitespace character)
+nnoremap <BS> g_
+vnoremap <BS> g_
 
-" Make it so that 0 goes to the start of the visual line
-nnoremap 0 g0
-vnoremap 0 g0
+" Make it so that - acts like $ (go to end of line)
+nnoremap - $
+vnoremap - $
 
-" Make it so that - acts like g$ (go to end of visual line)
-nnoremap - g$
-vnoremap - g$
-
-" Make it so that _ acts like - (go to first non-whitespace character of previous line)
-nnoremap _ gkg^
-vnoremap _ gkg^
+" Make it so that _ acts like - (go to first non-whitespace character of previous visual line)
+nnoremap _ k^
+vnoremap _ k^
 
 " Make it so that + works with visual lines (go to first non-whitespace character of next line)
-nnoremap + gjg_
-vnoremap + gjg_
+nnoremap + jg_
+vnoremap + jg_
 
 " Make it so that CR acts like G (go to line #, default EOF)
 nnoremap <CR> G
@@ -116,26 +118,9 @@ nnoremap Q @q
 nnoremap <silent> <leader><space> :noh<CR><Esc>
 vnoremap <silent> <leader><space> :noh<CR><Esc>
 
-" Use Ctrl-I as an alias for Escape
-vnoremap <C-I> <Esc>
-inoremap <C-I> <Esc>
-cnoremap <C-I> <Esc>
-onoremap <C-I> <Esc>
-
 " Make it so that in insert mode, Ctrl-jk can be used for autocomplete
 inoremap <C-J> <C-N>
 inoremap <C-K> <C-P>
-
-" Make it so that s works as the vim-surround key in visual mode
-vmap s S
-
-" Make it so that j/k work with visual lines instead of file lines
-nnoremap j gj
-vnoremap j gj
-onoremap j gj
-nnoremap k gk
-vnoremap k gk
-onoremap k gk
 
 " Make it so that Ctrl Backspace works like it does in most other editors (erase previous word)
 inoremap <C-_> <C-W>
@@ -191,17 +176,21 @@ nnoremap <M-L> gt
 nnoremap <C-S> <C-^>
 
 if g:plugins_loaded
-    " Make it so that Ctrl-d lets you change the current buffer
-    nnoremap <silent> <C-D> :CtrlPBuffer<CR>
-
-    " Make it so that Ctrl-f lets you search for files
-    nnoremap <silent> <C-F> :CtrlP<CR>
-
     " Make it so that Ctrl-e enters 'explore' mode
     nnoremap <silent> <C-E> :NERDTreeToggle<CR>
+
+    " Make it so that Ctrl-d lets you search buffers
+    nnoremap <silent> <C-D> :CtrlPBuffer<CR>
+
+    " Make it so that Ctrl-f lets you search files
+    nnoremap <silent> <C-F> :CtrlP<CR>
+
+    " Make it so that Ctrl-g lets you search most recently used files
+    nnoremap <silent> <C-G> :CtlrPMRUFiles<CR>
 else
     nnoremap <C-D> :call PluginError('Ctrl-d', 'ctrlpvim/ctrlp.vim')<CR>
     nnoremap <C-F> :call PluginError('Ctrl-f', 'ctrlpvim/ctrlp.vim')<CR>
+    nnoremap <C-G> :call PluginError('Ctrl-g', 'ctrlpvim/ctrlp.vim')<CR>
 
     " If NERDTree isn't available, use default explorer plugin instead
     nnoremap <silent> <C-E> :Explore<CR>
@@ -255,14 +244,10 @@ if v:shell_error == 0 && strlen(fish_path)
 endif
 
 if has('nvim') || has('terminal')
-    " Use Ctrl-I to exit terminal mode
-    tnoremap <C-I> <C-\><C-N>
-
-    " Use Ctrl-hjkl for arrow keys
-    tnoremap <C-h> <Left>
-    tnoremap <C-j> <Down>
-    tnoremap <C-k> <Up>
-    tnoremap <C-l> <Right>
+    " Use Ctrl-\ to escape terminal mode
+    tnoremap <C-\><C-C> <C-\><C-N>
+    tnoremap <C-\><C-[> <C-\><C-N>
+    tnoremap <C-\><Esc> <C-\><C-N>
 
     " Helper function for setting terminal options
     function ConfigureTerminal()
