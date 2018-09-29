@@ -1,3 +1,10 @@
+" Helper function for printing warning messages
+function WarningMsg(msg)
+    echohl WarningMsg
+    echomsg a:msg
+    echohl None
+endfunction
+
 " Helper function for printing error messages without throwing an exception
 function ErrorMsg(msg, bell)
     if a:bell
@@ -23,7 +30,7 @@ if g:load_plugins
     exec 'source ' . g:config_path . '/plugins.vim'
 else
     let g:plugins_loaded = 0
-    autocmd VimEnter * call ErrorMsg('Plugins not loaded, plugins have been disabled (g:load_plugins=0)', 0)
+    autocmd VimEnter * call WarningMsg('Plugins not loaded, plugins have been disabled (g:load_plugins=0)')
 endif
 
 exec 'source ' . g:config_path . '/general.vim'
