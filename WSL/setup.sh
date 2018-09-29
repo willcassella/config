@@ -1,4 +1,4 @@
-# Check prequsite: config is avaiable form ~/usr/config
+# Check prerequisite: config is available in ~/usr/config
 if [ ! -f ~/usr/config/WSL/setup.sh ]; then 
     echo 'config directory must be accessible from ~/usr/config'
     exit 1
@@ -25,7 +25,7 @@ mkdir -p ~/.config/nvim
 echo "let g:load_plugins = 1" > ~/.config/nvim/init.vim
 echo "let g:pretty = 1" >> ~/.config/nvim/init.vim
 echo "let g:config_path = '~/usr/config/nvim/'" >> ~/.config/nvim/init.vim
-echo "source ~/usr/config/nvim/init.vim" >> ~/.config/nvim/nvim/init.vim
+echo "source ~/usr/config/nvim/init.vim" >> ~/.config/nvim/init.vim
 echo "source ~/usr/config/WSL/vim_clipboard.vim" >> ~/.config/nvim/init.vim
 pip install --upgrade neovim
 pip3 install --upgrade neovim
@@ -34,7 +34,7 @@ pip3 install --upgrade neovim
 echo "let g:load_plugins = 0" > ~/.vimrc
 echo "let g:pretty = 1" >> ~/.vimrc
 echo "let g:config_path = '~/usr/config/nvim/'" >> ~/.vimrc
-echo "source ~/usr/config/nvim/init.vim'" >> ~/.vimrc
+echo "source ~/usr/config/nvim/init.vim" >> ~/.vimrc
 
 # Make fish the default shell
 sudo chsh -s $(which fish) $(whoami)

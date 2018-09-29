@@ -186,7 +186,7 @@ if g:plugins_loaded
     nnoremap <silent> <C-F> :CtrlP<CR>
 
     " Make it so that Ctrl-g lets you search most recently used files
-    nnoremap <silent> <C-G> :CtlrPMRUFiles<CR>
+    nnoremap <silent> <C-G> :CtrlPMRUFiles<CR>
 else
     nnoremap <C-D> :call PluginError('Ctrl-d', 'ctrlpvim/ctrlp.vim')<CR>
     nnoremap <C-F> :call PluginError('Ctrl-f', 'ctrlpvim/ctrlp.vim')<CR>
