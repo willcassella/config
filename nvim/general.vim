@@ -164,13 +164,29 @@ vnoremap J <C-E>
 nnoremap K <C-Y>
 vnoremap K <C-Y>
 
-" Make it so that Shift-h and Shift-l switch buffers
-nnoremap H :bp<CR>
-nnoremap L :bn<CR>
+function NextTabOrBuffer()
+    if tabpagenr('$') == 1
+        bn
+    else
+        normal! gt
+    endif
+endfunction
 
-" Make it so that Alt-Shift-h and Alt-Shift-l switch tabs
-nnoremap <M-H> gT
-nnoremap <M-L> gt
+function PrevTabOrBuffer()
+    if tabpagenr('$') == 1
+        bp
+    else
+        normal! gT
+    endif
+endfunction
+
+" Make it so that Shift-h and Shift-l switch tabs or buffers
+nnoremap <silent> H :call PrevTabOrBuffer()<CR>
+nnoremap <silent> L :call NextTabOrBuffer()<CR>
+
+" Make it so that Alt-Shift-h and Alt-Shift-l switch buffers
+nnoremap <silent> <M-H> :bp<CR>
+nnoremap <silent> <M-L> :bn<CR>
 
 " Make it so that Ctrl-s opens the alternate buffer
 nnoremap <C-S> <C-^>
@@ -182,8 +198,8 @@ if g:plugins_loaded
     " Make it so that Ctrl-d lets you search buffers
     nnoremap <silent> <C-D> :CtrlPBuffer<CR>
 
-    " Make it so that Ctrl-f lets you search files
-    nnoremap <silent> <C-F> :CtrlP<CR>
+    " Make it so that Ctrl-f uses FZF plugin
+    nnoremap <silent> <C-F> :FZF<CR>
 
     " Make it so that Ctrl-g lets you search most recently used files
     nnoremap <silent> <C-G> :CtrlPMRUFiles<CR>

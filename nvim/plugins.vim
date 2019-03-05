@@ -20,6 +20,7 @@ Plug 'justinmk/vim-sneak'
 Plug 'wellle/targets.vim'
 Plug 'svermeulen/vim-easyclip'
 Plug 'foosoft/vim-argwrap'
+Plug 'junegunn/fzf'
 call plug#end()
 
 
