@@ -46,6 +46,9 @@ endif
 " Use system clipboard by default
 set clipboard=unnamedplus
 
+" Always use vertical splits for diff
+set diffopt+=vertical
+
 
 " BASIC MAPPINGS
 
@@ -184,9 +187,9 @@ endfunction
 nnoremap <silent> H :call PrevTabOrBuffer()<CR>
 nnoremap <silent> L :call NextTabOrBuffer()<CR>
 
-" Make it so that Alt-Shift-h and Alt-Shift-l switch buffers
-nnoremap <silent> <M-H> :bp<CR>
-nnoremap <silent> <M-L> :bn<CR>
+" Make it so that Alt-Shift-h and Alt-Shift-l move the current tab
+nnoremap <silent> <M-H> :tabmove -<CR>
+nnoremap <silent> <M-L> :tabmove +<CR>
 
 " Make it so that Ctrl-s opens the alternate buffer
 nnoremap <C-S> <C-^>
@@ -250,6 +253,19 @@ else
     nnoremap <M-Q> :call PluginError('Alt-Shift-q', 'qpkorr/vim-bufkill')<CR>
 endif
 
+function SplitImpl()
+    " If this is the header file
+    if expand('%:e') == 'h'
+        vsplit %:r.cc
+    elseif expand('%:e') == 'cc'
+        vsplit
+        wincmd h
+        edit %:r.h
+    endif
+endfunction
+
+nnoremap <F2> :call SplitImpl()<CR>
+
 
 " TERMINAL CONFIG
 
@@ -286,4 +302,7 @@ if has('nvim') || has('terminal')
 
     " Command for opening terminal in new vertical split
     command VTerm vnew | call termopen(&shell)
+
+    " Command for opening a terminal in a new tab
+    command TTerm tabnew | call termopen(&shell)
 endif
