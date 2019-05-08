@@ -290,9 +290,8 @@ if has('nvim') || has('terminal')
 
     if has('nvim')
         autocmd TermOpen * call ConfigureTerminal()
-    else
-        autocmd BufWinEnter * if &buftype == 'terminal' | call ConfigureTerminal() | endif
     endif
+    autocmd BufWinEnter * if &buftype == 'terminal' | call ConfigureTerminal() | endif
 
     " Command for opening terminal in the current window
     command Term enew | call termopen(&shell)
