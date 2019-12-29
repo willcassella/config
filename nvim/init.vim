@@ -29,6 +29,65 @@ function PluginError(key)
     call ErrorMsg(a:key . ' not available, plugins not loaded', 1)
 endfunction
 
+
+" GENERAL OPTIONS
+set nocompatible
+set modelines=0 " Something to do with security
+set encoding=utf-8 " Make vim always encode in utf8
+
+set expandtab " Tab expands to spaces
+set tabstop=4 " Tabs are 4 spaces
+set softtabstop=4 " Soft tabs are 4 spaces
+set shiftwidth=4 " Indenting (< and >) is done in 4 space increments
+
+set autoindent " Copy indention from previous line
+
+set ignorecase " Searching is case-insensitive
+set smartcase " unless the query has a capital letter
+
+set noequalalways " Prevent vim from resizing non-adjacent windows when opening or closing windows
+set splitbelow " Horizontal splits are made below the current buffer
+set splitright " Vertical splits are made to the right of the current buffer
+
+set autoread " Reload file if changed on-disk
+set hidden " Allow closing (hiding) buffers even if they have changes
+
+set gdefault " Make it so that g flag in replacements isn't necessary
+
+set scrolloff=2 " Show next 2 lines while scrolling
+set sidescrolloff=5 " Show next 5 columns while side-scrolling
+
+set updatetime=300 " Use a low update time
+
+" Only use mouse in normal, visual, and command modes (if available)
+if has('mouse')
+    set mouse=nvc
+endif
+
+set clipboard=unnamed,unnamedplus " Use system clipboard by default
+
+set diffopt+=vertical " Always use vertical splits for diff
+
+syntax on " Enable syntax highlighting
+
+set number " Show line number on current line
+set cursorline " Highlight cursor line
+set nowrap " Wrapping is annoying
+
+set showmatch " Show matching brackets
+set matchtime=1 " Cursor restores after highlighting matching bracket in 0.1 seconds
+
+set signcolumn=yes " Always show the side column
+
+set list
+set listchars=trail:-
+
+set completeopt-=preview " Showing information in the preview window is annoying
+
+" Use space as the leader key
+let mapleader = ' '
+
+
 " PLUGINS
 if g:load_plugins
     call plug#begin('~/.local/share/nvim/plugged')
@@ -36,6 +95,7 @@ if g:load_plugins
     Plug 'vim-airline/vim-airline-themes'
     Plug 'sheerun/vim-polyglot'
     Plug 'joshdick/onedark.vim'
+    Plug 'arcticicestudio/nord-vim'
     Plug 'yggdroot/indentline'
     Plug 'ctrlpvim/ctrlp.vim'
     Plug 'scrooloose/nerdtree'
@@ -120,7 +180,7 @@ if g:load_plugins && g:pretty
 
     let g:airline_powerline_fonts = 1
     let g:airline_theme = 'onedark'
-    silent! colorscheme onedark
+    colorscheme onedark
 
     " HIGHLIGHT SETTINGS
     hi clear DiffAdd
@@ -175,69 +235,21 @@ else " (not pretty, no plugins)
     silent! colorscheme desert
 endif
 
-" GENERAL OPTIONS
-set nocompatible
-set modelines=0 " Something to do with security
-set encoding=utf-8 " Make vim always encode in utf8
-
-set expandtab " Tab expands to spaces
-set tabstop=4 " Tabs are 4 spaces
-set softtabstop=4 " Soft tabs are 4 spaces
-set shiftwidth=4 " Indenting (< and >) is done in 4 space increments
-
-set autoindent " Copy indention from previous line
-
-set ignorecase " Searching is case-insensitive
-set smartcase " unless the query has a capital letter
-
-set noequalalways " Prevent vim from resizing non-adjacent windows when opening or closing windows
-set splitbelow " Horizontal splits are made below the current buffer
-set splitright " Vertical splits are made to the right of the current buffer
-
-set autoread " Reload file if changed on-disk
-set hidden " Allow closing (hiding) buffers even if they have changes
-
-set gdefault " Make it so that g flag in replacements isn't necessary
-
-set scrolloff=2 " Show next 2 lines while scrolling
-set sidescrolloff=5 " Show next 5 columns while side-scrolling
-
-set updatetime=300 " Use a low update time
-
-" Only use mouse in normal and visual modes, if available
-if has('mouse')
-    set mouse=nv
-endif
-
-set clipboard=unnamed,unnamedplus " Use system clipboard by default
-
-set diffopt+=vertical " Always use vertical splits for diff
-
-syntax on " Enable syntax highlighting
-
-set number " Show line number on current line
-set cursorline " Highlight cursor line
-set nowrap " Wrapping is annoying
-
-set showmatch " Show matching brackets
-set matchtime=1 " Cursor restores after highlighting matching bracket in 0.1 seconds
-
-set signcolumn=yes " Always show the side column
-
-set list
-set listchars=trail:-
-
-set completeopt-=preview " Showing information in the preview window is annoying
-
 
 " BASIC MAPPINGS
 " Trying to break the habit of using Ctrl-C for ESC
+nnoremap <C-C> <nop>
 inoremap <C-C> <nop>
 cnoremap <C-C> <nop>
 vnoremap <C-C> <nop>
+onoremap <C-C> <nop>
 
-" Use space as the leader key
-let mapleader = ' '
+" Use <Ctrl-G> as escape
+nnoremap <nowait> <C-G> <ESC>
+inoremap <nowait> <C-G> <ESC>
+vnoremap <nowait> <C-G> <ESC>
+cnoremap <nowait> <C-G> <ESC>
+onoremap <nowait> <C-G> <ESC>
 
 " Make it so that Alt+o and Alt+O give you whitespace in normal and insert mode
 nnoremap <M-o> o<C-U><Esc>
@@ -285,9 +297,8 @@ vnoremap <M-l> >gv
 " Make it so that F1 can be used for doc search
 nnoremap <F1> K
 
-" Make it so that Alt-Shift-j and Alt-Shift-k join and split lines
-nnoremap <M-J> J
-nnoremap <M-K> i<CR><Esc>
+" Make it so that Shift-k join splits lines
+nnoremap K i<CR><Esc>
 
 " Use Q to execute default register (used to be Q-ex mode)
 nnoremap Q @q
@@ -299,14 +310,6 @@ vnoremap <silent> <leader><space> <ESC>:noh<CR><Esc>gv
 " Make it so that Ctrl Backspace works like it does in most other editors (erase previous word)
 inoremap <C-_> <C-W>
 cnoremap <C-_> <C-W>
-
-
-" INTELLISENSE/AUTOCOMPLETE
-" Make it so that in insert mode, Ctrl-j/k can be used for autocomplete
-inoremap <C-J> <C-N>
-cnoremap <C-J> <C-N>
-inoremap <C-K> <C-P>
-cnoremap <C-K> <C-P>
 
 
 " WINDOW NAVIGATION
@@ -326,12 +329,6 @@ nnoremap <C-M-L> <C-W>>
 
 " BUFFER/TAB NAVIGATION
 
-" Make it so that Shift-j and Shift-k can scroll the window in normal and visual modes
-nnoremap J <C-E>
-vnoremap J <C-E>
-nnoremap K <C-Y>
-vnoremap K <C-Y>
-
 " Make it so that Shift-h and Shift-l switch tabs
 nnoremap H gT
 nnoremap L gt
@@ -344,21 +341,16 @@ nnoremap <silent> <M-L> :tabmove +<CR>
 nnoremap <C-U> <C-^>
 
 if g:load_plugins
-    " Make it so that Ctrl-e opens NERDTree
-    nnoremap <silent> <C-E> :NERDTreeToggle<CR>
-    " Make it so that Ctrl-f searches files with FZF
-    nnoremap <silent> <C-F> :FZF<CR>
-    " Make it so that Ctrl-d lets you search buffers
-    nnoremap <silent> <C-D> :CtrlPBuffer<CR>
-    " Make it so that Ctrl-g lets you search most recently used files
-    nnoremap <silent> <C-G> :CtrlPMRUFiles<CR>
+    " Make it so that Leader-f searches files with FZF
+    nnoremap <silent> <leader>f :FZF<CR>
+    " Make it so that Leader-d lets you search buffers
+    nnoremap <silent> <leader>d :CtrlPBuffer<CR>
+    " Make it so that Leader-g lets you search most recently used files
+    nnoremap <silent> <leader>g :CtrlPMRUFiles<CR>
 else
-    " Use builtin file explorer if NERDTree isn't available
-    nnoremap <silent> <C-E> :Explore<CR>
-
-    nnoremap <C-F> :call PluginError('Ctrl-F')<CR>
-    nnoremap <C-D> :call PluginError('Ctrl-D')<CR>
-    nnoremap <C-G> :call PluginError('Ctrl-G')<CR>
+    nnoremap <leader>f :call PluginError('leader-f')<CR>
+    nnoremap <leader>d :call PluginError('leader-d')<CR>
+    nnoremap <leader>g :call PluginError('leader-g')<CR>
 endif
 
 " Function to swap between header/source files
@@ -378,7 +370,7 @@ nnoremap <silent> <F2> :call SwapImpl()<CR>
 
 if has('nvim')
     " Use Ctrl-\ to escape terminal mode
-    tnoremap <C-\><C-C> <C-\><C-N>
+    tnoremap <C-\><C-G> <C-\><C-N>
     tnoremap <C-\><C-[> <C-\><C-N>
     tnoremap <C-\><Esc> <C-\><C-N>
 
