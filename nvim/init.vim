@@ -21,7 +21,7 @@ if !exists('g:pretty')
 endif
 
 if !exists('g:load_plugins')
-    let g:load_plugins = exists('*plug#begin')
+    let g:load_plugins = 0
 endif
 
 " Helper function for reporting errors for plugin bindings
@@ -34,7 +34,6 @@ endfunction
 set nocompatible
 set modelines=0 " Something to do with security
 set encoding=utf-8 " Make vim always encode in utf8
-
 set expandtab " Tab expands to spaces
 set tabstop=4 " Tabs are 4 spaces
 set softtabstop=4 " Soft tabs are 4 spaces
@@ -56,6 +55,8 @@ set gdefault " Make it so that g flag in replacements isn't necessary
 
 set scrolloff=2 " Show next 2 lines while scrolling
 set sidescrolloff=5 " Show next 5 columns while side-scrolling
+
+set inccommand=nosplit " Show command results incrementally
 
 set updatetime=300 " Use a low update time
 
@@ -83,6 +84,9 @@ set list
 set listchars=trail:-
 
 set completeopt-=preview " Showing information in the preview window is annoying
+set completeopt+=menuone
+
+set matchpairs+=<:> " Enable matching between < and >
 
 " Use space as the leader key
 let mapleader = ' '
@@ -90,13 +94,15 @@ let mapleader = ' '
 
 " PLUGINS
 if g:load_plugins
-    call plug#begin('~/.local/share/nvim/plugged')
+    call plug#begin()
+    Plug 'junegunn/vim-plug'
     Plug 'vim-airline/vim-airline'
     Plug 'vim-airline/vim-airline-themes'
-    Plug 'sheerun/vim-polyglot'
     Plug 'joshdick/onedark.vim'
+    Plug 'morhetz/gruvbox'
+    Plug 'lifepillar/vim-solarized8'
     Plug 'arcticicestudio/nord-vim'
-    Plug 'yggdroot/indentline'
+    Plug 'sheerun/vim-polyglot'
     Plug 'ctrlpvim/ctrlp.vim'
     Plug 'scrooloose/nerdtree'
     Plug 'tpope/vim-fugitive'
@@ -104,8 +110,6 @@ if g:load_plugins
     Plug 'tpope/vim-commentary'
     Plug 'tpope/vim-repeat'
     Plug 'airblade/vim-gitgutter'
-    Plug 'shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
-    Plug 'dense-analysis/ale'
     Plug 'ryanoasis/vim-devicons', g:pretty ? {} : {'on': []}
     Plug 'qpkorr/vim-bufkill'
     Plug 'justinmk/vim-sneak'
@@ -113,13 +117,9 @@ if g:load_plugins
     Plug 'svermeulen/vim-easyclip'
     Plug 'foosoft/vim-argwrap'
     Plug 'junegunn/fzf'
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
+    Plug 'willcassella/minimal_gdb'
     call plug#end()
-
-    " DEOPLETE
-    let g:deoplete#enable_at_startup = 1
-
-    " INDENTLINE
-    let g:indentLine_bufTypeExclude = ['help', 'terminal', 'nofile']
 
     " BUFFKILL
     let g:BufKillActionWhenModifiedFileToBeKilled = 'confirm'
@@ -130,23 +130,21 @@ if g:load_plugins
     " ARGWRAP
     nnoremap <silent> <leader>* :ArgWrap<CR>
 
-    " ALE
-    let g:ale_linters = {'cpp': ['clangd'], 'rust': ['rls']}
-    let g:airline#extensions#ale#enabled = 1
-
     " Make it so that [e and ]e can navigate between CoC errors
-    nmap <silent> [e :ALEPrevious<CR>
-    nmap <silent> ]e :ALENext<CR>
+    nmap <silent> [e <Plug>(coc-diagnostic-prev)
+    nmap <silent> ]e <Plug>(coc-diagnostic-next)
 
     " Remap go to definition
-    nmap <silent> gd :ALEGoToDefinition<CR>
+    nmap <silent> gd <Plug>(coc-definition)
+    nmap <silent> gr <Plug>(coc-references)
 
     " Use <C-S> and <C-Space> to search for symbols
     nnoremap <C-S> :CocList symbols<CR>
     nnoremap <C-Space> :CocList outline<CR>
 
-    " Show diagnostic info
-    nmap gi :ALEHover<CR>
+    if exists('*CocActionAsync')
+        autocmd CursorHold * silent call CocActionAsync('highlight')
+    endif
 else
     autocmd VimEnter * call WarningMsg('Plugins not loaded, plugins have been disabled')
 
@@ -161,13 +159,13 @@ else
     nnoremap s :call PluginError('n_s', 'justinmk/vim-sneak')<CR>
 
     " Errors for intellisense commands
-    nnoremap [e :call PluginError('[e', 'dense-analysis/ale')<CR>
-    nnoremap ]e :call PluginError(']e', 'dense-analysis/ale')<CR>
-    nnoremap gd :call PluginError('gd', 'dense-analysis/ale')<CR>
-    nnoremap gr :call Pluginerror('gr', 'dense-analysis/ale')<CR>
-    nnoremap gi :call PluginError('gi', 'dense-analysis/ale')<CR>
-    nnoremap <C-S> :call PluginError('Ctrl-S', 'dense-analysis/ale')<CR>
-    nnoremap <C-Space> :call PluginError('Ctrl-Space', 'dense-analysis/ale')<CR>
+    nnoremap [e :call PluginError('[e', 'neoclide/coc.nvim')<CR>
+    nnoremap ]e :call PluginError(']e', 'neoclide/coc.nvim')<CR>
+    nnoremap gd :call PluginError('gd', 'neoclide/coc.nvim')<CR>
+    nnoremap gr :call Pluginerror('gr', 'neoclide/coc.nvim')<CR>
+    nnoremap gi :call PluginError('gi', 'neoclide/coc.nvim')<CR>
+    nnoremap <C-S> :call PluginError('Ctrl-S', 'neoclide/coc.nvim')<CR>
+    nnoremap <C-Space> :call PluginError('Ctrl-Space', 'neoclide/coc.nvim')<CR>
 endif
 
 " VISUAL SETTINGS
@@ -197,6 +195,7 @@ if g:load_plugins && g:pretty
     let g:gitgutter_sign_removed = '┇'
 
     let g:airline#extensions#fugitiveline#enabled = 1
+    let g:airline#extensions#hunks#non_zero_only = 1
     let g:airline#extensions#tabline#show_buffers = 0
     let g:airline#extensions#tabline#show_splits = 1
     let g:airline#extensions#tabline#enabled = 1
@@ -211,7 +210,12 @@ if g:load_plugins && g:pretty
     let g:airline_right_alt_sep = ''
 elseif g:load_plugins " (plugins, not pretty)
     let g:airline_theme = 'minimalist'
-    silent! colorscheme onedark
+
+    if $TERM != "cygwin"
+        silent! colorscheme onedark
+    else
+        colorscheme slate
+    endif
 
     let g:gitgutter_sign_added = '++'
     let g:gitgutter_sign_modified = '~~'
@@ -250,6 +254,10 @@ inoremap <nowait> <C-G> <ESC>
 vnoremap <nowait> <C-G> <ESC>
 cnoremap <nowait> <C-G> <ESC>
 onoremap <nowait> <C-G> <ESC>
+
+" Unmap <C-G> from surround.vim
+autocmd SourcePost */vim-surround/plugin/surround.vim iunmap <C-G>s
+autocmd SourcePost */vim-surround/plugin/surround.vim iunmap <C-G>S
 
 " Make it so that Alt+o and Alt+O give you whitespace in normal and insert mode
 nnoremap <M-o> o<C-U><Esc>
@@ -326,6 +334,20 @@ nnoremap <C-M-J> <C-W>-
 nnoremap <C-M-K> <C-W>+
 nnoremap <C-M-L> <C-W>>
 
+" Make command completions a bit easier to use
+cnoremap <C-J> <C-N>
+cnoremap <C-K> <C-P>
+cnoremap <C-H> <Up>
+cnoremap <C-L> <Down>
+
+" Use J/K/C-D/C-E for scrolling
+nnoremap J <C-E>
+nnoremap K <C-Y>
+vnoremap J <C-E>
+vnoremap K <C-Y>
+nnoremap <C-E> <C-U>
+vnoremap <C-E> <C-U>
+
 
 " BUFFER/TAB NAVIGATION
 
@@ -379,9 +401,6 @@ if has('nvim')
         set scrolloff=0
         setlocal nonumber
         setlocal signcolumn=no
-        if g:load_plugins
-            IndentLinesDisable
-        endif
     endfunction
 
     function UnConfigureTerminal()
@@ -404,3 +423,8 @@ if has('nvim')
     command TTerm tab split | terminal
 endif
 
+" RANDOM COMMANDS
+
+" Copys file:line into the clipboard
+command Linespec let @+ = expand('%') . ':' . line('.')
+nnoremap <silent> yL :Linespec<CR>
