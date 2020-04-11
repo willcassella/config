@@ -447,3 +447,6 @@ endif
 " Copys file:line into the clipboard
 command Linespec let @+ = expand('%') . ':' . line('.')
 nnoremap <silent> yL :Linespec<CR>
+
+" Make it so that markdown files wrap at 120 lines
+au FileType markdown set texwidth=120
