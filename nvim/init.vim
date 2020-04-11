@@ -53,6 +53,7 @@ set hidden " Allow closing (hiding) buffers even if they have changes
 
 set gdefault " Make it so that g flag in replacements isn't necessary
 
+set scroll=20 " Scroll by 10 lines at a time
 set scrolloff=2 " Show next 2 lines while scrolling
 set sidescrolloff=5 " Show next 5 columns while side-scrolling
 
@@ -119,6 +120,8 @@ if g:load_plugins
     Plug 'junegunn/fzf'
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
     Plug 'willcassella/minimal_gdb'
+    Plug 'skywind3000/vim-quickui'
+    Plug 'psliwka/vim-smoothie'
     call plug#end()
 
     " BUFFKILL
@@ -137,13 +140,14 @@ if g:load_plugins
     " Remap go to definition
     nmap <silent> gd <Plug>(coc-definition)
     nmap <silent> gr <Plug>(coc-references)
+    nnoremap <silent> gh :call CocAction('doHover')<CR>
 
     " Use <C-S> and <C-Space> to search for symbols
     nnoremap <C-S> :CocList symbols<CR>
     nnoremap <C-Space> :CocList outline<CR>
 
     if exists('*CocActionAsync')
-        autocmd CursorHold * silent call CocActionAsync('highlight')
+        autocmd CursorHold * call CocActionAsync('highlight')
     endif
 else
     autocmd VimEnter * call WarningMsg('Plugins not loaded, plugins have been disabled')
@@ -265,6 +269,12 @@ nnoremap <M-O> O<C-U><Esc>
 inoremap <M-o> <C-O>o<C-U>
 inoremap <M-O> <C-O>O<C-U>
 
+" Make it so that Ctrl-U does redo (Ctrl-R is for scrolling)
+nnoremap <C-U> <C-R>
+if g:load_plugins
+    nmap <C-U> <Plug>(RepeatRedo)
+endif
+
 " Make it so that Backslash acts like ^, since ^ is to hard to reach (go to first non-whitespace character on line)
 nnoremap \ ^
 vnoremap \ ^
@@ -305,7 +315,7 @@ vnoremap <M-l> >gv
 " Make it so that F1 can be used for doc search
 nnoremap <F1> K
 
-" Make it so that Shift-k join splits lines
+" Make it so that Shift-k splits lines
 nnoremap K i<CR><Esc>
 
 " Use Q to execute default register (used to be Q-ex mode)
@@ -340,13 +350,21 @@ cnoremap <C-K> <C-P>
 cnoremap <C-H> <Up>
 cnoremap <C-L> <Down>
 
-" Use J/K/C-D/C-E for scrolling
-nnoremap J <C-E>
-nnoremap K <C-Y>
-vnoremap J <C-E>
-vnoremap K <C-Y>
-nnoremap <C-E> <C-U>
-vnoremap <C-E> <C-U>
+" Use <C-E>/<C-D>/<C-R>/<C-F> for scrolling
+noremap <C-E> <C-U>
+noremap <C-D> <C-D>
+noremap <C-R> <C-Y>
+noremap <C-F> <C-E>
+if g:load_plugins
+    let g:smoothie_no_default_mappings = v:true
+    map <C-E> <Plug>(SmoothieUpwards)
+    map <C-D> <Plug>(SmoothieDownwards)
+    map <PageUp> <Plug>(SmoothieBackwards)
+    map <S-Up> <Plug>(SmoothieBackwards)
+    map <C-B> <Plug>(SmoothieBackwards)
+    map <PageDown> <Plug>(SmoothieForwards)
+    map <S-Down> <Plug>(SmoothieForwards)
+endif
 
 
 " BUFFER/TAB NAVIGATION
@@ -359,8 +377,8 @@ nnoremap L gt
 nnoremap <silent> <M-H> :tabmove -<CR>
 nnoremap <silent> <M-L> :tabmove +<CR>
 
-" Make it so that Ctrl-U opens the alternate buffer
-nnoremap <C-U> <C-^>
+" Make it so that Ctrl-Y opens the alternate buffer
+nnoremap <C-Y> <C-^>
 
 if g:load_plugins
     " Make it so that Leader-f searches files with FZF
@@ -398,9 +416,10 @@ if has('nvim')
 
     " Helper function for setting terminal options
     function ConfigureTerminal()
-        set scrolloff=0
+        setlocal scrolloff=0
         setlocal nonumber
         setlocal signcolumn=no
+        setlocal matchpairs=
     endfunction
 
     function UnConfigureTerminal()
