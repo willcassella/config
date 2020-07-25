@@ -1,19 +1,20 @@
 " Helper function for printing warning messages
-function WarningMsg(msg)
+function s:WarningMsg(msg)
     echohl WarningMsg
     echomsg a:msg
     echohl None
 endfunction
 
 " Helper function for printing error messages without throwing an exception
-function ErrorMsg(msg, bell)
-    if a:bell
-        exec 'normal! \<Esc>'
-    endif
-
+function s:ErrorMsg(msg)
     echohl ErrorMsg
     echomsg a:msg
     echohl None
+endfunction
+
+" Helper function for reporting errors for plugin bindings
+function s:PluginError(key)
+    call s:ErrorMsg(a:key . ' not available, plugins not loaded', 1)
 endfunction
 
 if !exists('g:pretty')
@@ -24,46 +25,34 @@ if !exists('g:load_plugins')
     let g:load_plugins = 0
 endif
 
-" Helper function for reporting errors for plugin bindings
-function PluginError(key)
-    call ErrorMsg(a:key . ' not available, plugins not loaded', 1)
-endfunction
-
-
 " GENERAL OPTIONS
 set nocompatible
-set modelines=0 " Something to do with security
+set nomodeline " Modelines are insecure
 set encoding=utf-8 " Make vim always encode in utf8
 set expandtab " Tab expands to spaces
 set tabstop=4 " Tabs are 4 spaces
 set softtabstop=4 " Soft tabs are 4 spaces
 set shiftwidth=4 " Indenting (< and >) is done in 4 space increments
-
 set autoindent " Copy indention from previous line
-
 set ignorecase " Searching is case-insensitive
 set smartcase " unless the query has a capital letter
-
-set noequalalways " Prevent vim from resizing non-adjacent windows when opening or closing windows
-set splitbelow " Horizontal splits are made below the current buffer
-set splitright " Vertical splits are made to the right of the current buffer
-
 set autoread " Reload file if changed on-disk
 set hidden " Allow closing (hiding) buffers even if they have changes
 
 set gdefault " Make it so that g flag in replacements isn't necessary
 
-set scroll=20 " Scroll by 10 lines at a time
-set scrolloff=2 " Show next 2 lines while scrolling
-set sidescrolloff=5 " Show next 5 columns while side-scrolling
+set scroll=20
+set scrolloff=2
+set sidescrolloff=5
 
-set inccommand=nosplit " Show command results incrementally
+if exists('&inccommand')
+    set inccommand=nosplit " Show command results incrementally
+endif
 
-set updatetime=300 " Use a low update time
+set updatetime=300
 
-" Only use mouse in normal, visual, and command modes (if available)
 if has('mouse')
-    set mouse=nvc
+    set mouse=a
 endif
 
 set clipboard=unnamed,unnamedplus " Use system clipboard by default
@@ -150,7 +139,7 @@ if g:load_plugins
         autocmd CursorHold * call CocActionAsync('highlight')
     endif
 else
-    autocmd VimEnter * call WarningMsg('Plugins not loaded, plugins have been disabled')
+    autocmd VimEnter * call s:WarningMsg('Note: Plugins not loaded (not enabled)')
 
     " Errors for argwrap commands
     nnoremap <leader>* :call PluginError('\*')<CR>
@@ -174,23 +163,13 @@ endif
 
 " VISUAL SETTINGS
 if g:load_plugins && g:pretty
-    if has('nvim')
+    if exists('&termguicolors')
         set termguicolors
-    else
-        let t_Co=256
     endif
 
     let g:airline_powerline_fonts = 1
     let g:airline_theme = 'onedark'
     colorscheme onedark
-
-    " HIGHLIGHT SETTINGS
-    hi clear DiffAdd
-    hi DiffAdd guibg=#1A4B59
-    hi clear DiffChange
-    hi DiffChange guibg=#203D49
-    hi clear DiffText
-    hi DiffText guibg=#1A4B59
 
     let g:gitgutter_sign_priority = 5
     let g:gitgutter_sign_added = '┃'
@@ -232,10 +211,8 @@ elseif g:load_plugins " (plugins, not pretty)
     let g:airline#extensions#tabline#right_sep = ' '
     let g:airline#extensions#tabline#right_alt_sep = '|'
 elseif g:pretty " (pretty, no plugins)
-    if has('nvim')
+    if exists('&termguicolors')
         set termguicolors
-    else
-        let t_Co=256
     endif
 
     silent! colorscheme slate
@@ -246,28 +223,18 @@ endif
 
 " BASIC MAPPINGS
 " Trying to break the habit of using Ctrl-C for ESC
-nnoremap <C-C> <nop>
 inoremap <C-C> <nop>
-cnoremap <C-C> <nop>
-vnoremap <C-C> <nop>
-onoremap <C-C> <nop>
 
 " Use <Ctrl-G> as escape
-nnoremap <nowait> <C-G> <ESC>
-inoremap <nowait> <C-G> <ESC>
-vnoremap <nowait> <C-G> <ESC>
-cnoremap <nowait> <C-G> <ESC>
-onoremap <nowait> <C-G> <ESC>
+nnoremap <C-G> <ESC>
+inoremap <C-G> <ESC>
+vnoremap <C-G> <ESC>
+cnoremap <C-G> <ESC>
+onoremap <C-G> <ESC>
 
 " Unmap <C-G> from surround.vim
-autocmd SourcePost */vim-surround/plugin/surround.vim iunmap <C-G>s
-autocmd SourcePost */vim-surround/plugin/surround.vim iunmap <C-G>S
-
-" Make it so that Alt+o and Alt+O give you whitespace in normal and insert mode
-nnoremap <M-o> o<C-U><Esc>
-nnoremap <M-O> O<C-U><Esc>
-inoremap <M-o> <C-O>o<C-U>
-inoremap <M-O> <C-O>O<C-U>
+" autocmd SourcePost */vim-surround/plugin/surround.vim iunmap <C-G>s
+" autocmd SourcePost */vim-surround/plugin/surround.vim iunmap <C-G>S
 
 " Make it so that Ctrl-U does redo (Ctrl-R is for scrolling)
 nnoremap <C-U> <C-R>
@@ -287,13 +254,9 @@ vnoremap <BS> g_
 nnoremap - $
 vnoremap - $
 
-" Make it so that _ acts like - (go to first non-whitespace character of previous visual line)
-nnoremap _ k^
-vnoremap _ k^
-
-" Make it so that + works with visual lines (go to first non-whitespace character of next line)
-nnoremap + jg_
-vnoremap + jg_
+" Make it so that _ acts like - (go to first non-whitespace character of previous line)
+nnoremap _ -
+vnoremap _ -
 
 " Add mappings for moving lines with alt+k/alt+j
 nnoremap <M-k> :m .-2<CR>
@@ -328,27 +291,6 @@ vnoremap <silent> <leader><space> <ESC>:noh<CR><Esc>gv
 " Make it so that Ctrl Backspace works like it does in most other editors (erase previous word)
 inoremap <C-_> <C-W>
 cnoremap <C-_> <C-W>
-
-
-" WINDOW NAVIGATION
-
-" Make it so that Ctrl-hjkl can be used to navigate between windows
-nnoremap <C-H> <C-W>h
-nnoremap <C-J> <C-W>j
-nnoremap <C-K> <C-W>k
-nnoremap <C-L> <C-W>l
-
-" Make it so that Ctrl-Alt-hjkl can resize windows
-nnoremap <C-M-H> <C-W><
-nnoremap <C-M-J> <C-W>-
-nnoremap <C-M-K> <C-W>+
-nnoremap <C-M-L> <C-W>>
-
-" Make command completions a bit easier to use
-cnoremap <C-J> <C-N>
-cnoremap <C-K> <C-P>
-cnoremap <C-H> <Up>
-cnoremap <C-L> <Down>
 
 " Use <C-E>/<C-D>/<C-R>/<C-F> for scrolling
 noremap <C-E> <C-U>
@@ -388,9 +330,9 @@ if g:load_plugins
     " Make it so that Leader-g lets you search most recently used files
     nnoremap <silent> <leader>g :CtrlPMRUFiles<CR>
 else
-    nnoremap <leader>f :call PluginError('leader-f')<CR>
-    nnoremap <leader>d :call PluginError('leader-d')<CR>
-    nnoremap <leader>g :call PluginError('leader-g')<CR>
+    nnoremap <leader>f :call s:PluginError('leader-f')<CR>
+    nnoremap <leader>d :call s:PluginError('leader-d')<CR>
+    nnoremap <leader>g :call s:PluginError('leader-g')<CR>
 endif
 
 " Function to swap between header/source files
@@ -428,25 +370,4 @@ if has('nvim')
 
     autocmd BufEnter,TermOpen * if &buftype == 'terminal' | call ConfigureTerminal() | endif
     autocmd BufLeave * if &buftype == 'terminal' | call UnConfigureTerminal() | endif
-
-    " Command for opening terminal in the current window
-    command Term terminal
-
-    " Command for opening terminal in new horizontal split
-    command HTerm split | terminal
-
-    " Command for opening terminal in new vertical split
-    command VTerm vsplit | terminal
-
-    " Command for opening a terminal in a new tab
-    command TTerm tab split | terminal
 endif
-
-" RANDOM COMMANDS
-
-" Copys file:line into the clipboard
-command Linespec let @+ = expand('%') . ':' . line('.')
-nnoremap <silent> yL :Linespec<CR>
-
-" Make it so that markdown files wrap at 120 lines
-au FileType markdown set texwidth=120
