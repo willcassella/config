@@ -28,18 +28,25 @@ endif
 " GENERAL OPTIONS
 set nocompatible
 set nomodeline " Modelines are insecure
+set laststatus=2 " Always show the statusline
+set ruler
+set showcmd
+set wildmenu
 set encoding=utf-8 " Make vim always encode in utf8
 set expandtab " Tab expands to spaces
 set tabstop=4 " Tabs are 4 spaces
 set softtabstop=4 " Soft tabs are 4 spaces
 set shiftwidth=4 " Indenting (< and >) is done in 4 space increments
 set autoindent " Copy indention from previous line
-set ignorecase " Searching is case-insensitive
-set smartcase " unless the query has a capital letter
 set autoread " Reload file if changed on-disk
 set hidden " Allow closing (hiding) buffers even if they have changes
-
-set gdefault " Make it so that g flag in replacements isn't necessary
+set noshowmode
+set belloff=all " The bell is annoying
+set backspace=start,indent,eol
+set hlsearch
+set incsearch
+set ignorecase " Searching is case-insensitive
+set smartcase " unless the query has a capital letter
 
 set scroll=20
 set scrolloff=2
@@ -49,7 +56,9 @@ if exists('&inccommand')
     set inccommand=nosplit " Show command results incrementally
 endif
 
+set history=10000
 set updatetime=300
+set tabpagemax=50
 
 if has('mouse')
     set mouse=a
@@ -58,8 +67,6 @@ endif
 set clipboard=unnamed,unnamedplus " Use system clipboard by default
 
 set diffopt+=vertical " Always use vertical splits for diff
-
-syntax on " Enable syntax highlighting
 
 set number " Show line number on current line
 set cursorline " Highlight cursor line
@@ -81,19 +88,20 @@ set matchpairs+=<:> " Enable matching between < and >
 " Use space as the leader key
 let mapleader = ' '
 
+syntax on
+filetype plugin indent on
+
 
 " PLUGINS
 if g:load_plugins
     call plug#begin()
     Plug 'junegunn/vim-plug'
-    Plug 'vim-airline/vim-airline'
-    Plug 'vim-airline/vim-airline-themes'
     Plug 'joshdick/onedark.vim'
+    Plug 'itchyny/lightline.vim'
     Plug 'morhetz/gruvbox'
     Plug 'lifepillar/vim-solarized8'
     Plug 'arcticicestudio/nord-vim'
     Plug 'sheerun/vim-polyglot'
-    Plug 'ctrlpvim/ctrlp.vim'
     Plug 'scrooloose/nerdtree'
     Plug 'tpope/vim-fugitive'
     Plug 'tpope/vim-surround'
@@ -101,23 +109,43 @@ if g:load_plugins
     Plug 'tpope/vim-repeat'
     Plug 'airblade/vim-gitgutter'
     Plug 'ryanoasis/vim-devicons', g:pretty ? {} : {'on': []}
-    Plug 'qpkorr/vim-bufkill'
-    Plug 'justinmk/vim-sneak'
     Plug 'wellle/targets.vim'
     Plug 'svermeulen/vim-easyclip'
     Plug 'foosoft/vim-argwrap'
     Plug 'junegunn/fzf'
+    Plug 'junegunn/fzf.vim'
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
     Plug 'willcassella/minimal_gdb'
-    Plug 'skywind3000/vim-quickui'
     Plug 'psliwka/vim-smoothie'
     call plug#end()
 
-    " BUFFKILL
-    let g:BufKillActionWhenModifiedFileToBeKilled = 'confirm'
+    " FZF.Vim
+    nnoremap <silent> <leader>f :Files<CR>
+    nnoremap <silent> <leader>d :Buffers<CR>
+    nnoremap <silent> <leader>g :History<CR>
 
-    " CTRLP
-    let g:ctrlp_switch_buffer = ''
+    " Lightline
+    let g:lightline = {}
+    let g:lightline.component_function = {
+        \   'gitbranch': 'FugitiveHead',
+        \   'cocdiagnostic': 'CocStatusDiagnostic',
+        \ }
+    let g:lightline.active = {
+        \   'left': [
+        \     [ 'mode', 'paste' ],
+        \     [ 'gitbranch', 'readonly', 'filename', 'modified' ],
+        \     [ 'cocdiagnostic' ],
+        \   ],
+        \   'right': [
+        \     [ 'lineinfo' ],
+        \     [ 'percent' ],
+        \     [ 'fileformat', 'fileencoding', 'filetype' ],
+        \   ],
+        \ }
+    let g:lightline.tabline = {
+        \   'left': [[ 'tabs' ]],
+        \   'right': [],
+        \ }
 
     " ARGWRAP
     nnoremap <silent> <leader>* :ArgWrap<CR>
@@ -138,27 +166,50 @@ if g:load_plugins
     if exists('*CocActionAsync')
         autocmd CursorHold * call CocActionAsync('highlight')
     endif
+
+    " Ensure lightline is updated with coc status changes
+    autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
+
+    " Add CoC diagnostics to the statusline
+    function! CocStatusDiagnostic() abort
+      let info = get(b:, 'coc_diagnostic_info', {})
+      if empty(info) | return '' | endif
+
+      let msgs = []
+      if get(info, 'error', 0)
+        call add(msgs, 'E' . info['error'])
+      endif
+      if get(info, 'warning', 0)
+        call add(msgs, 'W' . info['warning'])
+      endif
+      return join(msgs, ' ') . ' ' . get(g:, 'coc_status', '')
+    endfunction
+
 else
     autocmd VimEnter * call s:WarningMsg('Note: Plugins not loaded (not enabled)')
 
+    " Errors for fzf.vim
+    nnoremap <leader>f :call s:PluginError('leader-f')<CR>
+    nnoremap <leader>d :call s:PluginError('leader-d')<CR>
+    nnoremap <leader>g :call s:PluginError('leader-g')<CR>
+
     " Errors for argwrap commands
-    nnoremap <leader>* :call PluginError('\*')<CR>
+    nnoremap <leader>* :call s:PluginError('\*')<CR>
 
     " Errors for vim-surround commands
-    nnoremap ys :call PluginError('n_ys', 'tpope/vim-surround')<CR>
-    nnoremap cs :call PluginError('n_cs', 'tpope/vim-surround')<CR>
-    nnoremap ds :call PluginError('n_ds', 'tpope/vim-surround')<CR>
-    vnoremap S :call PluginError('v_S', 'tpope/vim-surround')<CR>
-    nnoremap s :call PluginError('n_s', 'justinmk/vim-sneak')<CR>
+    nnoremap ys :call s:PluginError('n_ys')<CR>
+    nnoremap cs :call s:PluginError('n_cs')<CR>
+    nnoremap ds :call s:PluginError('n_ds')<CR>
+    vnoremap S :call s:PluginError('v_S')<CR>
 
     " Errors for intellisense commands
-    nnoremap [e :call PluginError('[e', 'neoclide/coc.nvim')<CR>
-    nnoremap ]e :call PluginError(']e', 'neoclide/coc.nvim')<CR>
-    nnoremap gd :call PluginError('gd', 'neoclide/coc.nvim')<CR>
-    nnoremap gr :call Pluginerror('gr', 'neoclide/coc.nvim')<CR>
-    nnoremap gi :call PluginError('gi', 'neoclide/coc.nvim')<CR>
-    nnoremap <C-S> :call PluginError('Ctrl-S', 'neoclide/coc.nvim')<CR>
-    nnoremap <C-Space> :call PluginError('Ctrl-Space', 'neoclide/coc.nvim')<CR>
+    nnoremap [e :call s:PluginError('[e')<CR>
+    nnoremap ]e :call s:PluginError(']e')<CR>
+    nnoremap gd :call s:PluginError('gd')<CR>
+    nnoremap gr :call s:Pluginerror('gr')<CR>
+    nnoremap gh :call s:PluginError('gh')<CR>
+    nnoremap <C-S> :call s:PluginError('Ctrl-S')<CR>
+    nnoremap <C-Space> :call s:PluginError('Ctrl-Space')<CR>
 endif
 
 " VISUAL SETTINGS
@@ -167,8 +218,7 @@ if g:load_plugins && g:pretty
         set termguicolors
     endif
 
-    let g:airline_powerline_fonts = 1
-    let g:airline_theme = 'onedark'
+    let g:lightline.colorscheme = 'onedark'
     colorscheme onedark
 
     let g:gitgutter_sign_priority = 5
@@ -176,24 +226,7 @@ if g:load_plugins && g:pretty
     let g:gitgutter_sign_modified = '╏'
     let g:gitgutter_sign_modified_removed = '╏'
     let g:gitgutter_sign_removed = '┇'
-
-    let g:airline#extensions#fugitiveline#enabled = 1
-    let g:airline#extensions#hunks#non_zero_only = 1
-    let g:airline#extensions#tabline#show_buffers = 0
-    let g:airline#extensions#tabline#show_splits = 1
-    let g:airline#extensions#tabline#enabled = 1
-    let g:airline#extensions#tabline#left_sep = ' '
-    let g:airline#extensions#tabline#left_alt_sep = '┃'
-    let g:airline#extensions#tabline#right_sep = ' '
-    let g:airline#extensions#tabline#right_alt_sep = '┃'
-
-    let g:airline_left_sep = ''
-    let g:airline_left_alt_sep = ''
-    let g:airline_right_sep = ''
-    let g:airline_right_alt_sep = ''
 elseif g:load_plugins " (plugins, not pretty)
-    let g:airline_theme = 'minimalist'
-
     if $TERM != "cygwin"
         silent! colorscheme onedark
     else
@@ -204,12 +237,6 @@ elseif g:load_plugins " (plugins, not pretty)
     let g:gitgutter_sign_modified = '~~'
     let g:gitgutter_sign_modified_removed = '~~'
     let g:gitgutter_sign_removed = '--'
-
-    let g:airline#extensions#tabline#enabled = 1
-    let g:airline#extensions#tabline#left_sep = ' '
-    let g:airline#extensions#tabline#left_alt_sep = '|'
-    let g:airline#extensions#tabline#right_sep = ' '
-    let g:airline#extensions#tabline#right_alt_sep = '|'
 elseif g:pretty " (pretty, no plugins)
     if exists('&termguicolors')
         set termguicolors
@@ -222,19 +249,7 @@ endif
 
 
 " BASIC MAPPINGS
-" Trying to break the habit of using Ctrl-C for ESC
-inoremap <C-C> <nop>
-
-" Use <Ctrl-G> as escape
-nnoremap <C-G> <ESC>
-inoremap <C-G> <ESC>
-vnoremap <C-G> <ESC>
-cnoremap <C-G> <ESC>
-onoremap <C-G> <ESC>
-
-" Unmap <C-G> from surround.vim
-" autocmd SourcePost */vim-surround/plugin/surround.vim iunmap <C-G>s
-" autocmd SourcePost */vim-surround/plugin/surround.vim iunmap <C-G>S
+inoremap <C-C> <Esc>
 
 " Make it so that Ctrl-U does redo (Ctrl-R is for scrolling)
 nnoremap <C-U> <C-R>
@@ -245,18 +260,22 @@ endif
 " Make it so that Backslash acts like ^, since ^ is to hard to reach (go to first non-whitespace character on line)
 nnoremap \ ^
 vnoremap \ ^
+onoremap \ ^
 
 " Make it so that Backspace acts like g_ (go to last non-whitespace character)
 nnoremap <BS> g_
 vnoremap <BS> g_
+onoremap <BS> g_
 
 " Make it so that - acts like $ (go to end of line)
 nnoremap - $
 vnoremap - $
+onoremap - $
 
 " Make it so that _ acts like - (go to first non-whitespace character of previous line)
 nnoremap _ -
 vnoremap _ -
+onoremap _ -
 
 " Add mappings for moving lines with alt+k/alt+j
 nnoremap <M-k> :m .-2<CR>
@@ -322,19 +341,6 @@ nnoremap <silent> <M-L> :tabmove +<CR>
 " Make it so that Ctrl-Y opens the alternate buffer
 nnoremap <C-Y> <C-^>
 
-if g:load_plugins
-    " Make it so that Leader-f searches files with FZF
-    nnoremap <silent> <leader>f :FZF<CR>
-    " Make it so that Leader-d lets you search buffers
-    nnoremap <silent> <leader>d :CtrlPBuffer<CR>
-    " Make it so that Leader-g lets you search most recently used files
-    nnoremap <silent> <leader>g :CtrlPMRUFiles<CR>
-else
-    nnoremap <leader>f :call s:PluginError('leader-f')<CR>
-    nnoremap <leader>d :call s:PluginError('leader-d')<CR>
-    nnoremap <leader>g :call s:PluginError('leader-g')<CR>
-endif
-
 " Function to swap between header/source files
 function SwapImpl()
     " If this is the header file
@@ -352,7 +358,7 @@ nnoremap <silent> <F2> :call SwapImpl()<CR>
 
 if has('nvim')
     " Use Ctrl-\ to escape terminal mode
-    tnoremap <C-\><C-G> <C-\><C-N>
+    tnoremap <C-\><C-C> <C-\><C-N>
     tnoremap <C-\><C-[> <C-\><C-N>
     tnoremap <C-\><Esc> <C-\><C-N>
 
