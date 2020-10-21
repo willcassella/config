@@ -64,8 +64,6 @@ if has('mouse')
     set mouse=a
 endif
 
-set clipboard=unnamed,unnamedplus " Use system clipboard by default
-
 set diffopt+=vertical " Always use vertical splits for diff
 
 set number " Show line number on current line
@@ -78,7 +76,7 @@ set matchtime=1 " Cursor restores after highlighting matching bracket in 0.1 sec
 set signcolumn=yes " Always show the side column
 
 set list
-set listchars=trail:-
+set listchars=trail:~
 
 set completeopt-=preview " Showing information in the preview window is annoying
 set completeopt+=menuone
@@ -100,22 +98,17 @@ if g:load_plugins
     Plug 'itchyny/lightline.vim'
     Plug 'morhetz/gruvbox'
     Plug 'lifepillar/vim-solarized8'
-    Plug 'arcticicestudio/nord-vim'
     Plug 'sheerun/vim-polyglot'
-    Plug 'scrooloose/nerdtree'
     Plug 'tpope/vim-fugitive'
     Plug 'tpope/vim-surround'
     Plug 'tpope/vim-commentary'
     Plug 'tpope/vim-repeat'
     Plug 'airblade/vim-gitgutter'
-    Plug 'ryanoasis/vim-devicons', g:pretty ? {} : {'on': []}
     Plug 'wellle/targets.vim'
-    Plug 'svermeulen/vim-easyclip'
     Plug 'foosoft/vim-argwrap'
     Plug 'junegunn/fzf'
     Plug 'junegunn/fzf.vim'
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
-    Plug 'willcassella/minimal_gdb'
     Plug 'psliwka/vim-smoothie'
     call plug#end()
 
@@ -247,35 +240,24 @@ else " (not pretty, no plugins)
     silent! colorscheme desert
 endif
 
-
-" BASIC MAPPINGS
-inoremap <C-C> <Esc>
-
 " Make it so that Ctrl-U does redo (Ctrl-R is for scrolling)
-nnoremap <C-U> <C-R>
 if g:load_plugins
     nmap <C-U> <Plug>(RepeatRedo)
+else
+    nnoremap <C-U> <C-R>
 endif
 
 " Make it so that Backslash acts like ^, since ^ is to hard to reach (go to first non-whitespace character on line)
-nnoremap \ ^
-vnoremap \ ^
-onoremap \ ^
+noremap \ ^
 
 " Make it so that Backspace acts like g_ (go to last non-whitespace character)
-nnoremap <BS> g_
-vnoremap <BS> g_
-onoremap <BS> g_
+noremap <BS> g_
 
 " Make it so that - acts like $ (go to end of line)
-nnoremap - $
-vnoremap - $
-onoremap - $
+noremap - $
 
 " Make it so that _ acts like - (go to first non-whitespace character of previous line)
-nnoremap _ -
-vnoremap _ -
-onoremap _ -
+noremap _ -
 
 " Add mappings for moving lines with alt+k/alt+j
 nnoremap <M-k> :m .-2<CR>
@@ -308,6 +290,7 @@ nnoremap <silent> <leader><space> :noh<CR><Esc>
 vnoremap <silent> <leader><space> <ESC>:noh<CR><Esc>gv
 
 " Make it so that Ctrl Backspace works like it does in most other editors (erase previous word)
+" Consider removing this, doesn't seem to work on all platforms
 inoremap <C-_> <C-W>
 cnoremap <C-_> <C-W>
 
