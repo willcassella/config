@@ -35,12 +35,11 @@ set wildmenu
 set encoding=utf-8 " Make vim always encode in utf8
 set expandtab " Tab expands to spaces
 set tabstop=4 " Tabs are 4 spaces
-set softtabstop=4 " Soft tabs are 4 spaces
 set shiftwidth=4 " Indenting (< and >) is done in 4 space increments
 set autoindent " Copy indention from previous line
 set autoread " Reload file if changed on-disk
 set hidden " Allow closing (hiding) buffers even if they have changes
-set noshowmode
+set noshowmode " lightline shows the current mode in the statusline
 set belloff=all " The bell is annoying
 set backspace=start,indent,eol
 set hlsearch
@@ -48,7 +47,6 @@ set incsearch
 set ignorecase " Searching is case-insensitive
 set smartcase " unless the query has a capital letter
 
-set scroll=20
 set scrolloff=2
 set sidescrolloff=5
 
@@ -98,6 +96,8 @@ if g:load_plugins
     Plug 'itchyny/lightline.vim'
     Plug 'morhetz/gruvbox'
     Plug 'lifepillar/vim-solarized8'
+    " Note: vim-polyglot is causing the splash screen to disappear for some
+    " reason
     Plug 'sheerun/vim-polyglot'
     Plug 'tpope/vim-fugitive'
     Plug 'tpope/vim-surround'
@@ -240,23 +240,16 @@ else " (not pretty, no plugins)
     silent! colorscheme desert
 endif
 
-" Make it so that Ctrl-U does redo (Ctrl-R is for scrolling)
-if g:load_plugins
-    nmap <C-U> <Plug>(RepeatRedo)
-else
-    nnoremap <C-U> <C-R>
-endif
-
 " Make it so that Backslash acts like ^, since ^ is to hard to reach (go to first non-whitespace character on line)
 noremap \ ^
 
 " Make it so that Backspace acts like g_ (go to last non-whitespace character)
 noremap <BS> g_
 
-" Make it so that - acts like $ (go to end of line)
+" Make it so that - acts like $ (go to end of line, complements 0)
 noremap - $
 
-" Make it so that _ acts like - (go to first non-whitespace character of previous line)
+" Make it so that _ acts like - (go to first non-whitespace character of previous line, complements +)
 noremap _ -
 
 " Add mappings for moving lines with alt+k/alt+j
@@ -276,11 +269,8 @@ inoremap <M-l> <C-t>
 vnoremap <M-h> <gv
 vnoremap <M-l> >gv
 
-" Make it so that F1 can be used for doc search
-nnoremap <F1> K
-
-" Make it so that Shift-k splits lines
-nnoremap K i<CR><Esc>
+" Make it so that Leader-k splits lines (and removes trailing whitespace)
+nnoremap <silent> <leader>k <CR><Esc>:.-1s/\s\+$//e<CR>+
 
 " Use Q to execute default register (used to be Q-ex mode)
 nnoremap Q @q
@@ -289,40 +279,18 @@ nnoremap Q @q
 nnoremap <silent> <leader><space> :noh<CR><Esc>
 vnoremap <silent> <leader><space> <ESC>:noh<CR><Esc>gv
 
-" Make it so that Ctrl Backspace works like it does in most other editors (erase previous word)
-" Consider removing this, doesn't seem to work on all platforms
-inoremap <C-_> <C-W>
-cnoremap <C-_> <C-W>
-
-" Use <C-E>/<C-D>/<C-R>/<C-F> for scrolling
-noremap <C-E> <C-U>
-noremap <C-D> <C-D>
-noremap <C-R> <C-Y>
-noremap <C-F> <C-E>
-if g:load_plugins
-    let g:smoothie_no_default_mappings = v:true
-    map <C-E> <Plug>(SmoothieUpwards)
-    map <C-D> <Plug>(SmoothieDownwards)
-    map <PageUp> <Plug>(SmoothieBackwards)
-    map <S-Up> <Plug>(SmoothieBackwards)
-    map <C-B> <Plug>(SmoothieBackwards)
-    map <PageDown> <Plug>(SmoothieForwards)
-    map <S-Down> <Plug>(SmoothieForwards)
-endif
-
+" Use <C-F> for scrolling up (more ergonomic than <C-Y>)
+noremap <C-F> <C-Y>
 
 " BUFFER/TAB NAVIGATION
 
-" Make it so that Shift-h and Shift-l switch tabs
-nnoremap H gT
-nnoremap L gt
+" Make it so that Ctrl-h and Ctrl-l switch tabs
+nnoremap <C-H> gT
+nnoremap <C-L> gt
 
 " Make it so that Alt-Shift-h and Alt-Shift-l move the current tab
 nnoremap <silent> <M-H> :tabmove -<CR>
 nnoremap <silent> <M-L> :tabmove +<CR>
-
-" Make it so that Ctrl-Y opens the alternate buffer
-nnoremap <C-Y> <C-^>
 
 " Function to swap between header/source files
 function SwapImpl()
@@ -334,7 +302,7 @@ function SwapImpl()
     endif
 endfunction
 
-nnoremap <silent> <F2> :call SwapImpl()<CR>
+nnoremap <silent> <leader>o :call SwapImpl()<CR>
 
 
 " TERMINAL CONFIG
