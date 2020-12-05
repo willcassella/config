@@ -26,11 +26,9 @@ if !exists('g:load_plugins')
 endif
 
 " GENERAL OPTIONS
-set nocompatible
 set nomodeline " Modelines are insecure
 set laststatus=2 " Always show the statusline
 set ruler
-set showcmd
 set wildmenu
 set encoding=utf-8 " Make vim always encode in utf8
 set expandtab " Tab expands to spaces
@@ -39,7 +37,6 @@ set shiftwidth=4 " Indenting (< and >) is done in 4 space increments
 set autoindent " Copy indention from previous line
 set autoread " Reload file if changed on-disk
 set hidden " Allow closing (hiding) buffers even if they have changes
-set noshowmode " lightline shows the current mode in the statusline
 set belloff=all " The bell is annoying
 set backspace=start,indent,eol
 set hlsearch
@@ -139,6 +136,7 @@ if g:load_plugins
         \   'left': [[ 'tabs' ]],
         \   'right': [],
         \ }
+    set noshowmode " lightline shows the current mode in the statusline
 
     " ARGWRAP
     nnoremap <silent> <leader>* :ArgWrap<CR>
@@ -270,7 +268,7 @@ vnoremap <M-h> <gv
 vnoremap <M-l> >gv
 
 " Make it so that Leader-k splits lines (and removes trailing whitespace)
-nnoremap <silent> <leader>k <CR><Esc>:.-1s/\s\+$//e<CR>+
+nnoremap <silent> <leader>k i<CR><Esc>:.-1s/\s\+$//e<CR>+
 
 " Use Q to execute default register (used to be Q-ex mode)
 nnoremap Q @q
