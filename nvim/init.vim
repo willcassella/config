@@ -43,6 +43,12 @@ set hlsearch
 set incsearch
 set ignorecase " Searching is case-insensitive
 set smartcase " unless the query has a capital letter
+set splitright splitbelow
+
+" Increase history limit
+if has('shada')
+    set shada=!,'1000,<50,s10,h
+endif
 
 set scrolloff=2
 set sidescrolloff=5
@@ -73,7 +79,7 @@ set signcolumn=yes " Always show the side column
 set list
 set listchars=trail:~
 
-set completeopt-=preview " Showing information in the preview window is annoying
+set completeopt-=preview
 set completeopt+=menuone
 
 set matchpairs+=<:> " Enable matching between < and >
@@ -154,10 +160,6 @@ if g:load_plugins
     nnoremap <C-S> :CocList symbols<CR>
     nnoremap <C-Space> :CocList outline<CR>
 
-    if exists('*CocActionAsync')
-        autocmd CursorHold * call CocActionAsync('highlight')
-    endif
-
     " Ensure lightline is updated with coc status changes
     autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 
@@ -176,6 +178,12 @@ if g:load_plugins
       return join(msgs, ' ') . ' ' . get(g:, 'coc_status', '')
     endfunction
 
+    " Git gutter
+    let g:gitgutter_sign_priority = 5
+    let g:gitgutter_sign_added = '┃'
+    let g:gitgutter_sign_modified = '╏'
+    let g:gitgutter_sign_modified_removed = '╏'
+    let g:gitgutter_sign_removed = '┇'
 else
     autocmd VimEnter * call s:WarningMsg('Note: Plugins not loaded (not enabled)')
 
@@ -204,38 +212,15 @@ else
 endif
 
 " VISUAL SETTINGS
-if g:load_plugins && g:pretty
-    if exists('&termguicolors')
-        set termguicolors
-    endif
+if g:pretty && exists('&termguicolors')
+    set termguicolors
+endif
 
-    let g:lightline.colorscheme = 'onedark'
-    colorscheme onedark
-
-    let g:gitgutter_sign_priority = 5
-    let g:gitgutter_sign_added = '┃'
-    let g:gitgutter_sign_modified = '╏'
-    let g:gitgutter_sign_modified_removed = '╏'
-    let g:gitgutter_sign_removed = '┇'
-elseif g:load_plugins " (plugins, not pretty)
-    if $TERM != "cygwin"
-        silent! colorscheme onedark
-    else
-        colorscheme slate
-    endif
-
-    let g:gitgutter_sign_added = '++'
-    let g:gitgutter_sign_modified = '~~'
-    let g:gitgutter_sign_modified_removed = '~~'
-    let g:gitgutter_sign_removed = '--'
-elseif g:pretty " (pretty, no plugins)
-    if exists('&termguicolors')
-        set termguicolors
-    endif
-
-    silent! colorscheme slate
-else " (not pretty, no plugins)
-    silent! colorscheme desert
+if g:pretty && g:load_plugins
+    colorscheme gruvbox
+    let g:lightline.colorscheme = 'gruvbox'
+else
+    colorscheme desert
 endif
 
 " Make it so that Backslash acts like ^, since ^ is to hard to reach (go to first non-whitespace character on line)
@@ -280,37 +265,9 @@ vnoremap <silent> <leader><space> <ESC>:noh<CR><Esc>gv
 " Use <C-F> for scrolling up (more ergonomic than <C-Y>)
 noremap <C-F> <C-Y>
 
-" BUFFER/TAB NAVIGATION
-
-" Make it so that Ctrl-h and Ctrl-l switch tabs
-nnoremap <C-H> gT
-nnoremap <C-L> gt
-
-" Make it so that Alt-Shift-h and Alt-Shift-l move the current tab
-nnoremap <silent> <M-H> :tabmove -<CR>
-nnoremap <silent> <M-L> :tabmove +<CR>
-
-" Function to swap between header/source files
-function SwapImpl()
-    " If this is the header file
-    if expand('%:e') == 'h'
-        edit %:r.cc
-    elseif expand('%:e') == 'cc'
-        edit %:r.h
-    endif
-endfunction
-
-nnoremap <silent> <leader>o :call SwapImpl()<CR>
-
-
 " TERMINAL CONFIG
 
 if has('nvim')
-    " Use Ctrl-\ to escape terminal mode
-    tnoremap <C-\><C-C> <C-\><C-N>
-    tnoremap <C-\><C-[> <C-\><C-N>
-    tnoremap <C-\><Esc> <C-\><C-N>
-
     " Helper function for setting terminal options
     function ConfigureTerminal()
         setlocal scrolloff=0
@@ -320,7 +277,7 @@ if has('nvim')
     endfunction
 
     function UnConfigureTerminal()
-        set scrolloff=2
+        setlocal scrolloff=2
     endfunction
 
     autocmd BufEnter,TermOpen * if &buftype == 'terminal' | call ConfigureTerminal() | endif
