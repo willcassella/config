@@ -99,9 +99,6 @@ if g:load_plugins
     Plug 'itchyny/lightline.vim'
     Plug 'morhetz/gruvbox'
     Plug 'lifepillar/vim-solarized8'
-    " Note: vim-polyglot is causing the splash screen to disappear for some
-    " reason
-    Plug 'sheerun/vim-polyglot'
     Plug 'tpope/vim-fugitive'
     Plug 'tpope/vim-surround'
     Plug 'tpope/vim-commentary'
@@ -112,7 +109,7 @@ if g:load_plugins
     Plug 'junegunn/fzf'
     Plug 'junegunn/fzf.vim'
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
-    Plug 'psliwka/vim-smoothie'
+    Plug 'voldikss/vim-floaterm'
     call plug#end()
 
     " FZF.Vim
@@ -184,6 +181,11 @@ if g:load_plugins
     let g:gitgutter_sign_modified = '╏'
     let g:gitgutter_sign_modified_removed = '╏'
     let g:gitgutter_sign_removed = '┇'
+
+    " Floaterm
+    nnoremap <silent> ` :FloatermToggle<CR>
+    au FileType floaterm tnoremap <buffer><silent> ` <C-\><C-N>:FloatermToggle<CR>
+    au FileType floaterm tnoremap <buffer> <C-\>` `
 else
     autocmd VimEnter * call s:WarningMsg('Note: Plugins not loaded (not enabled)')
 
@@ -229,12 +231,6 @@ noremap \ ^
 " Make it so that Backspace acts like g_ (go to last non-whitespace character)
 noremap <BS> g_
 
-" Make it so that - acts like $ (go to end of line, complements 0)
-noremap - $
-
-" Make it so that _ acts like - (go to first non-whitespace character of previous line, complements +)
-noremap _ -
-
 " Add mappings for moving lines with alt+k/alt+j
 nnoremap <M-k> :m .-2<CR>
 nnoremap <M-j> :m .+1<CR>
@@ -243,15 +239,6 @@ inoremap <M-k> <Esc>:m .-2<CR>gi
 vnoremap <M-j> :m '>+1<CR>gv
 vnoremap <M-k> :m '<-2<CR>gv
 
-" Make it so that <A-h> and <A-l> indent and outdent in all modes
-" Note: Not using << here because it doesn't seem to maintain cursor position, which is annoying
-nnoremap <M-h> a<C-d><Esc>
-nnoremap <M-l> a<C-t><Esc>
-inoremap <M-h> <C-d>
-inoremap <M-l> <C-t>
-vnoremap <M-h> <gv
-vnoremap <M-l> >gv
-
 " Make it so that Leader-k splits lines (and removes trailing whitespace)
 nnoremap <silent> <leader>k i<CR><Esc>:.-1s/\s\+$//e<CR>+
 
@@ -259,11 +246,14 @@ nnoremap <silent> <leader>k i<CR><Esc>:.-1s/\s\+$//e<CR>+
 nnoremap Q @q
 
 " Make it so that double-tapping space hides search highlights
-nnoremap <silent> <leader><space> :noh<CR><Esc>
-vnoremap <silent> <leader><space> <ESC>:noh<CR><Esc>gv
+nnoremap <silent> <leader><space> :noh<CR>
+vnoremap <silent> <leader><space> <ESC>:noh<CR>gv
 
 " Use <C-F> for scrolling up (more ergonomic than <C-Y>)
 noremap <C-F> <C-Y>
+
+" Useful for quickly opening another file in the current directory
+cabbrev <expr> %% expand('%:h')
 
 " TERMINAL CONFIG
 
