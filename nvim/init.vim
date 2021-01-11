@@ -5,22 +5,6 @@ function s:WarningMsg(msg)
     echohl None
 endfunction
 
-" Helper function for printing error messages without throwing an exception
-function s:ErrorMsg(msg)
-    echohl ErrorMsg
-    echomsg a:msg
-    echohl None
-endfunction
-
-" Helper function for reporting errors for plugin bindings
-function s:PluginError(key)
-    call s:ErrorMsg(a:key . ' not available, plugins not loaded', 1)
-endfunction
-
-if !exists('g:pretty')
-    let g:pretty = 0
-endif
-
 if !exists('g:load_plugins')
     let g:load_plugins = 0
 endif
@@ -84,12 +68,35 @@ set completeopt+=menuone
 
 set matchpairs+=<:> " Enable matching between < and >
 
-" Use space as the leader key
-let mapleader = ' '
-
 syntax on
 filetype plugin indent on
 
+" Use space as the leader key
+let mapleader = ' '
+
+" Add mappings for moving lines with alt+k/alt+j
+nnoremap <M-k> :m .-2<CR>
+nnoremap <M-j> :m .+1<CR>
+inoremap <M-j> <Esc>:m .+1<CR>gi
+inoremap <M-k> <Esc>:m .-2<CR>gi
+vnoremap <M-j> :m '>+1<CR>gv
+vnoremap <M-k> :m '<-2<CR>gv
+
+" Make it so that Leader-k splits lines (and removes trailing whitespace)
+nnoremap <silent> <leader>k i<CR><Esc>:.-1s/\s\+$//e<CR>+
+
+" Use Q to execute default register (used to be Q-ex mode)
+nnoremap Q @q
+
+" Make it so that double-tapping space hides search highlights
+nnoremap <silent> <leader><space> :noh<CR>
+vnoremap <silent> <leader><space> <ESC>:noh<CR>gv
+
+" Use <C-F> for scrolling up (more ergonomic than <C-Y>)
+noremap <C-F> <C-Y>
+
+" Useful for quickly opening another file in the current directory
+cabbrev <expr> %% expand('%:h')
 
 " PLUGINS
 if g:load_plugins
@@ -187,89 +194,18 @@ if g:load_plugins
     au FileType floaterm tnoremap <buffer><silent> ` <C-\><C-N>:FloatermToggle<CR>
     au FileType floaterm tnoremap <buffer> <C-\>` `
 else
-    autocmd VimEnter * call s:WarningMsg('Note: Plugins not loaded (not enabled)')
-
-    " Errors for fzf.vim
-    nnoremap <leader>f :call s:PluginError('leader-f')<CR>
-    nnoremap <leader>d :call s:PluginError('leader-d')<CR>
-    nnoremap <leader>g :call s:PluginError('leader-g')<CR>
-
-    " Errors for argwrap commands
-    nnoremap <leader>* :call s:PluginError('\*')<CR>
-
-    " Errors for vim-surround commands
-    nnoremap ys :call s:PluginError('n_ys')<CR>
-    nnoremap cs :call s:PluginError('n_cs')<CR>
-    nnoremap ds :call s:PluginError('n_ds')<CR>
-    vnoremap S :call s:PluginError('v_S')<CR>
-
-    " Errors for intellisense commands
-    nnoremap [e :call s:PluginError('[e')<CR>
-    nnoremap ]e :call s:PluginError(']e')<CR>
-    nnoremap gd :call s:PluginError('gd')<CR>
-    nnoremap gr :call s:Pluginerror('gr')<CR>
-    nnoremap gh :call s:PluginError('gh')<CR>
-    nnoremap <C-S> :call s:PluginError('Ctrl-S')<CR>
-    nnoremap <C-Space> :call s:PluginError('Ctrl-Space')<CR>
+    au VimEnter * call s:WarningMsg('Note: Plugins not loaded (not enabled)')
 endif
 
 " VISUAL SETTINGS
-if g:pretty && exists('&termguicolors')
-    set termguicolors
-endif
-
-if g:pretty && g:load_plugins
+if g:load_plugins
     colorscheme gruvbox
     let g:lightline.colorscheme = 'gruvbox'
 else
     colorscheme desert
 endif
 
-" Make it so that Backslash acts like ^, since ^ is to hard to reach (go to first non-whitespace character on line)
-noremap \ ^
-
-" Make it so that Backspace acts like g_ (go to last non-whitespace character)
-noremap <BS> g_
-
-" Add mappings for moving lines with alt+k/alt+j
-nnoremap <M-k> :m .-2<CR>
-nnoremap <M-j> :m .+1<CR>
-inoremap <M-j> <Esc>:m .+1<CR>gi
-inoremap <M-k> <Esc>:m .-2<CR>gi
-vnoremap <M-j> :m '>+1<CR>gv
-vnoremap <M-k> :m '<-2<CR>gv
-
-" Make it so that Leader-k splits lines (and removes trailing whitespace)
-nnoremap <silent> <leader>k i<CR><Esc>:.-1s/\s\+$//e<CR>+
-
-" Use Q to execute default register (used to be Q-ex mode)
-nnoremap Q @q
-
-" Make it so that double-tapping space hides search highlights
-nnoremap <silent> <leader><space> :noh<CR>
-vnoremap <silent> <leader><space> <ESC>:noh<CR>gv
-
-" Use <C-F> for scrolling up (more ergonomic than <C-Y>)
-noremap <C-F> <C-Y>
-
-" Useful for quickly opening another file in the current directory
-cabbrev <expr> %% expand('%:h')
-
 " TERMINAL CONFIG
-
 if has('nvim')
-    " Helper function for setting terminal options
-    function ConfigureTerminal()
-        setlocal scrolloff=0
-        setlocal nonumber
-        setlocal signcolumn=no
-        setlocal matchpairs=
-    endfunction
-
-    function UnConfigureTerminal()
-        setlocal scrolloff=2
-    endfunction
-
-    autocmd BufEnter,TermOpen * if &buftype == 'terminal' | call ConfigureTerminal() | endif
-    autocmd BufLeave * if &buftype == 'terminal' | call UnConfigureTerminal() | endif
+    au TermOpen * setl nonu so=0 scl=no mps=
 endif
