@@ -28,6 +28,7 @@ set incsearch
 set ignorecase " Searching is case-insensitive
 set smartcase " unless the query has a capital letter
 set splitright splitbelow
+set noswapfile nobackup noundofile
 
 " Increase history limit
 if has('shada')
@@ -61,7 +62,7 @@ set matchtime=1 " Cursor restores after highlighting matching bracket in 0.1 sec
 set signcolumn=yes " Always show the side column
 
 set list
-set listchars=trail:~
+set listchars=trail:~,tab:>-
 
 set completeopt-=preview
 set completeopt+=menuone
@@ -98,14 +99,20 @@ noremap <C-F> <C-Y>
 " Useful for quickly opening another file in the current directory
 cabbrev <expr> %% expand('%:h')
 
+if has('nvim')
+    au TermOpen * setl nonu so=0 scl=no mps= nolist
+    au TermEnter * setl nocul
+    au TermLeave * setl cul<
+endif
+
 " PLUGINS
 if g:load_plugins
     call plug#begin()
     Plug 'junegunn/vim-plug'
     Plug 'joshdick/onedark.vim'
-    Plug 'itchyny/lightline.vim'
     Plug 'morhetz/gruvbox'
     Plug 'lifepillar/vim-solarized8'
+    Plug 'itchyny/lightline.vim'
     Plug 'tpope/vim-fugitive'
     Plug 'tpope/vim-surround'
     Plug 'tpope/vim-commentary'
@@ -119,6 +126,8 @@ if g:load_plugins
     Plug 'voldikss/vim-floaterm'
     call plug#end()
 
+    colorscheme gruvbox
+
     " FZF.Vim
     nnoremap <silent> <leader>f :Files<CR>
     nnoremap <silent> <leader>d :Buffers<CR>
@@ -126,15 +135,16 @@ if g:load_plugins
 
     " Lightline
     let g:lightline = {}
+    let g:lightline.colorscheme = 'gruvbox'
     let g:lightline.component_function = {
         \   'gitbranch': 'FugitiveHead',
-        \   'cocdiagnostic': 'CocStatusDiagnostic',
+        \   'cocstatus': 'coc#status',
         \ }
     let g:lightline.active = {
         \   'left': [
         \     [ 'mode', 'paste' ],
         \     [ 'gitbranch', 'readonly', 'filename', 'modified' ],
-        \     [ 'cocdiagnostic' ],
+        \     [ 'cocstatus' ],
         \   ],
         \   'right': [
         \     [ 'lineinfo' ],
@@ -167,21 +177,6 @@ if g:load_plugins
     " Ensure lightline is updated with coc status changes
     autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 
-    " Add CoC diagnostics to the statusline
-    function! CocStatusDiagnostic() abort
-      let info = get(b:, 'coc_diagnostic_info', {})
-      if empty(info) | return '' | endif
-
-      let msgs = []
-      if get(info, 'error', 0)
-        call add(msgs, 'E' . info['error'])
-      endif
-      if get(info, 'warning', 0)
-        call add(msgs, 'W' . info['warning'])
-      endif
-      return join(msgs, ' ') . ' ' . get(g:, 'coc_status', '')
-    endfunction
-
     " Git gutter
     let g:gitgutter_sign_priority = 5
     let g:gitgutter_sign_added = '┃'
@@ -195,17 +190,5 @@ if g:load_plugins
     au FileType floaterm tnoremap <buffer> <C-\>` `
 else
     au VimEnter * call s:WarningMsg('Note: Plugins not loaded (not enabled)')
-endif
-
-" VISUAL SETTINGS
-if g:load_plugins
-    colorscheme gruvbox
-    let g:lightline.colorscheme = 'gruvbox'
-else
     colorscheme desert
-endif
-
-" TERMINAL CONFIG
-if has('nvim')
-    au TermOpen * setl nonu so=0 scl=no mps=
 endif
