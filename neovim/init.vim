@@ -1,10 +1,3 @@
-" Helper function for printing warning messages
-function s:WarningMsg(msg)
-    echohl WarningMsg
-    echomsg a:msg
-    echohl None
-endfunction
-
 if !exists('g:load_plugins')
     let g:load_plugins = 0
 endif
@@ -189,6 +182,5 @@ if g:load_plugins
     au FileType floaterm tnoremap <buffer><silent> ` <C-\><C-N>:FloatermToggle<CR>
     au FileType floaterm tnoremap <buffer> <C-\>` `
 else
-    au VimEnter * call s:WarningMsg('Note: Plugins not loaded (not enabled)')
     colorscheme desert
 endif
