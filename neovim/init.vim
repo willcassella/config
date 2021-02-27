@@ -22,6 +22,7 @@ set ignorecase " Searching is case-insensitive
 set smartcase " unless the query has a capital letter
 set splitright splitbelow
 set noswapfile nobackup noundofile
+set title
 
 " Increase history limit
 if has('shada')
