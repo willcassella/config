@@ -182,6 +182,13 @@ if g:load_plugins
     nnoremap <silent> ` :FloatermToggle<CR>
     au FileType floaterm tnoremap <buffer><silent> ` <C-\><C-N>:FloatermToggle<CR>
     au FileType floaterm tnoremap <buffer> <C-\>` `
+
+    " Create FZF rule for branch files
+    fu s:FZFBranchFiles()
+        let l:args = {'source': 'git diff --diff-filter=AMRC --name-only @{u}', 'sink': 'e'}
+        call fzf#run(fzf#vim#with_preview(fzf#wrap(l:args)))
+    endf
+    nnoremap <silent> <leader>w <cmd>call <sid>FZFBranchFiles()<cr>
 else
     colorscheme desert
 endif
