@@ -118,6 +118,7 @@ if g:load_plugins
     Plug 'junegunn/fzf.vim'
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
     Plug 'voldikss/vim-floaterm'
+    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
     call plug#end()
 
     colorscheme gruvbox
@@ -189,6 +190,9 @@ if g:load_plugins
         call fzf#run(fzf#vim#with_preview(fzf#wrap(l:args)))
     endf
     nnoremap <silent> <leader>w <cmd>call <sid>FZFBranchFiles()<cr>
+
+    " Treesitter
+    luafile $HOME/config/neovim/treesitter.lua
 else
     colorscheme desert
 endif
