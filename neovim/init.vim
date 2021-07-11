@@ -2,66 +2,60 @@ if !exists('g:load_plugins')
     let g:load_plugins = 0
 endif
 
-" GENERAL OPTIONS
-set nomodeline " Modelines are insecure
-set laststatus=2 " Always show the statusline
+" Neovim defaults (here for vim)
+set nocompatible
+set autoindent
+set autoread
+set backspace=start,indent,eol
+set belloff=all
+set encoding=utf-8
+set hlsearch
+set incsearch
+set history=10000
+set tabpagemax=50
+set laststatus=2
 set ruler
 set wildmenu
-set encoding=utf-8 " Make vim always encode in utf8
+
+" GENERAL OPTIONS
+set nomodeline " Modelines are insecure
 set expandtab " Tab expands to spaces
 set tabstop=4 " Tabs are 4 spaces
 set shiftwidth=4 " Indenting (< and >) is done in 4 space increments
-set autoindent " Copy indention from previous line
-set autoread " Reload file if changed on-disk
 set hidden " Allow closing (hiding) buffers even if they have changes
-set belloff=all " The bell is annoying
-set backspace=start,indent,eol
-set hlsearch
-set incsearch
 set ignorecase " Searching is case-insensitive
 set smartcase " unless the query has a capital letter
 set splitright splitbelow
 set noswapfile nobackup noundofile
 set title
+set scrolloff=2
+set sidescrolloff=5
+set updatetime=300
+set diffopt+=vertical " Always use vertical splits for diff
+set number " Show line number on current line
+set cursorline " Highlight cursor line
+set nowrap " Wrapping is annoying
+set showmatch " Show matching brackets
+set matchtime=1 " Cursor restores after highlighting matching bracket in 0.1 seconds
+set signcolumn=yes " Always show the side column
+set list
+set listchars=trail:~,tab:>-
+set completeopt-=preview
+set completeopt+=menuone
+set matchpairs+=<:> " Enable matching between < and >
 
 " Increase history limit
 if has('shada')
     set shada=!,'1000,<50,s10,h
 endif
 
-set scrolloff=2
-set sidescrolloff=5
-
 if exists('&inccommand')
     set inccommand=nosplit " Show command results incrementally
 endif
 
-set history=10000
-set updatetime=300
-set tabpagemax=50
-
 if has('mouse')
     set mouse=a
 endif
-
-set diffopt+=vertical " Always use vertical splits for diff
-
-set number " Show line number on current line
-set cursorline " Highlight cursor line
-set nowrap " Wrapping is annoying
-
-set showmatch " Show matching brackets
-set matchtime=1 " Cursor restores after highlighting matching bracket in 0.1 seconds
-
-set signcolumn=yes " Always show the side column
-
-set list
-set listchars=trail:~,tab:>-
-
-set completeopt-=preview
-set completeopt+=menuone
-
-set matchpairs+=<:> " Enable matching between < and >
 
 syntax on
 filetype plugin indent on
@@ -80,7 +74,7 @@ vnoremap <M-k> :m '<-2<CR>gv
 " Make it so that Leader-k splits lines (and removes trailing whitespace)
 nnoremap <silent> <leader>k i<CR><Esc>:.-1s/\s\+$//e<CR>+
 
-" Use Q to execute default register (used to be Q-ex mode)
+" Use Q to execute q register (used to be Q-ex mode)
 nnoremap Q @q
 
 " Make it so that double-tapping space hides search highlights
@@ -98,6 +92,16 @@ if has('nvim')
     au TermEnter * setl nocul
     au TermLeave * setl cul<
 endif
+
+" Try to use ripgrep as grep program
+if executable("rg")
+    " Taken from https://github.com/BurntSushi/ripgrep/issues/425
+    set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
+    set grepformat=%f:%l:%c:%m,%f:%l:%m
+endif
+
+" Autoformat options for markdown files
+au FileType markdown setl spell tw=120 fo+=aw fo-=c
 
 " PLUGINS
 if g:load_plugins
@@ -118,7 +122,11 @@ if g:load_plugins
     Plug 'junegunn/fzf.vim'
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
     Plug 'voldikss/vim-floaterm'
-    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+    " Neovim-only plugins
+    if has('nvim')
+        Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+    endif
     call plug#end()
 
     colorscheme gruvbox
@@ -186,13 +194,15 @@ if g:load_plugins
 
     " Create FZF rule for branch files
     fu s:FZFBranchFiles()
-        let l:args = {'source': 'git diff --diff-filter=AMRC --name-only @{u}', 'sink': 'e'}
+        let l:args = {'source': 'git diff --diff-filter=AMRC --name-only @{u}', 'options': '--multi'}
         call fzf#run(fzf#vim#with_preview(fzf#wrap(l:args)))
     endf
     nnoremap <silent> <leader>w <cmd>call <sid>FZFBranchFiles()<cr>
 
     " Treesitter
-    luafile $HOME/config/neovim/treesitter.lua
+    if has('nvim')
+        luafile $HOME/config/neovim/treesitter.lua
+    endif
 else
     colorscheme desert
 endif
