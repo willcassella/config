@@ -107,9 +107,7 @@ au FileType markdown setl spell tw=120 fo+=aw fo-=c
 if g:load_plugins
     call plug#begin()
     Plug 'junegunn/vim-plug'
-    Plug 'joshdick/onedark.vim'
     Plug 'morhetz/gruvbox'
-    Plug 'lifepillar/vim-solarized8'
     Plug 'itchyny/lightline.vim'
     Plug 'tpope/vim-fugitive'
     Plug 'tpope/vim-surround'
@@ -160,6 +158,11 @@ if g:load_plugins
         \   'right': [],
         \ }
     set noshowmode " lightline shows the current mode in the statusline
+
+    " Hack to update lightline when changing 'background' option
+    autocmd OptionSet background
+      \ execute 'source' globpath(&rtp, 'autoload/lightline/colorscheme/gruvbox.vim')
+      \ | call lightline#colorscheme() | call lightline#update()
 
     " ARGWRAP
     nnoremap <silent> <leader>* :ArgWrap<CR>
