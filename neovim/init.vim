@@ -126,6 +126,7 @@ if g:load_plugins
     Plug 'junegunn/fzf.vim'
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
     Plug 'voldikss/vim-floaterm'
+    Plug 'direnv/direnv.vim'
 
     " Neovim-only plugins
     if has('nvim')
