@@ -103,6 +103,12 @@ endif
 " Autoformat options for markdown files
 au FileType markdown setl spell tw=120 fo+=aw fo-=c
 
+" Filetype support for direnv files
+au BufRead,BufNewFile .envrc setl ft=bash
+
+" Helper function for copying path of current buffer
+com YankPath let @0=@%
+
 " PLUGINS
 if g:load_plugins
     call plug#begin()
