@@ -10,7 +10,6 @@ set incsearch
 set history=10000
 set tabpagemax=50
 set laststatus=2
-set ruler
 set wildmenu
 
 " GENERAL OPTIONS
@@ -39,6 +38,26 @@ set listchars=trail:~,tab:>-
 set completeopt-=preview
 set completeopt+=menuone
 set matchpairs+=<:> " Enable matching between < and >
+set noruler
+
+" Statusline
+let g:statusline_extra = []
+func! StatuslineExtra()
+    " Eval each expression in g:statusline_extra and remove empty results
+    let l:results = map(copy(g:statusline_extra), 'eval(v:val)')
+    call filter(l:results, 'len(v:val)')
+    return trim(join([''] + l:results, ' | '))
+endfunc
+
+func! MyStatusLine()
+    " Style terminal buffers differently
+    if &buftype == 'terminal' | return '%{&shell}%=[term]' | endif
+    " Style non-current buffers differently
+    if win_getid() != g:actual_curwin | return '%t%( %m%r%)%<%=%l:%c' | endif
+    " Full style for current non-terminal buffers
+    return '%t%( %m%r%)%< %{StatuslineExtra()}%=%l/%L:%c%( %{&fenc}%)%( %{&ff}%)%( %y%)'
+endfunc
+set statusline=%{%MyStatusLine()%}
 
 " Increase history limit
 if has('shada')
@@ -110,7 +129,6 @@ if exists('g:load_plugins') && g:load_plugins
     call plug#begin()
     Plug 'junegunn/vim-plug'
     Plug 'morhetz/gruvbox'
-    Plug 'itchyny/lightline.vim'
     Plug 'tpope/vim-fugitive'
     Plug 'tpope/vim-surround'
     Plug 'tpope/vim-commentary'
@@ -132,43 +150,20 @@ if exists('g:load_plugins') && g:load_plugins
 
     colorscheme gruvbox
 
+    " Fugitive
+    let g:statusline_extra += ["FugitiveHead()"]
+
     " FZF.Vim
     nnoremap <silent> <leader>f :Files<CR>
     nnoremap <silent> <leader>d :Buffers<CR>
     nnoremap <silent> <leader>g :History<CR>
 
-    " Lightline
-    let g:lightline = {}
-    let g:lightline.colorscheme = 'gruvbox'
-    let g:lightline.component_function = {
-        \   'gitbranch': 'FugitiveHead',
-        \   'cocstatus': 'coc#status',
-        \ }
-    let g:lightline.active = {
-        \   'left': [
-        \     [ 'mode', 'paste' ],
-        \     [ 'gitbranch', 'readonly', 'filename', 'modified' ],
-        \     [ 'cocstatus' ],
-        \   ],
-        \   'right': [
-        \     [ 'lineinfo' ],
-        \     [ 'percent' ],
-        \     [ 'fileformat', 'fileencoding', 'filetype' ],
-        \   ],
-        \ }
-    let g:lightline.tabline = {
-        \   'left': [[ 'tabs' ]],
-        \   'right': [],
-        \ }
-    set noshowmode " lightline shows the current mode in the statusline
-
-    " Hack to update lightline when changing 'background' option
-    autocmd OptionSet background
-      \ execute 'source' globpath(&rtp, 'autoload/lightline/colorscheme/gruvbox.vim')
-      \ | call lightline#colorscheme() | call lightline#update()
-
     " ARGWRAP
     nnoremap <silent> <leader>* :ArgWrap<CR>
+
+    " CoC
+    let g:statusline_extra += ["coc#status()"]
+    autocmd User CocStatusChange,CocDiagnosticChange let &ro = &ro
 
     " Make it so that [e and ]e can navigate between CoC errors
     nmap <silent> [e <Plug>(coc-diagnostic-prev)
@@ -182,9 +177,6 @@ if exists('g:load_plugins') && g:load_plugins
     " Use <C-S> and <C-Space> to search for symbols
     nnoremap <C-S> :CocList symbols<CR>
     nnoremap <C-Space> :CocList outline<CR>
-
-    " Ensure lightline is updated with coc status changes
-    autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 
     " Git gutter
     let g:gitgutter_sign_priority = 5
