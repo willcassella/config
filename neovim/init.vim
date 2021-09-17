@@ -41,21 +41,26 @@ set matchpairs+=<:> " Enable matching between < and >
 set noruler
 
 " Statusline
-let g:statusline_extra = []
-func! StatuslineExtra()
+func! StatuslineParts(parts)
     " Eval each expression in g:statusline_extra and remove empty results
-    let l:results = map(copy(g:statusline_extra), 'eval(v:val)')
+    let l:results = map(copy(a:parts), 'eval(v:val)')
     call filter(l:results, 'len(v:val)')
     return trim(join([''] + l:results, ' | '))
 endfunc
+let g:statusline_left_parts = []
+let g:statusline_right_parts = ['&fenc', '&ff', "&ft"]
 
 func! MyStatusLine()
     " Style terminal buffers differently
-    if &buftype == 'terminal' | return '%{&shell}%=[term]' | endif
+    if &buftype == 'terminal' | return '%{&shell}%<%=[term]' | endif
+    let l:left_part = '%t%( %m%r%)'
+    let l:right_part = '%l/%L:%c'
     " Style non-current buffers differently
-    if win_getid() != g:actual_curwin | return '%t%( %m%r%)%<%=%l:%c' | endif
-    " Full style for current non-terminal buffers
-    return '%t%( %m%r%)%< %{StatuslineExtra()}%=%l/%L:%c%( %{&fenc}%)%( %{&ff}%)%( %y%)'
+    if win_getid() != g:actual_curwin | return l:left_part . '%<%=' . l:right_part | endif
+    " Current non-terminal buffer includes extra parts
+    let l:left_part .= '%< %{StatuslineParts(g:statusline_left_parts)}'
+    let l:right_part .= '%( %{StatuslineParts(g:statusline_right_parts)}%)'
+    return l:left_part . '%=' . l:right_part
 endfunc
 set statusline=%{%MyStatusLine()%}
 
@@ -151,7 +156,7 @@ if exists('g:load_plugins') && g:load_plugins
     colorscheme gruvbox
 
     " Fugitive
-    let g:statusline_extra += ["FugitiveHead()"]
+    let g:statusline_left_parts += ["FugitiveHead()"]
 
     " FZF.Vim
     nnoremap <silent> <leader>f :Files<CR>
@@ -162,7 +167,7 @@ if exists('g:load_plugins') && g:load_plugins
     nnoremap <silent> <leader>* :ArgWrap<CR>
 
     " CoC
-    let g:statusline_extra += ["coc#status()"]
+    let g:statusline_left_parts += ["coc#status()"]
     autocmd User CocStatusChange,CocDiagnosticChange let &ro = &ro
 
     " Make it so that [e and ]e can navigate between CoC errors
