@@ -1,7 +1,3 @@
-if !exists('g:load_plugins')
-    let g:load_plugins = 0
-endif
-
 " Neovim defaults (here for vim)
 set nocompatible
 set autoindent
@@ -110,7 +106,7 @@ au BufRead,BufNewFile .envrc setl ft=bash
 com YankPath let @0=@%
 
 " PLUGINS
-if g:load_plugins
+if exists('g:load_plugins') && g:load_plugins
     call plug#begin()
     Plug 'junegunn/vim-plug'
     Plug 'morhetz/gruvbox'
