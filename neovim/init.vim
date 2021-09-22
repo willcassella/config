@@ -28,7 +28,6 @@ set sidescrolloff=5
 set updatetime=300
 set diffopt+=vertical " Always use vertical splits for diff
 set number " Show line number on current line
-set cursorline " Highlight cursor line
 set nowrap " Wrapping is annoying
 set showmatch " Show matching brackets
 set matchtime=1 " Cursor restores after highlighting matching bracket in 0.1 seconds
@@ -39,6 +38,9 @@ set completeopt-=preview
 set completeopt+=menuone
 set matchpairs+=<:> " Enable matching between < and >
 set noruler
+set cursorline " Highlight cursor line
+au WinEnter * setl cursorline<
+au WinLeave * setl nocursorline
 
 " Statusline
 func! StatuslineParts(parts)
@@ -145,7 +147,10 @@ if exists('g:load_plugins') && g:load_plugins
     Plug 'junegunn/fzf.vim'
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
     Plug 'voldikss/vim-floaterm'
-    Plug 'direnv/direnv.vim'
+
+    if executable('direnv')
+        Plug 'direnv/direnv.vim'
+    endif
 
     " Neovim-only plugins
     if has('nvim')
