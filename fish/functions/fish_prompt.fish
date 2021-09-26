@@ -22,7 +22,7 @@ function fish_prompt
     # Get the current branch we're on, if we're in a git repo
     if set -l git_branch (git rev-parse --abbrev-ref HEAD 2> /dev/null)
         # Output git branch, or HEAD if detached
-        set_color $color_border; echo -n '['
+        set_color $color_border; echo -n '['
         if [ "$git_branch" = HEAD ]
             set_color $color_git_nobranch; echo -n HEAD
         else
