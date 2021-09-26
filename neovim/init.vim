@@ -55,12 +55,12 @@ let g:statusline_right_parts = ['&fenc', '&ff', "&ft"]
 func! MyStatusLine()
     " Style terminal buffers differently
     if &buftype == 'terminal' | return '%{&shell}%<%=[term]' | endif
-    let l:left_part = '%t%( %m%r%)'
+    let l:left_part = '%t%( %m%r%)%<'
     let l:right_part = '%l/%L:%c'
     " Style non-current buffers differently
-    if win_getid() != g:actual_curwin | return l:left_part . '%<%=' . l:right_part | endif
+    if win_getid() != g:actual_curwin | return l:left_part . '%=' . l:right_part | endif
     " Current non-terminal buffer includes extra parts
-    let l:left_part .= '%< %{StatuslineParts(g:statusline_left_parts)}'
+    let l:left_part .= '%( %{StatuslineParts(g:statusline_left_parts)}%)'
     let l:right_part .= '%( %{StatuslineParts(g:statusline_right_parts)}%)'
     return l:left_part . '%=' . l:right_part
 endfunc
