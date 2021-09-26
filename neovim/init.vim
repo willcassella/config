@@ -135,7 +135,8 @@ com YankPath let @0=@%
 if exists('g:load_plugins') && g:load_plugins
     call plug#begin()
     Plug 'junegunn/vim-plug'
-    Plug 'morhetz/gruvbox'
+    Plug 'gruvbox-community/gruvbox'
+    Plug 'tomasiser/vim-code-dark'
     Plug 'tpope/vim-fugitive'
     Plug 'tpope/vim-surround'
     Plug 'tpope/vim-commentary'
