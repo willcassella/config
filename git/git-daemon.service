@@ -1,0 +1,22 @@
+# Template for setting up a systemd service to run git-serve
+# Install via `sudo cp git-daemon.service /etc/systemd/system/'
+# Be sure to edit the variables below first!
+
+[Unit]
+Description=Start Git Daemon
+
+[Service]
+ExecStart=/usr/bin/env -C ${SRC_DIRECTORY} GIT_SERVE_ALLOW_PUSH=1 ${HOME}/config/git/bin/serve.sh
+
+Restart=always
+RestartSec=500ms
+
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=git-daemon
+
+User=${USER}
+Group=${USER}
+
+[Install]
+WantedBy=multi-user.target
