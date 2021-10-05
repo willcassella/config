@@ -23,7 +23,7 @@ set smartcase " unless the query has a capital letter
 set splitright splitbelow
 set noswapfile nobackup noundofile
 set title
-set scrolloff=2
+set scrolloff=1
 set sidescrolloff=5
 set updatetime=300
 set diffopt+=vertical " Always use vertical splits for diff
@@ -37,7 +37,6 @@ set listchars=trail:~,tab:>-
 set completeopt-=preview
 set completeopt+=menuone
 set matchpairs+=<:> " Enable matching between < and >
-set noruler
 set cursorline " Highlight cursor line
 au WinEnter * setl cursorline<
 au WinLeave * setl nocursorline
@@ -102,9 +101,6 @@ nnoremap Q @q
 " Make it so that double-tapping space hides search highlights
 nnoremap <silent> <leader><space> :noh<CR>
 vnoremap <silent> <leader><space> <ESC>:noh<CR>gv
-
-" Use <C-F> for scrolling up (more ergonomic than <C-Y>)
-noremap <C-F> <C-Y>
 
 " Useful for quickly opening another file in the current directory
 cabbrev <expr> %% expand('%:h')
@@ -183,7 +179,10 @@ if exists('g:load_plugins') && g:load_plugins
     " Remap go to definition
     nmap <silent> gd <Plug>(coc-definition)
     nmap <silent> gr <Plug>(coc-references)
-    nnoremap <silent> gh :call CocAction('doHover')<CR>
+    nnoremap <silent> gh <Cmd>call CocAction('doHover')<CR>
+
+    " User <leader>cf for Coc fix
+    nnoremap <silent> <leader>cf <Cmd>CocFix<CR>
 
     " Use <C-S> and <C-Space> to search for symbols
     nnoremap <C-S> :CocList symbols<CR>
