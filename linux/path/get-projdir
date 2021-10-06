@@ -1,0 +1,7 @@
+#!/bin/bash
+set -eou pipefail
+
+if [ -z "${1:-}" ]; then
+    exit 1
+fi
+realpath "$1" | xargs dirname | xargs -I{} env -C {} git rev-parse --show-toplevel
