@@ -99,8 +99,7 @@ nnoremap <silent> <leader>k i<CR><Esc>:.-1s/\s\+$//e<CR>+
 nnoremap Q @q
 
 " Make it so that double-tapping space hides search highlights
-nnoremap <silent> <leader><space> :noh<CR>
-vnoremap <silent> <leader><space> <ESC>:noh<CR>gv
+noremap <silent> <leader><space> <Cmd>noh<CR>
 
 " Useful for quickly opening another file in the current directory
 cabbrev <expr> %% expand('%:h')
@@ -161,12 +160,12 @@ if exists('g:load_plugins') && g:load_plugins
     let g:statusline_left_parts += ["FugitiveHead()"]
 
     " FZF.Vim
-    nnoremap <silent> <leader>f :Files<CR>
-    nnoremap <silent> <leader>d :Buffers<CR>
-    nnoremap <silent> <leader>g :History<CR>
+    nnoremap <silent> <leader>f <Cmd>Files<CR>
+    nnoremap <silent> <leader>d <Cmd>Buffers<CR>
+    nnoremap <silent> <leader>g <Cmd>History<CR>
 
     " ARGWRAP
-    nnoremap <silent> <leader>* :ArgWrap<CR>
+    nnoremap <silent> <leader>* <Cmd>ArgWrap<CR>
 
     " CoC
     let g:statusline_left_parts += ["coc#status()"]
@@ -185,8 +184,8 @@ if exists('g:load_plugins') && g:load_plugins
     nnoremap <silent> <leader>cf <Cmd>CocFix<CR>
 
     " Use <C-S> and <C-Space> to search for symbols
-    nnoremap <C-S> :CocList symbols<CR>
-    nnoremap <C-Space> :CocList outline<CR>
+    nnoremap <C-S> <Cmd>CocList symbols<CR>
+    nnoremap <C-Space> <Cmd>CocList outline<CR>
 
     " Git gutter
     let g:gitgutter_sign_priority = 5
@@ -196,8 +195,8 @@ if exists('g:load_plugins') && g:load_plugins
     let g:gitgutter_sign_removed = '┇'
 
     " Floaterm
-    nnoremap <silent> ` :FloatermToggle<CR>
-    au FileType floaterm tnoremap <buffer><silent> ` <C-\><C-N>:FloatermToggle<CR>
+    nnoremap <silent> ` <Cmd>FloatermToggle<CR>
+    au FileType floaterm tnoremap <buffer><silent> ` <Cmd>FloatermToggle<CR>
     au FileType floaterm tnoremap <buffer> <C-\>` `
 
     " Create FZF rule for branch files
