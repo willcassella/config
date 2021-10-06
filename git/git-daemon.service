@@ -6,7 +6,7 @@
 Description=Start Git Daemon
 
 [Service]
-ExecStart=/usr/bin/env -C ${SRC_DIRECTORY} GIT_SERVE_ALLOW_PUSH=1 ${HOME}/config/git/bin/serve.sh
+ExecStart=/usr/bin/env -C ${SRC_DIRECTORY} GIT_SERVE_ALLOW_PUSH=1 ${HOME}/config/git/path/git-serve
 
 Restart=always
 RestartSec=500ms
