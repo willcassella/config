@@ -1,0 +1,16 @@
+#!/bin/bash
+set -eou pipefail
+
+# If no argument was given, use the parent directory
+if [ -z "${1:-}" ]; then
+    DIR=$(pwd)
+elif [ -f "$1" ]; then
+    # If a file path was given, get parent directory of the realpath of $1, as it may be a symlink
+    DIR=$(realpath "$1" | xargs dirname)
+elif [ -d "$1" ]; then
+    DIR=$1
+else
+    exit 1
+fi
+
+exec env -C "$DIR" git rev-parse --show-toplevel
