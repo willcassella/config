@@ -3,12 +3,12 @@ set -eou pipefail
 
 # 9418 is the standard git port, DEFAULT_GIT_PORT is the environment
 # variable used internally by git-daemon
-PORT=${DEFAULT_GIT_PORT:-9418}
+PORT="${DEFAULT_GIT_PORT:-9418}"
 echo "Now serving on port $PORT, set DEFAULT_GIT_PORT to change"
 
 args=()
 
-if [ ${GIT_SERVE_ALLOW_PUSH:-0} = 1 ]; then
+if [ "${GIT_SERVE_ALLOW_PUSH:-0}" = 1 ]; then
     echo "receive-pack (git push) service enabled, be careful who this is exposed to!"
     args+=( '--enable=receive-pack' )
 else
@@ -24,7 +24,7 @@ else
     echo "ex: git pull git://localhost:$PORT/repo branch"
 fi
 
-if [ ${GIT_SERVE_DETACH:-0} = 1 ]; then
+if [ "${GIT_SERVE_DETACH:-0}" = 1 ]; then
     echo "Detaching from shell"
     args+=( '--detach' )
 fi
