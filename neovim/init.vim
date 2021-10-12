@@ -155,6 +155,7 @@ if exists('g:load_plugins') && g:load_plugins
     " Neovim-only plugins
     if has('nvim')
         Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+        Plug 'navarasu/onedark.nvim'
     endif
     call plug#end()
 
