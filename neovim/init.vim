@@ -123,6 +123,10 @@ au FileType markdown setl spell tw=120 fo+=aw fo-=c
 " Filetype support for direnv files
 au BufRead,BufNewFile .envrc setl ft=bash
 
+" Filetype support for gn files
+au BufRead,BufNewFile *.gn,*.gni setl ft=gn
+au FileType gn setl syn=conf ts=2 sw=2 inex=substitute(v:fname,'^//','','')
+
 " Helper function for copying path of current buffer
 com YankPath let @0=@%
 
