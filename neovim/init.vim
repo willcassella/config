@@ -85,15 +85,15 @@ filetype plugin indent on
 let mapleader = ' '
 
 " Add mappings for moving lines with alt+k/alt+j
-nnoremap <M-k> :m .-2<CR>
-nnoremap <M-j> :m .+1<CR>
-inoremap <M-j> <Esc>:m .+1<CR>gi
-inoremap <M-k> <Esc>:m .-2<CR>gi
+nnoremap <M-k> <Cmd>m .-2<CR>
+nnoremap <M-j> <Cmd>m .+1<CR>
+inoremap <M-j> <Cmd>m .+1<CR>
+inoremap <M-k> <Cmd>m .-2<CR>
 vnoremap <M-j> :m '>+1<CR>gv
 vnoremap <M-k> :m '<-2<CR>gv
 
 " Make it so that Leader-k splits lines (and removes trailing whitespace)
-nnoremap <silent> <leader>k i<CR><Esc>:.-1s/\s\+$//e<CR>+
+nnoremap <silent> <leader>k i<CR><Esc><Cmd>.-1s/\s\+$//e<CR>+
 
 " Use Q to execute q register (used to be Q-ex mode)
 nnoremap Q @q
