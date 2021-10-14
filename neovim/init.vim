@@ -161,6 +161,7 @@ if exists('g:load_plugins') && g:load_plugins
         Plug 'navarasu/onedark.nvim'
         Plug 'lukas-reineke/indent-blankline.nvim'
         set colorcolumn=9999999 " Workaround for rendering bug in Neovim with indent-blankline
+        let g:indent_blankline_disable_with_nolist = v:true
     endif
     call plug#end()
 
