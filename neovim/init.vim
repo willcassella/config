@@ -174,7 +174,7 @@ if exists('g:load_plugins') && g:load_plugins
 
     " CoC
     let g:statusline_left_parts += ["coc#status()"]
-    autocmd User CocStatusChange,CocDiagnosticChange let &ro = &ro
+    au User CocStatusChange,CocDiagnosticChange let &ro = &ro
 
     " Make it so that [e and ]e can navigate between CoC errors
     nmap <silent> [e <Plug>(coc-diagnostic-prev)
