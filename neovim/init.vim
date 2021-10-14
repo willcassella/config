@@ -130,6 +130,9 @@ au FileType gn setl syn=conf ts=2 sw=2 inex=substitute(v:fname,'^//','','')
 " Helper function for copying path of current buffer
 com YankPath let @0=@%
 
+" Helper command for evaluating selected text
+com -range Eval exe join(getline(<line1>, <line2>), "\n")
+
 " PLUGINS
 if exists('g:load_plugins') && g:load_plugins
     call plug#begin()
