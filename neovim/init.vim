@@ -159,6 +159,8 @@ if exists('g:load_plugins') && g:load_plugins
     if has('nvim')
         Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
         Plug 'navarasu/onedark.nvim'
+        Plug 'lukas-reineke/indent-blankline.nvim'
+        set colorcolumn=9999999 " Workaround for rendering bug in Neovim with indent-blankline
     endif
     call plug#end()
 
