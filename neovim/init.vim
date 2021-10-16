@@ -92,8 +92,8 @@ inoremap <M-k> <Cmd>m .-2<CR>
 vnoremap <M-j> :m '>+1<CR>gv
 vnoremap <M-k> :m '<-2<CR>gv
 
-" Make it so that Leader-k splits lines (and removes trailing whitespace)
-nnoremap <silent> <leader>k i<CR><Esc><Cmd>.-1s/\s\+$//e<CR>+
+" Make it so that Alt-Shift-J splits lines (and removes trailing whitespace)
+nnoremap <silent> <M-J> i<CR><Esc>k<Cmd>s/\s\+$//e<CR>+
 
 " Use Q to execute q register (used to be Q-ex mode)
 nnoremap Q @q
