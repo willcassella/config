@@ -49,7 +49,7 @@ func! StatuslineParts(parts)
     return trim(join([''] + l:results, ' | '))
 endfunc
 let g:statusline_left_parts = []
-let g:statusline_right_parts = ['&fenc', '&ff', "&ft"]
+let g:statusline_right_parts = ['&fenc', '&ff', '&ft']
 
 func! MyStatusLine()
     " Style terminal buffers differently
@@ -111,7 +111,7 @@ if has('nvim')
 endif
 
 " Try to use ripgrep as grep program
-if executable("rg")
+if executable('rg')
     " Taken from https://github.com/BurntSushi/ripgrep/issues/425
     set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
     set grepformat=%f:%l:%c:%m,%f:%l:%m
@@ -131,7 +131,7 @@ au FileType gn ++nested setl syn=conf ts=2 sw=2 inex=substitute(v:fname,'^//',''
 com YankPath let @0=@%
 
 " Helper command for evaluating selected text
-com -range Eval exe join(getline(<line1>, <line2>), "\n")
+com -range Eval exe join(getline(<line1>, <line2>), '\n')
 
 " PLUGINS
 if exists('g:load_plugins') && g:load_plugins
@@ -168,7 +168,7 @@ if exists('g:load_plugins') && g:load_plugins
     colorscheme gruvbox
 
     " Fugitive
-    let g:statusline_left_parts += ["FugitiveHead()"]
+    let g:statusline_left_parts += ['FugitiveHead()']
 
     " FZF.Vim
     nnoremap <silent> <leader>f <Cmd>Files<CR>
@@ -179,7 +179,7 @@ if exists('g:load_plugins') && g:load_plugins
     nnoremap <silent> <leader>* <Cmd>ArgWrap<CR>
 
     " CoC
-    let g:statusline_left_parts += ["coc#status()"]
+    let g:statusline_left_parts += ['coc#status()']
     au User CocStatusChange,CocDiagnosticChange ++nested let &ro = &ro
 
     " Make it so that [e and ]e can navigate between CoC errors
