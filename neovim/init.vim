@@ -224,3 +224,11 @@ if exists('g:load_plugins') && g:load_plugins
 else
     colorscheme desert
 endif
+
+" Load project vimrc files (no-op if not defined)
+" I prefer this over 'use vim' in .envrc since it's more predictable.
+for file in split($PROJECT_VIMRC, ':')
+    if len(file)
+        exe 'source' file
+    endif
+endfor
