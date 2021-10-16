@@ -38,8 +38,8 @@ set completeopt-=preview
 set completeopt+=menuone
 set matchpairs+=<:> " Enable matching between < and >
 set cursorline " Highlight cursor line
-au WinEnter * setl cursorline<
-au WinLeave * setl nocursorline
+au WinEnter * ++nested setl cursorline<
+au WinLeave * ++nested setl nocursorline
 
 " Statusline
 func! StatuslineParts(parts)
@@ -105,9 +105,9 @@ noremap <silent> <leader><space> <Cmd>noh<CR>
 cabbrev <expr> %% expand('%:h')
 
 if has('nvim')
-    au TermOpen * setl nonu so=0 scl=no mps= nolist
-    au TermEnter * setl nocul
-    au TermLeave * setl cul<
+    au TermOpen * ++nested setl nonu so=0 scl=no mps= nolist
+    au TermEnter * ++nested setl nocul
+    au TermLeave * ++nested setl cul<
 endif
 
 " Try to use ripgrep as grep program
@@ -118,14 +118,14 @@ if executable("rg")
 endif
 
 " Autoformat options for markdown files
-au FileType markdown setl spell tw=120 fo+=aw fo-=c
+au FileType markdown ++nested setl spell tw=120 fo+=aw fo-=c
 
 " Filetype support for direnv files
-au BufRead,BufNewFile .envrc setl ft=bash
+au BufRead,BufNewFile .envrc ++nested setl ft=bash
 
 " Filetype support for gn files
-au BufRead,BufNewFile *.gn,*.gni setl ft=gn
-au FileType gn setl syn=conf ts=2 sw=2 inex=substitute(v:fname,'^//','','')
+au BufRead,BufNewFile *.gn,*.gni ++nested setl ft=gn
+au FileType gn ++nested setl syn=conf ts=2 sw=2 inex=substitute(v:fname,'^//','','')
 
 " Helper function for copying path of current buffer
 com YankPath let @0=@%
@@ -180,7 +180,7 @@ if exists('g:load_plugins') && g:load_plugins
 
     " CoC
     let g:statusline_left_parts += ["coc#status()"]
-    au User CocStatusChange,CocDiagnosticChange let &ro = &ro
+    au User CocStatusChange,CocDiagnosticChange ++nested let &ro = &ro
 
     " Make it so that [e and ]e can navigate between CoC errors
     nmap <silent> [e <Plug>(coc-diagnostic-prev)
@@ -207,8 +207,8 @@ if exists('g:load_plugins') && g:load_plugins
 
     " Floaterm
     nnoremap <silent> ` <Cmd>FloatermToggle<CR>
-    au FileType floaterm tnoremap <buffer><silent> ` <Cmd>FloatermToggle<CR>
-    au FileType floaterm tnoremap <buffer> <C-\>` `
+    au FileType floaterm ++nested tnoremap <buffer><silent> ` <Cmd>FloatermToggle<CR>
+    au FileType floaterm ++nested tnoremap <buffer> <C-\>` `
 
     " Create FZF rule for branch files
     fu s:FZFBranchFiles()
