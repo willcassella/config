@@ -237,7 +237,8 @@ else
 endif
 
 " Load project vimrc files (no-op if not defined)
-" I prefer this over 'use vim' in .envrc since it's more predictable.
+" I prefer this over 'use vim' in .envrc since it's more predictable
+" (run once, unconditionally).
 for file in split($PROJECT_VIMRC, ':')
     if len(file)
         exe 'source' file
