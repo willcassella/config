@@ -42,6 +42,17 @@ au WinEnter * ++nested setl cursorline<
 au WinLeave * ++nested setl nocursorline
 
 " Statusline
+func! TerminalBufferName()
+    if has('nvim')
+        " In neovim, terminal filenames have the form: term://pwd//PID(?):cmd
+        " We want to return the command name
+        return '!' . join(split(bufname(), ':')[2:], ':')
+    else
+        " In vim, terminal buffer names are good as is
+        return bufname()
+    end
+endfunc
+
 func! StatuslineParts(parts)
     " Eval each expression in g:statusline_extra and remove empty results
     let l:results = map(copy(a:parts), 'eval(v:val)')
@@ -51,11 +62,11 @@ endfunc
 let g:statusline_left_parts = []
 let g:statusline_right_parts = ['&fenc', '&ff', '&ft']
 
-func! MyStatusLine()
+func! Statusline()
     " Style terminal buffers differently
-    if &buftype == 'terminal' | return '%{&shell}%<%=[term]' | endif
+    if &buftype == 'terminal' | return '%{TerminalBufferName()}%<%=[term]' | endif
     let l:left_part = '%t%( %m%r%)%<'
-    let l:right_part = '%l/%L:%c'
+    let l:right_part = '%l/%L:%c #%{winnr()}'
     " Style non-current buffers differently
     if win_getid() != g:actual_curwin | return l:left_part . '%=' . l:right_part | endif
     " Current non-terminal buffer includes extra parts
@@ -63,7 +74,7 @@ func! MyStatusLine()
     let l:right_part .= '%( %{StatuslineParts(g:statusline_right_parts)}%)'
     return l:left_part . '%=' . l:right_part
 endfunc
-set statusline=%{%MyStatusLine()%}
+set statusline=%{%Statusline()%}
 
 " Increase history limit
 if has('shada')
