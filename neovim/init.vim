@@ -143,10 +143,6 @@ au FileType markdown ++nested setl spell tw=120 fo+=aw fo-=c
 " Filetype support for direnv files
 au BufRead,BufNewFile .envrc ++nested setl ft=bash
 
-" Filetype support for gn files
-au BufRead,BufNewFile *.gn,*.gni ++nested setl ft=gn
-au FileType gn ++nested setl syn=conf ts=2 sw=2 inex=substitute(v:fname,'^//','','')
-
 " Helper function for copying path of current buffer
 com YankPath let @0=@%
 
@@ -179,6 +175,7 @@ if exists('g:load_plugins') && g:load_plugins
     if has('nvim')
         Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
         Plug 'nvim-treesitter/playground'
+        Plug 'willcassella/nvim-gn', {'do': ':TSUpdate'}
         Plug 'navarasu/onedark.nvim'
         Plug 'lukas-reineke/indent-blankline.nvim'
         set colorcolumn=9999999 " Workaround for rendering bug in Neovim with indent-blankline
