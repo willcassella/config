@@ -1,17 +1,3 @@
-" Neovim defaults (here for vim)
-set nocompatible
-set autoindent
-set autoread
-set backspace=start,indent,eol
-set belloff=all
-set encoding=utf-8
-set hlsearch
-set incsearch
-set history=10000
-set tabpagemax=50
-set laststatus=2
-set wildmenu
-
 " GENERAL OPTIONS
 set nomodeline " Modelines are insecure
 set expandtab " Tab expands to spaces

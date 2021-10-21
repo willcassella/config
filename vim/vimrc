@@ -1,0 +1,20 @@
+" Use neovim defaults
+set nocompatible
+set autoindent
+set autoread
+set backspace=start,indent,eol
+set belloff=all
+set encoding=utf-8
+set hlsearch
+set incsearch
+set history=10000
+set tabpagemax=50
+set laststatus=2
+set wildmenu
+
+" Gui options
+set guioptions-=rL
+
+" Enable cursor shapes
+let &t_SI = "\e[6 q"
+let &t_EI = "\e[2 q"
