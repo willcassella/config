@@ -238,6 +238,16 @@ if exists('g:load_plugins') && g:load_plugins
         call fzf#run(fzf#vim#with_preview(fzf#wrap(l:args)))
     endf
     nnoremap <silent> <leader>w <cmd>call <sid>FZFBranchFiles()<cr>
+
+    " Make the fugitive window the only window if vim started that way.
+    " ie: nvim +G
+    fu s:FullscreenFugitive()
+        if map(getbufinfo(), 'v:val["bufnr"]') == [1, 2] && bufname(1) == "" && getbufvar(2, "&ft") == "fugitive"
+            " Assume fugitive is the currently active window
+            wincmd o
+        endif
+    endf
+    au VimEnter * ++nested call s:FullscreenFugitive()
 else
     colorscheme desert
 endif
