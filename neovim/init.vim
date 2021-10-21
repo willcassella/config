@@ -173,8 +173,6 @@ if exists('g:load_plugins') && g:load_plugins
         luafile $HOME/config/neovim/treesitter.lua
     endif
 
-    colorscheme gruvbox
-
     " Fugitive
     let g:statusline_left_parts += ['FugitiveHead()']
 
@@ -234,8 +232,6 @@ if exists('g:load_plugins') && g:load_plugins
         endif
     endf
     au VimEnter * ++nested call s:FullscreenFugitive()
-else
-    colorscheme desert
 endif
 
 " Load project vimrc files (no-op if not defined)
