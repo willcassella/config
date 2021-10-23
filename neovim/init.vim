@@ -212,6 +212,8 @@ if exists('g:load_plugins') && g:load_plugins
     let g:gitgutter_sign_removed = '┇'
 
     " Floaterm
+    let g:floaterm_width = 0.8
+    let g:floaterm_height = 0.8
     nnoremap <silent> ` <Cmd>FloatermToggle<CR>
     au FileType floaterm ++nested tnoremap <buffer><silent> ` <Cmd>FloatermToggle<CR>
     au FileType floaterm ++nested tnoremap <buffer> <C-\>` `
