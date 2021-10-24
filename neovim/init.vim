@@ -228,6 +228,7 @@ if exists('g:load_plugins') && g:load_plugins
     " Make the fugitive window the only window if vim started that way.
     " ie: nvim +G
     fu s:FullscreenFugitive()
+        " If current layout is two buffers: default and fugitive
         if map(getbufinfo(), 'v:val["bufnr"]') == [1, 2] && bufname(1) == "" && getbufvar(2, "&ft") == "fugitive"
             " Assume fugitive is the currently active window
             wincmd o
