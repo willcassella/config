@@ -1,0 +1,19 @@
+#!/bin/bash
+set -eou pipefail
+
+# If no argument was given, use current directory
+TARGET="${1:-$PWD}"
+
+if [ -d "$TARGET" ]; then
+    ls -la "$TARGET"
+elif [ -f "$TARGET" ]; then
+    if command -v bat &> /dev/null; then
+        bat "$TARGET"
+    elif command -v batcat &> /dev/null; then
+        batcat "$TARGET"
+    else
+        cat "$TARGET"
+    fi
+else
+    echo &1>2 "$TARGET does not exist"
+fi
