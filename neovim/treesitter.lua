@@ -10,6 +10,8 @@ require "nvim-treesitter.configs".setup {
       "css",
       "javascript",
       "python",
+      "fish",
+      "gn", -- Provided by willcassella/nvim-gn
   },
   highlight = {
     enable = true,

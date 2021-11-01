@@ -30,8 +30,8 @@ function fish_prompt
         end
 
         # Output number unstaged and staged changes
-        set -l unstaged_changes (git diff --name-only | uniq | wc -l)
-        set -l staged_changes (git diff --name-only --staged | wc -l)
+        set -l unstaged_changes (git diff --name-only | uniq | wc -l | tr -d ' ')
+        set -l staged_changes (git diff --name-only --staged | wc -l | tr -d ' ')
         if [ "$unstaged_changes" -ne 0 ]
             set_color $color_git_unstaged; echo -n " ~$unstaged_changes"
         end
