@@ -12,6 +12,9 @@ set tabpagemax=50
 set laststatus=2
 set wildmenu
 
+" <Esc> mappings timeout after 5 ms
+set ttimeoutlen=5
+
 " Gui options
 set guioptions-=rL
 
