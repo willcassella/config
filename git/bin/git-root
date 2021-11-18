@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eou pipefail
 
-# If no argument was given, use the parent directory
+# If no argument was given, use the current directory
 if [ -z "${1:-}" ]; then
     DIR="$(pwd)"
 elif [ -f "$1" ]; then
