@@ -3,7 +3,6 @@ set nomodeline " Modelines are insecure
 set expandtab " Tab expands to spaces
 set tabstop=4 " Tabs are 4 spaces
 set shiftwidth=4 " Indenting (< and >) is done in 4 space increments
-set hidden " Allow closing (hiding) buffers even if they have changes
 set ignorecase " Searching is case-insensitive
 set smartcase " unless the query has a capital letter
 set splitright splitbelow
@@ -76,10 +75,6 @@ if has('shada')
     set shada=!,'1000,<50,s10,h
 endif
 
-if exists('&inccommand')
-    set inccommand=nosplit " Show command results incrementally
-endif
-
 if has('mouse')
     set mouse=a
 endif
@@ -103,9 +98,6 @@ nnoremap <silent> <M-J> i<CR><Esc>k<Cmd>s/\s\+$//e<CR>+
 
 " Use Q to execute q register (used to be Q-ex mode)
 nnoremap Q @q
-
-" Make it so that double-tapping space hides search highlights
-noremap <silent> <leader><space> <Cmd>noh<CR>
 
 " Useful for quickly opening another file in the current directory
 cabbrev <expr> %% expand('%:h')

@@ -11,6 +11,8 @@ set history=10000
 set tabpagemax=50
 set laststatus=2
 set wildmenu
+set hidden
+set nojoinspaces
 
 " <Esc> mappings timeout after 5 ms
 set ttimeoutlen=5
