@@ -133,6 +133,7 @@ if exists('g:load_plugins') && g:load_plugins
     Plug 'junegunn/vim-plug'
     Plug 'gruvbox-community/gruvbox'
     Plug 'tomasiser/vim-code-dark'
+    Plug 'NLKNguyen/papercolor-theme'
     Plug 'tpope/vim-fugitive'
     Plug 'tpope/vim-surround'
     Plug 'tpope/vim-commentary'
@@ -145,10 +146,6 @@ if exists('g:load_plugins') && g:load_plugins
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
     Plug 'voldikss/vim-floaterm'
 
-    if executable('direnv')
-        Plug 'direnv/direnv.vim'
-    endif
-
     " Neovim-only plugins
     if has('nvim')
         Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -156,7 +153,6 @@ if exists('g:load_plugins') && g:load_plugins
         Plug 'willcassella/nvim-gn', {'do': ':TSUpdate'}
         Plug 'navarasu/onedark.nvim'
         Plug 'lukas-reineke/indent-blankline.nvim'
-        set colorcolumn=9999999 " Workaround for rendering bug in Neovim with indent-blankline
         let g:indent_blankline_disable_with_nolist = v:true
     endif
     call plug#end()
