@@ -52,7 +52,7 @@ func! Statusline()
 
     " Style terminal buffers differently
     if getbufvar(l:buf, '&buftype') == 'terminal'
-        return '%{TerminalBufferName()}%<%=[term]'
+        return ' %{TerminalBufferName()}%<%=[term] '
     endif
 
     let l:left_part = '%t%( %m%r%)%<'
@@ -60,13 +60,13 @@ func! Statusline()
 
     " Style non-current buffers differently
     if win_getid() != g:statusline_winid
-        return l:left_part . '%=' . l:right_part
+        return ' ' . l:left_part . '%=' . l:right_part . ' '
     endif
 
     " Current, non-terminal buffers include extra parts
     let l:left_part .= '%( %{StatuslineParts(g:statusline_left_parts)}%)'
     let l:right_part .= '%( %{StatuslineParts(g:statusline_right_parts)}%)'
-    return l:left_part . '%=' . l:right_part
+    return ' ' . l:left_part . '%=' . l:right_part . ' '
 endfunc
 set statusline=%!Statusline()
 
