@@ -8,6 +8,7 @@ set smartcase " unless the query has a capital letter
 set splitright splitbelow
 set noswapfile nobackup noundofile
 set title
+set mouse=a
 set scrolloff=1
 set sidescrolloff=5
 set updatetime=300
@@ -73,10 +74,6 @@ set statusline=%!Statusline()
 " Increase history limit
 if has('shada')
     set shada=!,'1000,<50,s10,h
-endif
-
-if has('mouse')
-    set mouse=a
 endif
 
 syntax on
