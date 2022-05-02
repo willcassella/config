@@ -82,14 +82,6 @@ filetype plugin indent on
 " Use space as the leader key
 let mapleader = ' '
 
-" Add mappings for moving lines with alt+k/alt+j
-nnoremap <M-k> <Cmd>m .-2<CR>
-nnoremap <M-j> <Cmd>m .+1<CR>
-inoremap <M-j> <Cmd>m .+1<CR>
-inoremap <M-k> <Cmd>m .-2<CR>
-vnoremap <M-j> :m '>+1<CR>gv
-vnoremap <M-k> :m '<-2<CR>gv
-
 " Make it so that Alt-Shift-J splits lines (and removes trailing whitespace)
 nnoremap <silent> <M-J> i<CR><Esc>k<Cmd>s/\s\+$//e<CR>+
 
@@ -117,12 +109,6 @@ au FileType markdown ++nested setl spell tw=120 fo+=aw fo-=c
 
 " Filetype support for direnv files
 au BufRead,BufNewFile .envrc ++nested setl ft=bash
-
-" Helper function for copying path of current buffer
-com YankPath let @0=@%
-
-" Helper command for evaluating selected text
-com -range Eval exe join(getline(<line1>, <line2>), '\n')
 
 " PLUGINS
 if exists('g:load_plugins') && g:load_plugins
