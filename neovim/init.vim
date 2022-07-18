@@ -85,9 +85,6 @@ let mapleader = ' '
 " Make it so that Alt-Shift-J splits lines (and removes trailing whitespace)
 nnoremap <silent> <M-J> i<CR><Esc>k<Cmd>s/\s\+$//e<CR>+
 
-" Use Q to execute q register (used to be Q-ex mode)
-nnoremap Q @q
-
 " Useful for quickly opening another file in the current directory
 cabbrev <expr> %% expand('%:h')
 

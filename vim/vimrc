@@ -18,8 +18,11 @@ set nojoinspaces
 set ttimeoutlen=5
 
 " Gui options
-set guioptions-=rL
+set guioptions-=rLt
 
 " Enable cursor shapes
 let &t_SI = "\e[6 q"
 let &t_EI = "\e[2 q"
+
+" Use Q to execute q register (used to be Q-ex mode)
+nnoremap Q @q
