@@ -110,29 +110,28 @@ au BufRead,BufNewFile .envrc ++nested setl ft=bash
 " PLUGINS
 if exists('g:load_plugins') && g:load_plugins
     call plug#begin()
-    Plug 'junegunn/vim-plug'
-    Plug 'gruvbox-community/gruvbox'
-    Plug 'tomasiser/vim-code-dark'
-    Plug 'NLKNguyen/papercolor-theme'
-    Plug 'tpope/vim-fugitive'
-    Plug 'tpope/vim-surround'
-    Plug 'tpope/vim-commentary'
-    Plug 'tpope/vim-repeat'
     Plug 'airblade/vim-gitgutter'
-    Plug 'wellle/targets.vim'
     Plug 'foosoft/vim-argwrap'
     Plug 'junegunn/fzf'
     Plug 'junegunn/fzf.vim'
+    Plug 'junegunn/vim-plug'
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
+    Plug 'tomasiser/vim-code-dark'
+    Plug 'tpope/vim-commentary'
+    Plug 'tpope/vim-fugitive'
+    Plug 'tpope/vim-repeat'
+    Plug 'tpope/vim-surround'
     Plug 'voldikss/vim-floaterm'
+    Plug 'wellle/targets.vim'
 
     " Neovim-only plugins
     if has('nvim')
+        Plug 'Mofiqul/vscode.nvim'
+        Plug 'lukas-reineke/indent-blankline.nvim'
         Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
         Plug 'nvim-treesitter/playground'
+        Plug 'projekt0n/github-nvim-theme'
         Plug 'willcassella/nvim-gn', {'do': ':TSUpdate'}
-        Plug 'navarasu/onedark.nvim'
-        Plug 'lukas-reineke/indent-blankline.nvim'
         let g:indent_blankline_disable_with_nolist = v:true
     endif
     call plug#end()
