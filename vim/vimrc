@@ -26,3 +26,6 @@ let &t_EI = "\e[2 q"
 
 " Use Q to execute q register (used to be Q-ex mode)
 nnoremap Q @q
+
+syntax on
+filetype plugin indent on

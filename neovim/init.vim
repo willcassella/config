@@ -76,9 +76,6 @@ if has('shada')
     set shada=!,'1000,<50,s10,h
 endif
 
-syntax on
-filetype plugin indent on
-
 " Use space as the leader key
 let mapleader = ' '
 
