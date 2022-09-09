@@ -120,6 +120,7 @@ if exists('g:load_plugins') && g:load_plugins
     Plug 'tpope/vim-surround'
     Plug 'voldikss/vim-floaterm'
     Plug 'wellle/targets.vim'
+    Plug 'freeo/vim-kalisi'
 
     " Neovim-only plugins
     if has('nvim')
@@ -163,6 +164,7 @@ if exists('g:load_plugins') && g:load_plugins
 
     " User <leader>cf for Coc fix
     nnoremap <silent> <leader>cf <Cmd>CocFix<CR>
+    nnoremap <silent> <leader>cf <Cmd>call CocAction('doQuickfix')<CR>
 
     " Use <C-S> and <C-Space> to search for symbols
     nnoremap <C-S> <Cmd>CocList symbols<CR>
