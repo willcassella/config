@@ -13,6 +13,7 @@ set laststatus=2
 set wildmenu
 set hidden
 set nojoinspaces
+set mouse=a
 
 " <Esc> mappings timeout after 5 ms
 set ttimeoutlen=5

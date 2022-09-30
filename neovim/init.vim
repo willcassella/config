@@ -8,7 +8,6 @@ set smartcase " unless the query has a capital letter
 set splitright splitbelow
 set noswapfile nobackup noundofile
 set title
-set mouse=a
 set scrolloff=1
 set sidescrolloff=5
 set updatetime=300
@@ -163,7 +162,6 @@ if exists('g:load_plugins') && g:load_plugins
     nnoremap <silent> gh <Cmd>call CocAction('doHover')<CR>
 
     " User <leader>cf for Coc fix
-    nnoremap <silent> <leader>cf <Cmd>CocFix<CR>
     nnoremap <silent> <leader>cf <Cmd>call CocAction('doQuickfix')<CR>
 
     " Use <C-S> and <C-Space> to search for symbols
