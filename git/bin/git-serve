@@ -2,7 +2,8 @@
 set -eou pipefail
 
 # 9418 is the standard git port, DEFAULT_GIT_PORT is the environment
-# variable used internally by git-daemon
+# variable used internally by git-daemon.
+# Using `PORT` variable just for printing purposes.
 PORT="${DEFAULT_GIT_PORT:-9418}"
 echo "Now serving on port $PORT, set DEFAULT_GIT_PORT to change"
 
@@ -15,7 +16,7 @@ else
     echo "receive-pack (git push) service disabled, set GIT_SERVE_ALLOW_PUSH=1 to enable"
 fi
 
-# If we're already in a git directory, print a more relevant message
+# If we're already in a git directory, print a more relevant message.
 if [ -d .git ]; then
     echo "Access via git://localhost:$PORT/"
     echo "ex: git pull git://localhost:$PORT/ branch"
@@ -25,8 +26,12 @@ else
 fi
 
 if [ "${GIT_SERVE_DETACH:-0}" = 1 ]; then
-    echo "Detaching from shell"
+    echo "Detaching from shell (pid $$)"
     args+=( '--detach' )
+else
+    echo "Running in foreground, set GIT_SERVE_DETACH=1 to detach."
 fi
 
-exec git daemon --base-path=. --export-all --reuseaddr --informative-errors --verbose "${args[@]}"
+# Run base command with additional arguments (if any) added at the end.
+# `${args[@]+"${args[@]}"}` avoids treating `args` as unset when empty because bash sucks.
+exec git daemon --base-path=. --export-all --reuseaddr --informative-errors --verbose ${args[@]+"${args[@]}"}
