@@ -8,7 +8,6 @@ set smartcase " unless the query has a capital letter
 set splitright splitbelow
 set noswapfile nobackup noundofile
 set title
-set scrolloff=1
 set sidescrolloff=5
 set updatetime=300
 set diffopt+=vertical " Always use vertical splits for diff
@@ -85,7 +84,7 @@ nnoremap <silent> <M-J> i<CR><Esc>k<Cmd>s/\s\+$//e<CR>+
 cabbrev <expr> %% expand('%:h')
 
 if has('nvim')
-    au TermOpen * ++nested setl nonu so=0 scl=no mps= nolist
+    au TermOpen * ++nested setl nonu scl=no mps= nolist
     au TermEnter * ++nested setl nocul
     au TermLeave * ++nested setl cul<
 endif
