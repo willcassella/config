@@ -15,12 +15,12 @@ set number " Show line number on current line
 set nowrap " Wrapping is annoying
 set showmatch " Show matching brackets
 set matchtime=1 " Cursor restores after highlighting matching bracket in 0.1 seconds
+set matchpairs+=<:> " Enable matching between < and >
 set signcolumn=yes " Always show the side column
 set list
 set listchars=trail:~,tab:>-
 set completeopt-=preview
 set completeopt+=menuone
-set matchpairs+=<:> " Enable matching between < and >
 set cursorline " Highlight cursor line
 au WinEnter * ++nested setl cursorline<
 au WinLeave * ++nested setl nocursorline
@@ -111,7 +111,6 @@ if exists('g:load_plugins') && g:load_plugins
     Plug 'junegunn/fzf.vim'
     Plug 'junegunn/vim-plug'
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
-    Plug 'tomasiser/vim-code-dark'
     Plug 'tpope/vim-commentary'
     Plug 'tpope/vim-fugitive'
     Plug 'tpope/vim-repeat'
@@ -119,6 +118,7 @@ if exists('g:load_plugins') && g:load_plugins
     Plug 'voldikss/vim-floaterm'
     Plug 'wellle/targets.vim'
     Plug 'freeo/vim-kalisi'
+    Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 
     " Neovim-only plugins
     if has('nvim')
@@ -126,7 +126,6 @@ if exists('g:load_plugins') && g:load_plugins
         Plug 'lukas-reineke/indent-blankline.nvim'
         Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
         Plug 'nvim-treesitter/playground'
-        Plug 'projekt0n/github-nvim-theme'
         Plug 'willcassella/nvim-gn', {'do': ':TSUpdate'}
         let g:indent_blankline_disable_with_nolist = v:true
     endif
