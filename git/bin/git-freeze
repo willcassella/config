@@ -1,0 +1,12 @@
+#!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
+
+if [[ "$(git diff --staged --name-only | wc -l)" -ne 0 ]]; then
+    git commit -m "FREEZE.indexed"
+fi
+
+if [[ "$(git diff --name-only | wc -l)" -ne 0 ]]; then
+    git add -A
+    git commit -m "FREEZE.unindexed"
+fi

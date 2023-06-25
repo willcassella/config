@@ -1,0 +1,13 @@
+#!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
+
+if [[ "$(git log -n1 --format=%B)" = FREEZE.indexed ]]; then
+    git reset --soft HEAD~
+    exec git thaw
+fi
+
+if [[ "$(git log -n1 --format=%B)" = FREEZE.unindexed ]]; then
+    git reset HEAD~
+    exec git thaw
+fi
