@@ -124,9 +124,9 @@ if exists('g:load_plugins') && g:load_plugins
     if has('nvim')
         Plug 'Mofiqul/vscode.nvim'
         Plug 'lukas-reineke/indent-blankline.nvim'
-        Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+        Plug 'nvim-treesitter/nvim-treesitter'
         Plug 'nvim-treesitter/playground'
-        Plug 'willcassella/nvim-gn', {'do': ':TSUpdate'}
+        Plug 'willcassella/nvim-gn'
         let g:indent_blankline_disable_with_nolist = v:true
     endif
     call plug#end()
