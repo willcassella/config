@@ -1,3 +1,8 @@
+# Intellij tries to source *rc files interactively for some reason, so disable that
+if [[ ! -z "$INTELLIJ_ENVIRONMENT_READER" ]]; then
+    return 0
+fi
+
 WHICH_FISH=`which fish`
 if echo $- | grep -q 'i' && [[ -x $WHICH_FISH ]] && [[ $SHELL != $WHICH_FISH ]]; then
   # Safeguard to only activate fish for interactive shells and only if fish
@@ -7,5 +12,5 @@ if echo $- | grep -q 'i' && [[ -x $WHICH_FISH ]] && [[ $SHELL != $WHICH_FISH ]];
   #
   # If this is not a new session, the user probably typed 'bash' into their
   # console and wants bash, so we skip this.
-  exec env SHELL=$WHICH_FISH $WHICH_FISH -i
+  exec env "SHELL=$WHICH_FISH" "$WHICH_FISH" -i
 fi
