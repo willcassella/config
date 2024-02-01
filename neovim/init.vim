@@ -25,6 +25,10 @@ set cursorline " Highlight cursor line
 au WinEnter * ++nested setl cursorline<
 au WinLeave * ++nested setl nocursorline
 
+if has('nvim')
+    au TermOpen * ++nested setl nonu scl=no mps=
+endif
+
 " Statusline
 func! TerminalBufferName()
     if has('nvim')
@@ -82,12 +86,6 @@ nnoremap <silent> <M-J> i<CR><Esc>k<Cmd>s/\s\+$//e<CR>+
 
 " Useful for quickly opening another file in the current directory
 cabbrev <expr> %% expand('%:h')
-
-if has('nvim')
-    au TermOpen * ++nested setl nonu scl=no mps= nolist
-    au TermEnter * ++nested setl nocul
-    au TermLeave * ++nested setl cul<
-endif
 
 " Try to use ripgrep as grep program
 if executable('rg')
