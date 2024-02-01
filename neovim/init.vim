@@ -100,7 +100,10 @@ endif
 au FileType markdown ++nested setl spell tw=120 fo+=aw fo-=c
 
 " Filetype support for direnv files
-au BufRead,BufNewFile .envrc ++nested setl ft=bash
+au BufRead,BufNewFile *.envrc ++nested setl ft=bash
+
+" Filetype support for hlsl files
+au BufRead,BufNewFile *.hlsl ++nested setl ft=hlsl
 
 " PLUGINS
 if exists('g:load_plugins') && g:load_plugins
@@ -117,7 +120,6 @@ if exists('g:load_plugins') && g:load_plugins
     Plug 'tpope/vim-surround'
     Plug 'voldikss/vim-floaterm'
     Plug 'wellle/targets.vim'
-    Plug 'freeo/vim-kalisi'
     Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 
     " Neovim-only plugins
