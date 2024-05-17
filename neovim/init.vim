@@ -120,7 +120,6 @@ if exists('g:load_plugins') && g:load_plugins
     Plug 'junegunn/fzf.vim'
     Plug 'junegunn/vim-plug'
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
-    Plug 'tpope/vim-commentary'
     Plug 'tpope/vim-fugitive'
     Plug 'tpope/vim-repeat'
     Plug 'tpope/vim-surround'
