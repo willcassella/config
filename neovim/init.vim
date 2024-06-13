@@ -1,27 +1,4 @@
 " GENERAL OPTIONS
-set nomodeline " Modelines are insecure
-set expandtab " Tab expands to spaces
-set tabstop=4 " Tabs are 4 spaces
-set shiftwidth=4 " Indenting (< and >) is done in 4 space increments
-set ignorecase " Searching is case-insensitive
-set smartcase " unless the query has a capital letter
-set splitright splitbelow
-set noswapfile nobackup noundofile
-set title
-set sidescrolloff=5
-set updatetime=300
-set diffopt+=vertical " Always use vertical splits for diff
-set number " Show line number on current line
-set nowrap " Wrapping is annoying
-set showmatch " Show matching brackets
-set matchtime=1 " Cursor restores after highlighting matching bracket in 0.1 seconds
-set matchpairs+=<:> " Enable matching between < and >
-set signcolumn=yes " Always show the side column
-set list
-set listchars=trail:~,tab:>-
-set completeopt-=preview
-set completeopt+=menuone
-set cursorline " Highlight cursor line
 au WinEnter * ++nested setl cursorline<
 au WinLeave * ++nested setl nocursorline
 
@@ -32,10 +9,6 @@ cnoremap <C-F> <Right>
 cnoremap <C-B> <Left>
 cnoremap <M-b> <S-Left>
 cnoremap <M-f> <S-Right>
-
-if has('nvim')
-    au TermOpen * ++nested setl nonu scl=no mps=
-endif
 
 " Statusline
 func! TerminalBufferName()
@@ -80,11 +53,6 @@ func! Statusline()
     return ' ' . l:left_part . '%=' . l:right_part . ' '
 endfunc
 set statusline=%!Statusline()
-
-" Increase history limit
-if has('shada')
-    set shada=!,'1000,<50,s10,h
-endif
 
 " Use space as the leader key
 let mapleader = ' '
