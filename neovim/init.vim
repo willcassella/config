@@ -2,14 +2,6 @@
 au WinEnter * ++nested setl cursorline<
 au WinLeave * ++nested setl nocursorline
 
-" Make command mode have emacs-style keybindings.
-" <C-E> already works.
-cnoremap <C-A> <Home>
-cnoremap <C-F> <Right>
-cnoremap <C-B> <Left>
-cnoremap <M-b> <S-Left>
-cnoremap <M-f> <S-Right>
-
 " Statusline
 func! TerminalBufferName()
     if has('nvim')

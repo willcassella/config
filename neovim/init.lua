@@ -34,3 +34,11 @@ vim.api.nvim_create_autocmd('TermOpen', {
         vim.opt_local.matchpairs = ''
     end
 })
+
+-- Make command mode have emacs-style keybindings.
+-- <C-E> already works.
+vim.keymap.set('c', '<C-A>', '<Home>')
+vim.keymap.set('c', '<C-F>', '<Right>')
+vim.keymap.set('c', '<C-B>', '<Left>')
+vim.keymap.set('c', '<m-b>', '<S-Left>')
+vim.keymap.set('c', '<m-f>', '<S-Right>')
