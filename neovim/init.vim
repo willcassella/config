@@ -1,7 +1,3 @@
-" GENERAL OPTIONS
-au WinEnter * ++nested setl cursorline<
-au WinLeave * ++nested setl nocursorline
-
 " Statusline
 func! TerminalBufferName()
     if has('nvim')

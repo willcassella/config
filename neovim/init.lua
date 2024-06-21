@@ -26,8 +26,21 @@ vim.opt.cursorline = true -- Highlight cursor line
 -- Increase history limit
 vim.opt.shada = "!,'1000,<50,s10,h"
 
+-- Make cursorline only work on active window
+vim.api.nvim_create_autocmd({'WinEnter', 'WinLeave'}, {
+    nested = true,
+    callback = function(e)
+        if e.event == 'WinEnter' then
+            vim.opt_local.cursorline = true
+        else
+            vim.opt_local.cursorline = false
+        end
+    end
+})
+
 -- Set terminal style options
 vim.api.nvim_create_autocmd('TermOpen', {
+    nested = true,
     callback = function()
         vim.opt_local.number = false
         vim.opt_local.signcolumn = 'no'
