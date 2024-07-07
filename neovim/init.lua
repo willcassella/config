@@ -55,3 +55,10 @@ vim.keymap.set('c', '<C-F>', '<Right>')
 vim.keymap.set('c', '<C-B>', '<Left>')
 vim.keymap.set('c', '<m-b>', '<S-Left>')
 vim.keymap.set('c', '<m-f>', '<S-Right>')
+
+-- Autoformat options for markdown files
+vim.api.nvim_create_autocmd('FileType', {
+    pattern = 'markdown',
+    nested = true,
+    command = 'setl spell tw=120 fo+=aw fo-=c'
+})

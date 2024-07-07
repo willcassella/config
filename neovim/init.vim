@@ -1,13 +1,7 @@
 " Statusline
 func! TerminalBufferName()
-    if has('nvim')
-        " In neovim, terminal filenames have the form: term://PWD//PID:CMD
-        " We want to return the command name
-        return '!' . join(split(bufname(), ':')[2:], ':')
-    else
-        " In vim, terminal buffer names are good as is
-        return bufname()
-    end
+    " We want terminal filenames have the form: term://PWD//PID:CMD
+    return '!' . join(split(bufname(), ':')[2:], ':')
 endfunc
 
 func! StatuslineParts(parts)
@@ -58,9 +52,6 @@ if executable('rg')
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
 
-" Autoformat options for markdown files
-au FileType markdown ++nested setl spell tw=120 fo+=aw fo-=c
-
 " Filetype support for direnv files
 au BufRead,BufNewFile *.envrc ++nested setl ft=bash
 
@@ -81,22 +72,13 @@ if exists('g:load_plugins') && g:load_plugins
     Plug 'tpope/vim-surround'
     Plug 'voldikss/vim-floaterm'
     Plug 'wellle/targets.vim'
-    Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
-
-    " Neovim-only plugins
-    if has('nvim')
-        Plug 'Mofiqul/vscode.nvim'
-        Plug 'lukas-reineke/indent-blankline.nvim'
-        Plug 'nvim-treesitter/nvim-treesitter'
-        Plug 'nvim-treesitter/playground'
-        Plug 'willcassella/nvim-gn'
-        let g:indent_blankline_disable_with_nolist = v:true
-    endif
+    Plug 'Mofiqul/vscode.nvim'
+    Plug 'nvim-treesitter/nvim-treesitter'
+    Plug 'nvim-treesitter/playground'
+    Plug 'willcassella/nvim-gn'
     call plug#end()
 
-    if has('nvim')
-        luafile $HOME/config/neovim/treesitter.lua
-    endif
+    luafile $HOME/config/neovim/treesitter.lua
 
     " Fugitive
     let g:statusline_left_parts += ['FugitiveHead()']
@@ -142,13 +124,6 @@ if exists('g:load_plugins') && g:load_plugins
     nnoremap <silent> ` <Cmd>FloatermToggle<CR>
     au FileType floaterm ++nested tnoremap <buffer><silent> ` <Cmd>FloatermToggle<CR>
     au FileType floaterm ++nested tnoremap <buffer> <C-\>` `
-
-    " Create FZF rule for branch files
-    fu s:FZFBranchFiles()
-        let l:args = {'source': 'git diff --diff-filter=AMRC --name-only @{u}', 'options': '--multi'}
-        call fzf#run(fzf#vim#with_preview(fzf#wrap(l:args)))
-    endf
-    nnoremap <silent> <leader>w <cmd>call <sid>FZFBranchFiles()<cr>
 
     " Make the fugitive window the only window if vim started that way.
     " ie: nvim +G
