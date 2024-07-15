@@ -1,0 +1,10 @@
+#!/bin/bash
+set -euo pipefail
+
+WIDTH=${2:-80%}
+HEIGHT=${2:-80%}
+if [[ "$(tmux display-message -p -F '#{session_name}')" = 'popup' ]]; then
+    tmux detach-client
+else
+    tmux popup -d '#{pane_current_path}' -xC -yC "-w$WIDTH" "-h$HEIGHT" -E 'tmux attach -t popup || tmux new -s popup'
+fi
