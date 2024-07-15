@@ -39,9 +39,6 @@ set statusline=%!Statusline()
 " Use space as the leader key
 let mapleader = ' '
 
-" Make it so that Alt-Shift-J splits lines (and removes trailing whitespace)
-nnoremap <silent> <M-J> i<CR><Esc>k<Cmd>s/\s\+$//e<CR>+
-
 " Useful for quickly opening another file in the current directory
 cabbrev <expr> %% expand('%:h')
 
@@ -72,10 +69,10 @@ if exists('g:load_plugins') && g:load_plugins
     Plug 'tpope/vim-surround'
     Plug 'voldikss/vim-floaterm'
     Plug 'wellle/targets.vim'
-    Plug 'Mofiqul/vscode.nvim'
     Plug 'nvim-treesitter/nvim-treesitter'
     Plug 'nvim-treesitter/playground'
     Plug 'willcassella/nvim-gn'
+    Plug 'Mofiqul/vscode.nvim'
     call plug#end()
 
     luafile $HOME/config/neovim/treesitter.lua
