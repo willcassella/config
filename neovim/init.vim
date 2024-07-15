@@ -67,7 +67,6 @@ if exists('g:load_plugins') && g:load_plugins
     Plug 'tpope/vim-fugitive'
     Plug 'tpope/vim-repeat'
     Plug 'tpope/vim-surround'
-    Plug 'voldikss/vim-floaterm'
     Plug 'wellle/targets.vim'
     Plug 'nvim-treesitter/nvim-treesitter'
     Plug 'nvim-treesitter/playground'
@@ -114,13 +113,6 @@ if exists('g:load_plugins') && g:load_plugins
     let g:gitgutter_sign_modified = '╏'
     let g:gitgutter_sign_modified_removed = '╏'
     let g:gitgutter_sign_removed = '┇'
-
-    " Floaterm
-    let g:floaterm_width = 0.8
-    let g:floaterm_height = 0.8
-    nnoremap <silent> ` <Cmd>FloatermToggle<CR>
-    au FileType floaterm ++nested tnoremap <buffer><silent> ` <Cmd>FloatermToggle<CR>
-    au FileType floaterm ++nested tnoremap <buffer> <C-\>` `
 
     " Make the fugitive window the only window if vim started that way.
     " ie: nvim +G
