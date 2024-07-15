@@ -35,7 +35,7 @@ vim.api.nvim_create_autocmd({'WinEnter', 'WinLeave'}, {
         else
             vim.opt_local.cursorline = false
         end
-    end
+    end,
 })
 
 -- Set terminal style options
@@ -44,8 +44,26 @@ vim.api.nvim_create_autocmd('TermOpen', {
     callback = function()
         vim.opt_local.number = false
         vim.opt_local.signcolumn = 'no'
-    end
+    end,
 })
+
+-- Autoformat options for markdown files
+vim.api.nvim_create_autocmd('FileType', {
+    pattern = 'markdown',
+    nested = true,
+    command = 'setl spell tw=120 fo+=aw fo-=c',
+})
+
+-- Add more filetypes
+vim.filetype.add{
+    extension = {
+        envrc = 'bash',
+        hlsl = 'hlsl',
+    },
+}
+
+-- Use space as leader key
+vim.g.mapleader = ' '
 
 -- Make command mode have emacs-style keybindings.
 -- <C-E> already works.
@@ -54,10 +72,3 @@ vim.keymap.set('c', '<C-F>', '<Right>')
 vim.keymap.set('c', '<C-B>', '<Left>')
 vim.keymap.set('c', '<m-b>', '<S-Left>')
 vim.keymap.set('c', '<m-f>', '<S-Right>')
-
--- Autoformat options for markdown files
-vim.api.nvim_create_autocmd('FileType', {
-    pattern = 'markdown',
-    nested = true,
-    command = 'setl spell tw=120 fo+=aw fo-=c'
-})

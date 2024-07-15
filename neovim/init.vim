@@ -36,24 +36,8 @@ func! Statusline()
 endfunc
 set statusline=%!Statusline()
 
-" Use space as the leader key
-let mapleader = ' '
-
 " Useful for quickly opening another file in the current directory
 cabbrev <expr> %% expand('%:h')
-
-" Try to use ripgrep as grep program
-if executable('rg')
-    " Taken from https://github.com/BurntSushi/ripgrep/issues/425
-    set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
-    set grepformat=%f:%l:%c:%m,%f:%l:%m
-endif
-
-" Filetype support for direnv files
-au BufRead,BufNewFile *.envrc ++nested setl ft=bash
-
-" Filetype support for hlsl files
-au BufRead,BufNewFile *.hlsl ++nested setl ft=hlsl
 
 " PLUGINS
 if exists('g:load_plugins') && g:load_plugins
