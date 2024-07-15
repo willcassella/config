@@ -113,17 +113,6 @@ if exists('g:load_plugins') && g:load_plugins
     let g:gitgutter_sign_modified = '╏'
     let g:gitgutter_sign_modified_removed = '╏'
     let g:gitgutter_sign_removed = '┇'
-
-    " Make the fugitive window the only window if vim started that way.
-    " ie: nvim +G
-    fu s:FullscreenFugitive()
-        " If current layout is two buffers: default and fugitive
-        if map(getbufinfo(), 'v:val["bufnr"]') == [1, 2] && bufname(1) == "" && getbufvar(2, "&ft") == "fugitive"
-            " Assume fugitive is the currently active window
-            wincmd o
-        endif
-    endf
-    au VimEnter * ++nested call s:FullscreenFugitive()
 endif
 
 " Load project vimrc files (no-op if not defined)
