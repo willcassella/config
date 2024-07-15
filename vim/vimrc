@@ -15,7 +15,27 @@ set hidden
 set nojoinspaces
 set mouse=a
 
+" More preferences
+set nomodeline
+set expandtab
+set tabstop=4
+set shiftwidth=4
+set ignorecase
+set smartcase
+set splitright
+set splitbelow
+set number
+set nowrap
+set showmatch
+set matchtime=1
+set list
+set listchars=trail:~,tab:>-
+set completeopt-=preview
+set completeopt+=menuone
+set cursorline
+
 " <Esc> mappings timeout after 5 ms
+" Makes it so that hitting escape doesn't take forever to leave insert mode.
 set ttimeoutlen=5
 
 " Gui options
