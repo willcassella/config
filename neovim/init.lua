@@ -72,3 +72,6 @@ vim.keymap.set('c', '<C-F>', '<Right>')
 vim.keymap.set('c', '<C-B>', '<Left>')
 vim.keymap.set('c', '<m-b>', '<S-Left>')
 vim.keymap.set('c', '<m-f>', '<S-Right>')
+
+-- Useful for quickly opening another file in the current directory
+vim.keymap.set('ca', '%%', function() return vim.fn.expand('%:h') end, { expr = true })

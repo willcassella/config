@@ -36,9 +36,6 @@ func! Statusline()
 endfunc
 set statusline=%!Statusline()
 
-" Useful for quickly opening another file in the current directory
-cabbrev <expr> %% expand('%:h')
-
 " PLUGINS
 if exists('g:load_plugins') && g:load_plugins
     call plug#begin()
