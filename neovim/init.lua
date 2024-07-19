@@ -75,3 +75,22 @@ vim.keymap.set('c', '<m-f>', '<S-Right>')
 
 -- Useful for quickly opening another file in the current directory
 vim.keymap.set('ca', '%%', function() return vim.fn.expand('%:h') end, { expr = true })
+
+-- Statusline
+function status_line()
+    -- Style terminal buffers differently
+    if vim.bo.buftype == 'terminal' then
+        return " !%{join(split(bufname(),':')[2:],':')} [%{b:term_title}]%<%=[term] "
+    end
+
+    local left = '%t%( %m%r%)%<'
+    local right = '%l/%L:%c #%{winnr()}'
+
+    -- Add more detail to current buffer
+    if tostring(vim.fn.win_getid()) == vim.g.actual_curwin then
+        left = left .. '%( %{StatuslineParts(g:statusline_left_parts)}%)'
+        right = right .. '%( %{StatuslineParts(g:statusline_right_parts)}%)'
+    end
+    return ' ' .. left .. '%=' .. right .. ' '
+end
+vim.opt.statusline = '%{%v:lua.status_line()%}'

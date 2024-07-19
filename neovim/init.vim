@@ -1,9 +1,3 @@
-" Statusline
-func! TerminalBufferName()
-    " We want terminal filenames have the form: term://PWD//PID:CMD
-    return '!' . join(split(bufname(), ':')[2:], ':')
-endfunc
-
 func! StatuslineParts(parts)
     " Eval each expression in g:statusline_extra and remove empty results
     let l:results = map(copy(a:parts), 'eval(v:val)')
@@ -12,29 +6,6 @@ func! StatuslineParts(parts)
 endfunc
 let g:statusline_left_parts = []
 let g:statusline_right_parts = ['&fenc', '&ff', '&ft']
-
-func! Statusline()
-    let l:buf = winbufnr(g:statusline_winid)
-
-    " Style terminal buffers differently
-    if getbufvar(l:buf, '&buftype') == 'terminal'
-        return ' %{TerminalBufferName()}%<%=[term] '
-    endif
-
-    let l:left_part = '%t%( %m%r%)%<'
-    let l:right_part = '%l/%L:%c #%{winnr()}'
-
-    " Style non-current buffers differently
-    if win_getid() != g:statusline_winid
-        return ' ' . l:left_part . '%=' . l:right_part . ' '
-    endif
-
-    " Current, non-terminal buffers include extra parts
-    let l:left_part .= '%( %{StatuslineParts(g:statusline_left_parts)}%)'
-    let l:right_part .= '%( %{StatuslineParts(g:statusline_right_parts)}%)'
-    return ' ' . l:left_part . '%=' . l:right_part . ' '
-endfunc
-set statusline=%!Statusline()
 
 " PLUGINS
 if exists('g:load_plugins') && g:load_plugins
