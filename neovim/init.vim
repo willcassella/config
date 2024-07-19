@@ -9,62 +9,11 @@ let g:statusline_right_parts = ['&fenc', '&ff', '&ft']
 
 " PLUGINS
 if exists('g:load_plugins') && g:load_plugins
-    call plug#begin()
-    Plug 'airblade/vim-gitgutter'
-    Plug 'foosoft/vim-argwrap'
-    Plug 'junegunn/fzf'
-    Plug 'junegunn/fzf.vim'
-    Plug 'junegunn/vim-plug'
-    Plug 'neoclide/coc.nvim', {'branch': 'release'}
-    Plug 'tpope/vim-fugitive'
-    Plug 'tpope/vim-repeat'
-    Plug 'tpope/vim-surround'
-    Plug 'wellle/targets.vim'
-    Plug 'nvim-treesitter/nvim-treesitter'
-    Plug 'nvim-treesitter/playground'
-    Plug 'willcassella/nvim-gn'
-    Plug 'Mofiqul/vscode.nvim'
-    call plug#end()
-
-    luafile $HOME/config/neovim/treesitter.lua
-
     " Fugitive
     let g:statusline_left_parts += ['FugitiveHead()']
 
-    " FZF.Vim
-    nnoremap <silent> <leader>f <Cmd>Files<CR>
-    nnoremap <silent> <leader>d <Cmd>Buffers<CR>
-    nnoremap <silent> <leader>g <Cmd>History<CR>
-
-    " ARGWRAP
-    nnoremap <silent> <leader>* <Cmd>ArgWrap<CR>
-
     " CoC
     let g:statusline_left_parts += ['coc#status()']
-    au User CocStatusChange,CocDiagnosticChange ++nested let &ro = &ro
-
-    " Make it so that [e and ]e can navigate between CoC errors
-    nmap <silent> [e <Plug>(coc-diagnostic-prev)
-    nmap <silent> ]e <Plug>(coc-diagnostic-next)
-
-    " Remap go to definition
-    nmap <silent> gd <Plug>(coc-definition)
-    nmap <silent> gr <Plug>(coc-references)
-    nnoremap <silent> gh <Cmd>call CocAction('doHover')<CR>
-
-    " User <leader>cf for Coc fix
-    nnoremap <silent> <leader>cf <Cmd>call CocAction('doQuickfix')<CR>
-
-    " Use <C-S> and <C-Space> to search for symbols
-    nnoremap <C-S> <Cmd>CocList symbols<CR>
-    nnoremap <C-Space> <Cmd>CocList outline<CR>
-
-    " Git gutter
-    let g:gitgutter_sign_priority = 5
-    let g:gitgutter_sign_added = '┃'
-    let g:gitgutter_sign_modified = '╏'
-    let g:gitgutter_sign_modified_removed = '╏'
-    let g:gitgutter_sign_removed = '┇'
 endif
 
 " Load project vimrc files (no-op if not defined)
