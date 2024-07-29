@@ -17,7 +17,9 @@ set showcmd
 set smarttab
 set tabpagemax=50
 set wildmenu
-set wildoptions+=pum
+if v:version >= 900
+    set wildoptions+=pum
+endif
 
 " More preferences
 set nomodeline
@@ -36,7 +38,6 @@ set list
 set listchars=trail:~,tab:>-
 set completeopt-=preview
 set completeopt+=menuone
-set cursorline
 
 " <Esc> mappings timeout after 5 ms
 " Makes it so that hitting escape doesn't take forever to leave insert mode.
@@ -51,6 +52,9 @@ let &t_EI = "\e[2 q"
 
 " Use Q to execute q register (used to be Q-ex mode)
 nnoremap Q @q
+
+" Use %% to abbreviate current directory
+cnoreabbrev <expr> %% expand('%:h')
 
 syntax on
 filetype plugin indent on
