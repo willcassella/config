@@ -148,3 +148,16 @@ if vim.g.load_plugins then
     vim.g.gitgutter_sign_modified_removed = '╏'
     vim.g.gitgutter_sign_removed = '┇'
 end
+
+-- Load project vimrc files (no-op if not defined)
+-- I prefer this over 'use vim' in .envrc since it's more predictable
+-- (run once, unconditionally).
+for file in vim.gsplit(vim.env.PROJECT_VIMRC or '', ':') do
+    if string.len(file) ~= 0 then
+        if vim.endswith(file, '.lua') then
+            vim.cmd.luafile(file)
+        else
+            vim.cmd.source(file)
+        end
+    end
+end

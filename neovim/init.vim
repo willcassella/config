@@ -15,12 +15,3 @@ if exists('g:load_plugins') && g:load_plugins
     " CoC
     let g:statusline_left_parts += ['coc#status()']
 endif
-
-" Load project vimrc files (no-op if not defined)
-" I prefer this over 'use vim' in .envrc since it's more predictable
-" (run once, unconditionally).
-for file in split($PROJECT_VIMRC, ':')
-    if len(file)
-        exe 'source' file
-    endif
-endfor
