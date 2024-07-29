@@ -77,25 +77,51 @@ vim.keymap.set('c', '<m-f>', '<s-right>')
 vim.keymap.set('ca', '%%', function() return vim.fn.expand('%:h') end, {expr = true})
 
 -- Statusline
+status_line_parts = {
+    left = {
+    },
+    right = {
+        function() return vim.bo.fenc end,
+        function() return vim.bo.ff end,
+        function() return vim.bo.ft end,
+    },
+}
+
+local function eval_status_line_parts(parts)
+    return vim.iter(parts)
+        :map(function(part)
+            if type(part) == 'function' then
+                part = part()
+            end
+            if type(part) == 'nil' then
+                return ''
+            end
+            return tostring(part)
+        end)
+        :filter(function(part)
+            return string.len(part) ~= 0
+        end)
+        :join(' | ')
+end
+
 function status_line()
-    -- Style terminal buffers differently
+    local left = {'%t%( %m%r%)%<'}
+    local right = {'%l/%L:%c #%{winnr()}'}
+
     if vim.bo.buftype == 'terminal' then
-        return " !%{join(split(bufname(),':')[2:],':')} [%{b:term_title}]%<%=[term] "
+        -- Style terminal buffers differently
+        left = {' %t [%{b:term_title}]'}
+        table.insert(right, '[term]')
+    elseif tostring(vim.fn.win_getid()) == vim.g.actual_curwin then
+        -- Add extra parts to active buffer
+        vim.list_extend(left, status_line_parts.left)
+        vim.list_extend(right, status_line_parts.right)
     end
-
-    local left = '%t%( %m%r%)%<'
-    local right = '%l/%L:%c #%{winnr()}'
-
-    -- Add more detail to current buffer
-    if tostring(vim.fn.win_getid()) == vim.g.actual_curwin then
-        left = left .. '%( %{StatuslineParts(g:statusline_left_parts)}%)'
-        right = right .. '%( %{StatuslineParts(g:statusline_right_parts)}%)'
-    end
-    return ' ' .. left .. '%=' .. right .. ' '
+    return ' ' .. eval_status_line_parts(left) .. '%=' .. eval_status_line_parts(right) .. ' '
 end
 vim.opt.statusline = '%{%v:lua.status_line()%}'
 
-if vim.g.load_plugins then
+if vim.g.load_plugins == 1 then
     vim.cmd([[
         call plug#begin()
         Plug 'airblade/vim-gitgutter'
@@ -115,6 +141,9 @@ if vim.g.load_plugins then
         call plug#end()
     ]])
 
+    -- vim-fugitive
+    table.insert(status_line_parts.left, vim.fn.FugitiveHead)
+
     -- nvim-treesitter
     require('nvim-treesitter.configs').setup{highlight = {enable = true}}
 
@@ -127,6 +156,7 @@ if vim.g.load_plugins then
     vim.keymap.set('n', '<leader>*', '<cmd>ArgWrap<cr>', {silent = true})
 
     -- coc.nvim
+    table.insert(status_line_parts.left, vim.fn['coc#status'])
     vim.api.nvim_create_autocmd('User', {
         pattern = 'CocStatusChange,CocDiagnosticChange',
         nested = true,
