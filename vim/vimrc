@@ -5,15 +5,19 @@ set autoread
 set backspace=start,indent,eol
 set belloff=all
 set encoding=utf-8
+set hidden
+set history=10000
 set hlsearch
 set incsearch
-set history=10000
-set tabpagemax=50
-set laststatus=2
-set wildmenu
-set hidden
 set nojoinspaces
+set laststatus=2
 set mouse=a
+set ruler
+set showcmd
+set smarttab
+set tabpagemax=50
+set wildmenu
+set wildoptions+=pum
 
 " More preferences
 set nomodeline
