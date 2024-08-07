@@ -81,43 +81,45 @@ status_line_parts = {
     left = {
     },
     right = {
-        function() return vim.bo.fenc end,
-        function() return vim.bo.ff end,
-        function() return vim.bo.ft end,
+        '%{&fenc}',
+        '%{&ff}',
+        '%{&ft}',
     },
 }
 
 local function eval_status_line_parts(parts)
     return vim.iter(parts)
         :map(function(part)
-            if type(part) == 'function' then
-                part = part()
-            end
-            if type(part) == 'nil' then
-                return ''
-            end
-            return tostring(part)
+            return {'%( | ', part, '%)'}
         end)
-        :filter(function(part)
-            return string.len(part) ~= 0
-        end)
-        :join(' | ')
+        :totable()
 end
 
 function status_line()
-    local left = {'%t%( %m%r%)%<'}
-    local right = {'%l/%L:%c #%{winnr()}'}
+    local left_base = '%t%( %m%r%)%<'
+    local right_base = '%l/%L:%c #%{winnr()}'
+    local left_parts = status_line_parts.left
+    local right_parts = status_line_parts.right
 
     if vim.bo.buftype == 'terminal' then
         -- Style terminal buffers differently
-        left = {' %t [%{b:term_title}]'}
-        table.insert(right, '[term]')
-    elseif tostring(vim.fn.win_getid()) == vim.g.actual_curwin then
-        -- Add extra parts to active buffer
-        vim.list_extend(left, status_line_parts.left)
-        vim.list_extend(right, status_line_parts.right)
+        left_base = '%t [%{b:term_title}]'
+        left_parts = {}
+        right_parts = {'[term]'}
     end
-    return ' ' .. eval_status_line_parts(left) .. '%=' .. eval_status_line_parts(right) .. ' '
+
+    if tostring(vim.fn.win_getid()) == vim.g.actual_curwin then
+        left_parts = eval_status_line_parts(left_parts)
+        right_parts = eval_status_line_parts(right_parts)
+    else
+        -- Hide parts in inactive windows.
+        left_parts = {}
+        right_parts = {}
+    end
+
+    return vim.iter({' ', left_base, left_parts, '%=', right_base, right_parts, ' '})
+        :flatten(math.huge)
+        :join()
 end
 vim.opt.statusline = '%{%v:lua.status_line()%}'
 
@@ -142,7 +144,7 @@ if vim.g.load_plugins == 1 then
     ]])
 
     -- vim-fugitive
-    table.insert(status_line_parts.left, vim.fn.FugitiveHead)
+    table.insert(status_line_parts.left, '%{FugitiveHead()}')
 
     -- nvim-treesitter
     require('nvim-treesitter.configs').setup{highlight = {enable = true}}
@@ -156,7 +158,7 @@ if vim.g.load_plugins == 1 then
     vim.keymap.set('n', '<leader>*', '<cmd>ArgWrap<cr>', {silent = true})
 
     -- coc.nvim
-    table.insert(status_line_parts.left, vim.fn['coc#status'])
+    table.insert(status_line_parts.left, '%{coc#status()}')
     vim.api.nvim_create_autocmd('User', {
         pattern = 'CocStatusChange,CocDiagnosticChange',
         nested = true,
