@@ -80,11 +80,7 @@ vim.keymap.set('ca', '%%', function() return vim.fn.expand('%:h') end, {expr = t
 status_line_parts = {
     left = {
     },
-    right = {
-        '%{&fenc}',
-        '%{&ff}',
-        '%{&ft}',
-    },
+    right = {'%{&fenc}', '%{&ff}', '%{&ft}'},
 }
 
 local function eval_status_line_parts(parts)
@@ -96,7 +92,7 @@ local function eval_status_line_parts(parts)
 end
 
 function status_line()
-    local left_base = '%t%( %m%r%)%<'
+    local left_base = '%t%( %m%r%)'
     local right_base = '%l/%L:%c #%{winnr()}'
     local left_parts = status_line_parts.left
     local right_parts = status_line_parts.right
@@ -105,7 +101,7 @@ function status_line()
         -- Style terminal buffers differently
         left_base = '%t [%{b:term_title}]'
         left_parts = {}
-        right_parts = {'[term]'}
+        right_parts = {'term'}
     end
 
     if tostring(vim.fn.win_getid()) == vim.g.actual_curwin then
@@ -117,7 +113,7 @@ function status_line()
         right_parts = {}
     end
 
-    return vim.iter({' ', left_base, left_parts, '%=', right_base, right_parts, ' '})
+    return vim.iter({' ', left_base, '%<', left_parts, '%=', right_base, right_parts, ' '})
         :flatten(math.huge)
         :join()
 end
