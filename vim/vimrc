@@ -38,8 +38,9 @@ set list
 set listchars=trail:~,tab:>-
 set completeopt-=preview
 set completeopt+=menuone
+let &stl = " %t%( %m%r%)%=%l/%L #%{winnr()} "
 
-" <Esc> mappings timeout after 5 ms
+" <esc> mappings timeout after 5 ms
 " Makes it so that hitting escape doesn't take forever to leave insert mode.
 set ttimeoutlen=5
 
@@ -52,6 +53,17 @@ let &t_EI = "\e[2 q"
 
 " Use Q to execute q register (used to be Q-ex mode)
 nnoremap Q @q
+
+" Make <c-L> behave like in neovim
+nnoremap <c-l> <cmd>nohl<cr><cmd>dif<cr><c-l>
+
+" Make command mode have emacs-style keybindings
+" <c-e> already works
+cnoremap <c-a> <home>
+cnoremap <c-f> <right>
+cnoremap <c-b> <left>
+cnoremap <m-b> <s-left>
+cnoremap <m-f> <s-right>
 
 " Use %% to abbreviate current directory
 cnoreabbrev <expr> %% expand('%:h')
