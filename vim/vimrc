@@ -4,6 +4,7 @@ set autoindent
 set autoread
 set backspace=start,indent,eol
 set belloff=all
+set display=lastline
 set encoding=utf-8
 set hidden
 set history=10000
@@ -32,6 +33,7 @@ set splitright
 set splitbelow
 set number
 set nowrap
+set linebreak
 set showmatch
 set matchtime=1
 set list
