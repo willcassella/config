@@ -13,6 +13,7 @@ vim.opt.updatetime = 300
 vim.opt.diffopt:append{'vertical'} -- Always use vertical splits for diff
 vim.opt.number = true -- Show line number on current line
 vim.opt.wrap = false -- Wrapping is annoying
+vim.opt.linebreak = true -- Use line breaking when wrapping is enabled
 vim.opt.showmatch = true -- Show matching brackets
 vim.opt.matchtime = 1 -- Cursor restores after highlighting matching bracket in 0.1 seconds
 vim.opt.matchpairs:append{'<:>'} -- Enable matching between < and >
