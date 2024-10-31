@@ -41,6 +41,7 @@ set listchars=trail:~,tab:>-
 set completeopt-=preview
 set completeopt+=menuone
 let &stl = " %t%( %m%r%)%=%l/%L #%{winnr()} "
+let g:mapleader = ' '
 
 " <esc> mappings timeout after 5 ms
 " Makes it so that hitting escape doesn't take forever to leave insert mode.
