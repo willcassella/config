@@ -137,6 +137,7 @@ if vim.g.load_plugins == 1 then
         Plug 'nvim-treesitter/playground'
         Plug 'willcassella/nvim-gn'
         Plug 'Mofiqul/vscode.nvim'
+        Plug 'rebelot/kanagawa.nvim'
         call plug#end()
     ]])
 
