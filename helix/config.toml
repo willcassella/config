@@ -7,3 +7,6 @@ cursorline = true
 insert = "bar"
 normal = "block"
 select = "underline"
+
+[editor.indent-guides]
+render = true
