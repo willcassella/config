@@ -8,4 +8,5 @@ fi
 
 # This sets the MAC address for en0, the default WiFi interface.
 # You can get the current address via `ifconfig en0`
+# You can get the actual hardware address via `networksetup -getmacaddress en0`
 sudo ifconfig en0 ether "${0}"
