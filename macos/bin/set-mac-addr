@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ -z ${1:-} ]]; then
+    echo 1>&2 "Usage: set-mac-addr [ADDRESS]"
+    exit 1
+fi
+
+# This sets the MAC address for en0, the default WiFi interface.
+# You can get the current address via `ifconfig en0`
+sudo ifconfig en0 ether "${0}"
