@@ -23,7 +23,6 @@ if v:version >= 900
 endif
 
 " More preferences
-set nomodeline
 set expandtab
 set tabstop=4
 set shiftwidth=4
