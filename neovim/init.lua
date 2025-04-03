@@ -1,4 +1,3 @@
-vim.opt.modeline = false -- Modelines are insecure
 vim.opt.expandtab = true -- Tab expands to spaces
 vim.opt.tabstop = 4 -- Tabs are 4 spaces
 vim.opt.shiftwidth = 4 -- Indenting (< and >) is done in 4 space increments
@@ -36,15 +35,6 @@ vim.api.nvim_create_autocmd({'WinEnter', 'WinLeave'}, {
         else
             vim.opt_local.cursorline = false
         end
-    end,
-})
-
--- Set terminal style options
-vim.api.nvim_create_autocmd('TermOpen', {
-    nested = true,
-    callback = function()
-        vim.opt_local.number = false
-        vim.opt_local.signcolumn = 'no'
     end,
 })
 
