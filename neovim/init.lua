@@ -26,6 +26,11 @@ vim.opt.cursorline = true -- Highlight cursor line
 -- Increase history limit
 vim.opt.shada = "!,'1000,<50,s10,h"
 
+-- Use ripgrep (with smart case and vcs ignore) as the grep provider
+if vim.fn.executable('rg') then
+    vim.opt.grepprg = 'rg --vimgrep --smart-case'
+end
+
 -- Make cursorline only work on active window
 vim.api.nvim_create_autocmd({'WinEnter', 'WinLeave'}, {
     nested = true,
