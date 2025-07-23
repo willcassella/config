@@ -128,9 +128,8 @@ if vim.g.load_plugins == 1 then
         Plug 'tpope/vim-repeat'
         Plug 'tpope/vim-surround'
         Plug 'wellle/targets.vim'
-        Plug 'nvim-treesitter/nvim-treesitter'
-        Plug 'nvim-treesitter/playground'
         Plug 'willcassella/nvim-gn'
+        Plug 'nvim-treesitter/nvim-treesitter', {'branch': 'main'}
         Plug 'Mofiqul/vscode.nvim'
         Plug 'rebelot/kanagawa.nvim'
         call plug#end()
@@ -140,7 +139,7 @@ if vim.g.load_plugins == 1 then
     table.insert(status_line_parts.left, '%{FugitiveHead()}')
 
     -- nvim-treesitter
-    require('nvim-treesitter.configs').setup{highlight = {enable = true}}
+    require('nvim-treesitter').setup{highlight = {enable = true}}
 
     -- fzf.vim
     vim.keymap.set('n', '<leader>f', '<cmd>Files<cr>', {silent = true})
