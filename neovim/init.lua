@@ -128,7 +128,6 @@ if vim.g.load_plugins == 1 then
         Plug 'tpope/vim-repeat'
         Plug 'tpope/vim-surround'
         Plug 'wellle/targets.vim'
-        Plug 'willcassella/nvim-gn'
         Plug 'nvim-treesitter/nvim-treesitter', {'branch': 'main'}
         Plug 'Mofiqul/vscode.nvim'
         Plug 'rebelot/kanagawa.nvim'
