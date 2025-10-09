@@ -1,0 +1,48 @@
+#!/usr/bin/env python
+import subprocess as cmd
+import sys
+
+def is_ancestor_of(upstream: str, downstream: str) -> bool:
+    out = cmd.run(["git", "merge-base", "--is-ancestor", upstream, downstream])
+    if out.returncode == 0:
+        return True
+    elif out.returncode != 1:
+        print(f"git merge-base --is-ancestor {upstream} {downstream} returned {out.returncode}", file=sys.stderr)
+        exit(1)
+    return False
+
+def rebase_downstream(upstream: str) -> None:
+    # Iterate over the refs tracking this branch
+    out = cmd.run(["git", "for-each-ref", "refs/heads", "--format=%(refname:short):%(upstream:short)"], check=True, capture_output=True)
+    for branch, branch_upstream in (x.decode().split(':') for x in out.stdout.splitlines()):
+        if branch_upstream != upstream:
+            continue
+
+        # If this branch is marked dormant, skip it
+        out = cmd.run(["git", "config", "get", "--type=bool", "--default=false", f"branch.{branch}.dormant"], check=True, capture_output=True)
+        if out.stdout.decode().strip() == "true":
+            continue
+
+        # If this branch is not up to date, try rebasing it.
+        if is_ancestor_of(upstream, branch):
+            print(f"{branch} up to date", file=sys.stderr)
+        else:
+            print(f"Rebasing {branch}...", file=sys.stderr)
+            out = cmd.run(["git", "rebase", "--fork-point", upstream, branch])
+            if out.returncode != 0:
+                exit(1)
+
+        # Rebase the descendants of this branch
+        rebase_downstream(branch)
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: git rebase-downstream REF", file=sys.stderr)
+        exit(1)
+
+    # Get the symbolic name of the ref
+    out = cmd.run(["git", "rev-parse", "--symbolic", sys.argv[1]], check=True, capture_output=True)
+    upstream = out.stdout.decode().strip()
+
+    # Rebase all downstream refs
+    rebase_downstream(upstream)

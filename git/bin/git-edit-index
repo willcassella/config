@@ -1,0 +1,68 @@
+#!/usr/bin/env python
+import os
+import sys
+import subprocess as cmd
+from pathlib import Path
+import tempfile
+
+class FileInfo:
+    def __init__(self, path: Path, id: str, mode: str):
+        self.path = path
+        self.id = id
+        self.mode = mode
+
+def get_file_info(path: Path) -> FileInfo | None:
+    out = cmd.run(['git', 'ls-files', '--error-unmatch', '--format', '%(objecttype):%(objectmode):%(objectname)', '--', path], stdin=cmd.DEVNULL, capture_output=True)
+    if out.returncode != 0:
+        return None
+
+    type, mode, id = (x.strip() for x in out.stdout.decode().split(':'))
+
+    if type != 'blob':
+        print(f"Error: {path} is not a file", file=sys.stderr)
+        exit(1)
+
+    if mode != '100755' and mode != '100644':
+        print(f"Error: {path} is not a regular file", file=sys.stderr)
+        exit(1)
+
+    return FileInfo(path, id, mode)
+
+def read_git_file(file: FileInfo, out) -> None:
+    cmd.run(['git', 'cat-file', '--filters', f"--path={file.path}", file.id], check=True, stdin=cmd.DEVNULL, stdout=out, stderr=cmd.DEVNULL)
+
+def edit_file(editor: str, file: Path) -> None:
+    cmd.run(f"{editor} {file}", shell=True, check=True)
+
+def write_git_file(file: Path, index_path: Path, mode: str) -> FileInfo:
+    out = cmd.run(['git', 'hash-object', '-w', '-t', 'blob', f"--path={index_path}", '--', file], check=True, capture_output=True)
+    id = out.stdout.decode().strip()
+    return FileInfo(index_path, id, mode)
+
+def stage_file(file: FileInfo) -> None:
+    cmd.run(['git', 'update-index', '--cacheinfo', f"{file.mode},{file.id},{file.path}"], check=True)
+
+def edit_indexed_file(editor: str, path: Path):
+    file_info = get_file_info(path)
+
+    with tempfile.NamedTemporaryFile(suffix=''.join(path.suffixes), delete_on_close=False) as temp:
+        # If the file exists, copy it from the index into the temp file
+        if file_info:
+            read_git_file(file_info, temp)
+        temp.close()
+        temp_path = Path(temp.name)
+
+        # Invoke the editor and update file_info
+        edit_file(editor, temp_path)
+        file_info = write_git_file(temp_path, path, file_info and file_info.mode or '100644')
+
+    # Update the index with the new file
+    stage_file(file_info)
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: git edit-index PATH", file=sys.stderr)
+        exit(1)
+    editor = os.environ.get("EDITOR", "vim")
+    path = Path(sys.argv[1])
+    edit_indexed_file(editor, path)

@@ -1,6 +1,8 @@
 #!/bin/bash
 set -eou pipefail
 
+# Inspired by https://datagrok.org/git/git-serve/
+
 # 9418 is the standard git port, DEFAULT_GIT_PORT is the environment
 # variable used internally by git-daemon.
 # Using `PORT` variable just for printing purposes.
