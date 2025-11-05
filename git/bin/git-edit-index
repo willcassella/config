@@ -1,4 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.14"
+# dependencies = []
+# ///
 import os
 import sys
 import subprocess as cmd
@@ -40,7 +44,7 @@ def write_git_file(file: Path, index_path: Path, mode: str) -> FileInfo:
     return FileInfo(index_path, id, mode)
 
 def stage_file(file: FileInfo) -> None:
-    cmd.run(['git', 'update-index', '--cacheinfo', f"{file.mode},{file.id},{file.path}"], check=True)
+    cmd.run(['git', 'update-index', '--add', '--cacheinfo', f"{file.mode},{file.id},{file.path}"], check=True)
 
 def edit_indexed_file(editor: str, path: Path):
     file_info = get_file_info(path)
