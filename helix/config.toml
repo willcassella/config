@@ -2,6 +2,7 @@ theme = "kanagawa"
 
 [editor]
 cursorline = true
+auto-format = false
 
 [editor.cursor-shape]
 insert = "bar"
@@ -10,9 +11,6 @@ select = "underline"
 
 [editor.indent-guides]
 render = true
-
-[keys.insert]
-"C-[" = "normal_mode"
 
 [keys.normal]
 "C" = ["select_mode", "goto_line_end", "change_selection"]
