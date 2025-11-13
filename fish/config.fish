@@ -37,7 +37,8 @@ function fish_prompt
     set_color $COLOR_BORDER; echo -n ' ]'
 
     # Get the current branch we're on, if we're in a git repo
-    if set -l git_branch (git rev-parse --abbrev-ref HEAD 2> /dev/null)
+    if type -q git
+        and set -l git_branch (git rev-parse --abbrev-ref HEAD 2> /dev/null)
         # Output git branch, or HEAD if detached
         set_color $COLOR_BORDER; echo -n '['
         if [ "$git_branch" = HEAD ]
