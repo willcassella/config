@@ -15,7 +15,7 @@ set COLOR_HOST brgreen
 set COLOR_PWD brwhite
 set COLOR_ERROR ff3f3f
 set COLOR_GIT_BRANCH brwhite
-set COLOR_GIT_NOBRANCH "$color_error"
+set COLOR_GIT_NOBRANCH "$COLOR_ERROR"
 set COLOR_GIT_UNSTAGED bryellow
 set COLOR_GIT_STAGED brgreen
 
