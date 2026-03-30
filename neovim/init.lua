@@ -116,23 +116,27 @@ end
 vim.opt.statusline = '%{%v:lua.status_line()%}'
 
 if vim.g.load_plugins == 1 then
-    vim.cmd([[
-        call plug#begin()
-        Plug 'airblade/vim-gitgutter'
-        Plug 'foosoft/vim-argwrap'
-        Plug 'junegunn/fzf'
-        Plug 'junegunn/fzf.vim'
-        Plug 'junegunn/vim-plug'
-        Plug 'neoclide/coc.nvim', {'branch': 'release'}
-        Plug 'tpope/vim-fugitive'
-        Plug 'tpope/vim-repeat'
-        Plug 'tpope/vim-surround'
-        Plug 'wellle/targets.vim'
-        Plug 'nvim-treesitter/nvim-treesitter', {'branch': 'main'}
-        Plug 'Mofiqul/vscode.nvim'
-        Plug 'rebelot/kanagawa.nvim'
-        call plug#end()
-    ]])
+    local gh = function(x) return 'https://github.com/' .. x end
+    vim.pack.add({
+        gh('airblade/vim-gitgutter'),
+        gh('foosoft/vim-argwrap'),
+        gh('junegunn/fzf'),
+        gh('junegunn/fzf.vim'),
+        {
+            src = gh('neoclide/coc.nvim'),
+            version = 'release',
+        },
+        gh('tpope/vim-fugitive'),
+        gh('tpope/vim-repeat'),
+        gh('tpope/vim-surround'),
+        gh('wellle/targets.vim'),
+        {
+            src = gh('nvim-treesitter/nvim-treesitter'),
+            version = 'main',
+        },
+        gh('Mofiqul/vscode.nvim'),
+        gh('rebelot/kanagawa.nvim'),
+    })
 
     -- vim-fugitive
     table.insert(status_line_parts.left, '%{FugitiveHead()}')
