@@ -18,7 +18,7 @@ vim.opt.matchtime = 1 -- Cursor restores after highlighting matching bracket in 
 vim.opt.matchpairs:append{'<:>'} -- Enable matching between < and >
 vim.opt.signcolumn = "yes" -- Always show the side column
 vim.opt.list = true
-vim.opt.listchars = {trail = '~', tab = '>-'}
+vim.opt.listchars = {leadmultispace = '+---', tab = '>-', trail = '~'}
 vim.opt.completeopt:remove{'preview'}
 vim.opt.completeopt:append{'menuone'}
 vim.opt.cursorline = true -- Highlight cursor line
