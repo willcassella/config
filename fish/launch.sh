@@ -1,16 +1,26 @@
-# Intellij tries to source *rc files interactively for some reason, so disable that
-if [[ ! -z "$INTELLIJ_ENVIRONMENT_READER" ]]; then
-    return 0
+#!/bin/bash
+
+# Script for launching fish instead of bash/zsh as the interactive shell.
+# Still want to use bash for scripts and explicit invocations.
+# Figuring that out is unfortunately kind of complicated, hence all these checks.
+
+# Early exit if the shell is not interactive or attached to a TTY
+if test ! -t 0 || [[ $- != *i* ]]; then
+    return
 fi
 
-WHICH_FISH=`which fish`
-if echo $- | grep -q 'i' && [[ -x $WHICH_FISH ]] && [[ $SHELL != $WHICH_FISH ]]; then
-  # Safeguard to only activate fish for interactive shells and only if fish
-  # shell is present and executable. Verify that this is a new session by
-  # checking if $SHELL is set to the path to fish. If it is not, we set
-  # $SHELL and start fish.
-  #
-  # If this is not a new session, the user probably typed 'bash' into their
-  # console and wants bash, so we skip this.
-  exec env "SHELL=$WHICH_FISH" "$WHICH_FISH" -i
+# Early exit if running in a "dumb" terminal (Emacs, some JetBrains internals)
+if [[ "$TERM" == "dumb" ]]; then
+    return
 fi
+
+WHICH_FISH=$(which fish)
+
+# If we're currently running (or already ran) fish
+if [[ $SHELL == $WHICH_FISH ]] || [[ -n $LAUNCHED_FISH ]]; then
+    return
+fi
+
+export SHELL=$WHICH_FISH
+export LAUNCHED_FISH=1
+exec fish
